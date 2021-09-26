@@ -7,9 +7,9 @@ struct BluetoothServiceID: Identifiable {
 }
 
 public struct ConnectionView: View {
-    let controller: BluetoothControllerProtocol
+    public let controller: BluetoothControllerProtocol
     @ObservedObject
-    var model: BluetoothModel
+    public var model: BluetoothModel
 
     @State var filteredServices = Set<UUID>()
     var serviceIDs = [BluetoothServiceID(id: 0x180d, name: "Heart Rate")]
