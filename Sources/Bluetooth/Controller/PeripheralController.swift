@@ -1,6 +1,6 @@
 import CoreBluetooth
 
-protocol PeripheralControllerProtocol {
+public protocol PeripheralControllerProtocol {
     func notify(enabled: Bool, id: CBUUID) -> Void
 }
 

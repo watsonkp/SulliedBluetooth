@@ -1,6 +1,6 @@
 import CoreBluetooth
 
-class BluetoothModel: ObservableObject {
+public class BluetoothModel: ObservableObject {
     @Published var peripherals = [PeripheralModel]()
     @Published var connectedPeripherals = [PeripheralModel]()
 }

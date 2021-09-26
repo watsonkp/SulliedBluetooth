@@ -1,6 +1,6 @@
 import CoreBluetooth
 
-protocol BluetoothControllerProtocol {
+public protocol BluetoothControllerProtocol {
     var model: BluetoothModel { get }
     var peripheralControllers: [UUID: PeripheralControllerProtocol] { get }
     func toggleScan() -> Void
@@ -10,11 +10,11 @@ protocol BluetoothControllerProtocol {
 
 public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControllerProtocol {
     private var manager: CBCentralManager
-    var model: BluetoothModel = BluetoothModel()
+    public var model: BluetoothModel = BluetoothModel()
     private let bluetoothBaseUUID = Data(base64Encoded: "AAAQAIAAAIBfmzT7")
     private let baseMemberUUID = Data(base64Encoded: "8AA=")!
     private var discoveredPeripherals = [UUID: (Date, CBPeripheral)]()
-    var peripheralControllers = [UUID: PeripheralControllerProtocol]()
+    public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
 
     public override init() {
         // TODO: Consider moving this off of main thread
@@ -37,7 +37,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         }
     }
 
-    func toggleScan() {
+    public func toggleScan() {
         if manager.isScanning {
             manager.stopScan()
             NSLog("BluetoothController: Stopped scanning")
@@ -51,7 +51,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         }
     }
 
-    func connect(_ id: UUID) {
+    public func connect(_ id: UUID) {
         NSLog("Connecting to: \(id)")
 
         if let peripheral = discoveredPeripherals[id]?.1 {
@@ -119,7 +119,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     // Removes members of the connectedPeripherals model property from the peripherals model property
     // Workaround to update the model after returning from the discovery view
     // Connecting on navigation and moving the model simultaneously is trouble
-    func filterConnectedPeripherals() {
+    public func filterConnectedPeripherals() {
         NSLog("filterConnectedPeripherals()")
         let connectedIDs = Set<UUID>(model.connectedPeripherals.map { $0.identifier })
         model.peripherals.removeAll(where: { connectedIDs.contains($0.identifier) })
