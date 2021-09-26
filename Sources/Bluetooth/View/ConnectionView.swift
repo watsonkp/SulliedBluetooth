@@ -6,7 +6,7 @@ struct BluetoothServiceID: Identifiable {
     let name: String
 }
 
-struct ContentView: View {
+struct ConnectionView: View {
     let controller: BluetoothControllerProtocol
     @ObservedObject
     var model: BluetoothModel
@@ -72,9 +72,9 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct ConnectionView_Previews: PreviewProvider {
     static let controller = DesignTimeBluetoothController()
     static var previews: some View {
-        ContentView(controller: controller, model: controller.model)
+        ConnectionView(controller: controller, model: controller.model)
     }
 }
