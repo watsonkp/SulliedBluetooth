@@ -18,6 +18,8 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
         }
     }
     
+    public init() {}
+
     public func connect(_ id: UUID) {
         NSLog("connect()")
         if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
