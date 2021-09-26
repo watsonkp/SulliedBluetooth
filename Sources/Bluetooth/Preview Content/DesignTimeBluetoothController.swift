@@ -1,11 +1,11 @@
 import CoreBluetooth
 
-class DesignTimeBluetoothController: BluetoothControllerProtocol {
-    var model: BluetoothModel = BluetoothModel()
-    var peripheralControllers = [UUID: PeripheralControllerProtocol]()
+public class DesignTimeBluetoothController: BluetoothControllerProtocol {
+    public var model: BluetoothModel = BluetoothModel()
+    public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
     var isScanning = false
     
-    func toggleScan() {
+    public func toggleScan() {
         NSLog("toggleScan()")
         if isScanning {
             isScanning = false
@@ -18,7 +18,7 @@ class DesignTimeBluetoothController: BluetoothControllerProtocol {
         }
     }
     
-    func connect(_ id: UUID) {
+    public func connect(_ id: UUID) {
         NSLog("connect()")
         if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
             let peripheral = model.peripherals[index]
@@ -27,7 +27,7 @@ class DesignTimeBluetoothController: BluetoothControllerProtocol {
         }
     }
     
-    func filterConnectedPeripherals() {
+    public func filterConnectedPeripherals() {
         let connectedIDs = Set<UUID>(model.connectedPeripherals.map { $0.identifier })
         model.peripherals.removeAll(where: { connectedIDs.contains($0.identifier) })
     }
