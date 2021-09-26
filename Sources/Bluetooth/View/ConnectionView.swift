@@ -6,7 +6,7 @@ struct BluetoothServiceID: Identifiable {
     let name: String
 }
 
-struct ConnectionView: View {
+public struct ConnectionView: View {
     let controller: BluetoothControllerProtocol
     @ObservedObject
     var model: BluetoothModel
@@ -23,7 +23,7 @@ struct ConnectionView: View {
     
     @State var scanning: Bool = false
 
-    var body: some View {
+    public var body: some View {
         // View.onAppear() modifier on NavigationView doesn't work. It might be a bug in SwiftUI.
         NavigationView {
             List {

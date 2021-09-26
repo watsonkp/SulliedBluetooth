@@ -8,7 +8,7 @@ protocol BluetoothControllerProtocol {
     func filterConnectedPeripherals() -> Void
 }
 
-class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControllerProtocol {
+public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControllerProtocol {
     private var manager: CBCentralManager
     var model: BluetoothModel = BluetoothModel()
     private let bluetoothBaseUUID = Data(base64Encoded: "AAAQAIAAAIBfmzT7")
@@ -16,7 +16,7 @@ class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControll
     private var discoveredPeripherals = [UUID: (Date, CBPeripheral)]()
     var peripheralControllers = [UUID: PeripheralControllerProtocol]()
 
-    override init() {
+    public override init() {
         // TODO: Consider moving this off of main thread
         // WARNING: Confusing XPC error at runtime if this isn't set during init
         manager = CBCentralManager(delegate: nil, queue: nil)
@@ -67,7 +67,7 @@ class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControll
         }
     }
 
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    public func centralManagerDidUpdateState(_ central: CBCentralManager) {
         // Guidance for each state is documented at:
         // https://developer.apple.com/documentation/corebluetooth/cbmanagerstate
         switch central.state {
@@ -99,7 +99,7 @@ class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControll
 //        NSLog("CoreBluetooth: Restoring central manager during relaunch into background")
 //    }
 
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         NSLog("CoreBluetooth: Discovered a peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
         if discoveredPeripherals[peripheral.identifier] == nil {
             discoveredPeripherals[peripheral.identifier] = (Date(), peripheral)
@@ -107,7 +107,7 @@ class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControll
         }
     }
 
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+    public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         NSLog("CoreBluetooth: connected to: \(peripheral.name ?? peripheral.identifier.uuidString)")
         if let index = model.peripherals.firstIndex(where: { $0.identifier == peripheral.identifier }) {
             model.connectedPeripherals.append(model.peripherals[index])
@@ -125,11 +125,11 @@ class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControll
         model.peripherals.removeAll(where: { connectedIDs.contains($0.identifier) })
     }
 
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+    public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         NSLog("CoreBluetooth: failed to connect to peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
     }
     
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+    public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         NSLog("CoreBluetooth: disconnected peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
     }
 }
