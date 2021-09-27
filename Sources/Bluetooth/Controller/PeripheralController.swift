@@ -1,4 +1,5 @@
 import CoreBluetooth
+import Combine
 
 public protocol PeripheralControllerProtocol {
     func notify(enabled: Bool, id: CBUUID) -> Void
@@ -8,6 +9,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     var model: PeripheralModel
     private let peripheral: CBPeripheral
     private var characteristics = [CBUUID: CBCharacteristic]()
+    var recordPublisher = PassthroughSubject<BluetoothRecord, Never>()
 
     init(peripheral: CBPeripheral, model: PeripheralModel) {
         self.peripheral = peripheral
@@ -54,12 +56,20 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
 //        NSLog("CoreBluetooth: didUpdateValueFor \(characteristic.uuid)")
+        let timestamp = Date()
         // TODO: Publish the value
         if let serviceModel = model.services.filter({ $0.uuid == characteristic.service?.uuid }).first {
             if let characteristicModel = serviceModel.characteristics.filter({ $0.uuid == characteristic.uuid }).first {
                 characteristicModel.value = characteristic.value?.base64EncodedString()
                 if characteristic.isNotifying {
                     characteristicModel.isNotifying = true
+                }
+                if let value = characteristic.value {
+                    recordPublisher.send(BluetoothRecord(peripheral: peripheral.identifier,
+                                                         uuid: characteristic.uuid,
+                                                         name: "\(characteristic.uuid)",
+                                                         timestamp: timestamp,
+                                                         value: value))
                 }
             }
         }

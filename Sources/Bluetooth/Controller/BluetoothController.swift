@@ -1,4 +1,5 @@
 import CoreBluetooth
+import Combine
 
 public protocol BluetoothControllerProtocol {
     var model: BluetoothModel { get }
@@ -15,6 +16,8 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private let baseMemberUUID = Data(base64Encoded: "8AA=")!
     private var discoveredPeripherals = [UUID: (Date, CBPeripheral)]()
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
+    var publisher = PassthroughSubject<BluetoothRecord, Never>()
+    private var subscriptions: [AnyCancellable] = []
 
     public override init() {
         // TODO: Consider moving this off of main thread
@@ -60,6 +63,8 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 //                self.model.connectedPeripherals.append(peripheralModel)
                 
                 let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
+                controller.recordPublisher.sink(receiveValue: { self.publisher.send($0) })
+                    .store(in: &subscriptions)
                 peripheral.delegate = controller
                 peripheralControllers[id] = controller
                 manager.connect(peripheral, options: nil)
