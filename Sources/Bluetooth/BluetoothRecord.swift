@@ -1,9 +1,9 @@
 import CoreBluetooth
 
 public struct BluetoothRecord {
-    let peripheral: UUID
-    let uuid: CBUUID
-    let name: String
-    let timestamp: Date
-    let value: Any
+    public let peripheral: UUID
+    public let uuid: CBUUID
+    public let name: String
+    public let timestamp: Date
+    public let value: Any
 }
