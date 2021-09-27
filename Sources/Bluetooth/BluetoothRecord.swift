@@ -1,6 +1,6 @@
 import CoreBluetooth
 
-struct BluetoothRecord {
+public struct BluetoothRecord {
     let peripheral: UUID
     let uuid: CBUUID
     let name: String

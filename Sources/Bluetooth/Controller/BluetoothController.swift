@@ -16,7 +16,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private let baseMemberUUID = Data(base64Encoded: "8AA=")!
     private var discoveredPeripherals = [UUID: (Date, CBPeripheral)]()
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
-    var publisher = PassthroughSubject<BluetoothRecord, Never>()
+    public var publisher = PassthroughSubject<BluetoothRecord, Never>()
     private var subscriptions: [AnyCancellable] = []
 
     public override init() {
