@@ -111,9 +111,9 @@ public enum BluetoothValue {
 }
 
 public struct HeartRateMeasurement {
-    let heartRateMeasurementValue: UInt16
-    let sensorContactSupported: Bool
-    let sensorContactDetected: Bool
-    let energyExpended: UInt16?
-    let rrInterval: [UInt16]?
+    public let heartRateMeasurementValue: UInt16
+    public let sensorContactSupported: Bool
+    public let sensorContactDetected: Bool
+    public let energyExpended: UInt16?
+    public let rrInterval: [UInt16]?
 }
