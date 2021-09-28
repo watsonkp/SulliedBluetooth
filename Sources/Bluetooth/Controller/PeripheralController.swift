@@ -64,12 +64,8 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                 if characteristic.isNotifying {
                     characteristicModel.isNotifying = true
                 }
-                if let value = characteristic.value {
-                    recordPublisher.send(BluetoothRecord(peripheral: peripheral.identifier,
-                                                         uuid: characteristic.uuid,
-                                                         name: "\(characteristic.uuid)",
-                                                         timestamp: timestamp,
-                                                         value: value))
+                if characteristic.value != nil {
+                    recordPublisher.send(BluetoothRecord(characteristic: characteristic, timestamp: timestamp))
                 }
             }
         }
