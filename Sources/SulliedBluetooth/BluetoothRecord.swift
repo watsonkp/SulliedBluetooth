@@ -6,6 +6,8 @@ public struct BluetoothRecord {
     public let name: String
     public let timestamp: Date
     public let value: BluetoothValue
+    public let raw: Data
+    public let serviceUUID: CBUUID
 
     init(characteristic: CBCharacteristic, timestamp: Date) {
         self.peripheral = characteristic.service!.peripheral!.identifier
@@ -13,6 +15,9 @@ public struct BluetoothRecord {
         self.name = "\(characteristic.uuid)"
         self.timestamp = timestamp
         self.value = BluetoothRecord.decode(id: self.uuid, value: characteristic.value)
+        // TODO: Remove these properties. Added temporarily for backwards compatibility.
+        self.raw = characteristic.value!
+        self.serviceUUID = characteristic.service!.uuid
     }
 
     static func decode(id: CBUUID, value: Data?) -> BluetoothValue {
