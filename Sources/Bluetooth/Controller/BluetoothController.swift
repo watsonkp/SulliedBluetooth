@@ -16,10 +16,12 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private let baseMemberUUID = Data(base64Encoded: "8AA=")!
     private var discoveredPeripherals = [UUID: (Date, CBPeripheral)]()
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
-    public var publisher = PassthroughSubject<BluetoothRecord, Never>()
+    private var bluetoothPublisher = PassthroughSubject<BluetoothRecord, Never>()
+    public var publisher: AnyPublisher<BluetoothRecord, Never>
     private var subscriptions: [AnyCancellable] = []
 
     public override init() {
+        self.publisher = AnyPublisher(self.bluetoothPublisher)
         // TODO: Consider moving this off of main thread
         // WARNING: Confusing XPC error at runtime if this isn't set during init
         manager = CBCentralManager(delegate: nil, queue: nil)
@@ -63,7 +65,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 //                self.model.connectedPeripherals.append(peripheralModel)
                 
                 let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
-                controller.recordPublisher.sink(receiveValue: { self.publisher.send($0) })
+                controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })
                     .store(in: &subscriptions)
                 peripheral.delegate = controller
                 peripheralControllers[id] = controller
