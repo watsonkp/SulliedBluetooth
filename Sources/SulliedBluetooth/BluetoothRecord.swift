@@ -108,17 +108,36 @@ public struct BluetoothRecord {
     }
 }
 
-public enum BluetoothValue {
+public enum BluetoothValue: CustomStringConvertible {
     case batteryLevel(UInt8)
     case heartRateMeasurement(HeartRateMeasurement)
     case raw(Data)
     case none
+    public var description: String {
+        get {
+            switch self {
+            case .batteryLevel(let level):
+                return "\(level)%"
+            case .heartRateMeasurement(let measurement):
+                return "\(measurement)"
+            case .raw(let data):
+                return "\(data)"
+            case .none:
+                return "none"
+            }
+        }
+    }
 }
 
-public struct HeartRateMeasurement {
+public struct HeartRateMeasurement: CustomStringConvertible {
     public let heartRateMeasurementValue: UInt16
     public let sensorContactSupported: Bool
     public let sensorContactDetected: Bool
     public let energyExpended: UInt16?
     public let rrInterval: [UInt16]?
+    public var description: String {
+        get {
+            return "\(heartRateMeasurementValue) bpm"
+        }
+    }
 }
