@@ -140,4 +140,12 @@ public struct HeartRateMeasurement: CustomStringConvertible {
             return "\(heartRateMeasurementValue) bpm"
         }
     }
+
+    public init(heartRateMeasurementValue: UInt16, sensorContactSupported: Bool, sensorContactDetected: Bool, energyExpended: UInt16?, rrInterval: [UInt16]?) {
+        self.heartRateMeasurementValue = heartRateMeasurementValue
+        self.sensorContactSupported = sensorContactSupported
+        self.sensorContactDetected = sensorContactDetected
+        self.energyExpended = energyExpended
+        self.rrInterval = rrInterval
+    }
 }
