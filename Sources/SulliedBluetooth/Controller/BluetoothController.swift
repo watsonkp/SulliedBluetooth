@@ -57,9 +57,12 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func connect(_ id: UUID) {
-        NSLog("Connecting to: \(id)")
-
+        NSLog("Connection attempt to: \(id)")
         if let peripheral = discoveredPeripherals[id]?.1 {
+            if peripheral.state != .disconnected {
+                NSLog("Already \(peripheral.state) to \(id). Skipping new connection attempt.")
+                return
+            }
             if let peripheralModel = model.peripherals.filter({ $0.identifier == peripheral.identifier }).first {
                 // TODO: Remove model from model.peripherals and move it to connected peripherals
 //                self.model.connectedPeripherals.append(peripheralModel)
