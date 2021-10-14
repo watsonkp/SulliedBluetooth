@@ -19,6 +19,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private var bluetoothPublisher = PassthroughSubject<BluetoothRecord, Never>()
     public var publisher: AnyPublisher<BluetoothRecord, Never>
     private var subscriptions: [AnyCancellable] = []
+    private var didConnect = Set<UUID>()
 
     public override init() {
         self.publisher = AnyPublisher(self.bluetoothPublisher)
@@ -119,9 +120,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         NSLog("CoreBluetooth: connected to: \(peripheral.name ?? peripheral.identifier.uuidString)")
-        if let index = model.peripherals.firstIndex(where: { $0.identifier == peripheral.identifier }) {
-            model.connectedPeripherals.append(model.peripherals[index])
-        }
+        self.didConnect.insert(peripheral.identifier)
 
         peripheral.discoverServices(nil)
     }
@@ -131,8 +130,13 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     // Connecting on navigation and moving the model simultaneously is trouble
     public func filterConnectedPeripherals() {
         NSLog("filterConnectedPeripherals()")
-        let connectedIDs = Set<UUID>(model.connectedPeripherals.map { $0.identifier })
-        model.peripherals.removeAll(where: { connectedIDs.contains($0.identifier) })
+        for id in self.didConnect {
+            if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
+                model.connectedPeripherals.append(model.peripherals[index])
+            }
+        }
+
+        model.peripherals.removeAll(where: { didConnect.contains($0.identifier) })
     }
 
     public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
