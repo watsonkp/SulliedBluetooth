@@ -14,13 +14,13 @@ public struct BluetoothRecord {
         self.uuid = characteristic.uuid
         self.name = "\(characteristic.uuid)"
         self.timestamp = timestamp
-        self.value = BluetoothRecord.decode(id: self.uuid, value: characteristic.value)
+        self.value = BluetoothRecord.decode(characteristic: self.uuid, value: characteristic.value)
         // TODO: Remove these properties. Added temporarily for backwards compatibility.
         self.raw = characteristic.value!
         self.serviceUUID = characteristic.service!.uuid
     }
 
-    static func decode(id: CBUUID, value: Data?) -> BluetoothValue {
+    public static func decode(characteristic id: CBUUID, value: Data?) -> BluetoothValue {
         if let value = value {
             switch id {
             case CBUUID(string: "0x2a19"):
@@ -70,28 +70,35 @@ public struct BluetoothRecord {
                     }
                 }
 
-                // TODO: Parse multiple RR-Interval values
+                // Parse RR-Interval values. May be 0, 1, or more values.
                 var rrIntervals: [UInt16]? = nil
                 if (value[0] & 0x10) != 0 {
                     // One or more RR-Interval values are present
+                    rrIntervals = [UInt16]()
+                    var start: Int = 0
                     if (value[0] & 0x1) != 0 {
                         // Heart Rate Value Format is set to UINT16
                         if (value[0] & 0x8) != 0 {
                             // Energy Expended field is present
-                            rrIntervals = [UInt16((value[5]<<8) | value[6])]
+                            start = 5
                         } else {
                             // Energy Expended field is not present
-                            rrIntervals = [UInt16((value[3]<<8) | value[4])]
+                            start = 3
                         }
                     } else {
                         // Heart Rate Value Format is set to UINT8
                         if (value[0] & 0x8) != 0 {
                             // Energy Expended field is present
-                            rrIntervals = [UInt16((value[4]<<8) | value[5])]
+                            start = 4
                         } else {
                             // Energy Expended field is not present
-                            rrIntervals = [UInt16((value[2]<<8) | value[3])]
+                            start = 2
                         }
+                    }
+
+                    for i in stride(from: start, to: value.count, by: 2){
+                        let rrInterval: UInt16 = value[i...i+1].withUnsafeBytes { $0.load(as: UInt16.self) }
+                        rrIntervals?.append(rrInterval)
                     }
                 }
 
