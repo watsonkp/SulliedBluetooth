@@ -1,3 +1,5 @@
-# Bluetooth
+# SulliedBluetooth
 
-A description of this package.
+A package written to help with Bluetooth connections on iOS that makes use of the [Combine](https://developer.apple.com/documentation/combine/) and [SwiftUI](https://developer.apple.com/documentation/swiftui/) frameworks. Use of this package results in a [Publisher](https://developer.apple.com/documentation/combine/publisher) that publishes any Bluetooth values it receives. It also contains a SwiftUI view that allows a user to control device connections and received characteristics.
+
+This project is a work in progress. Current support for Bluetooth services and characteristics is limited. Experiments to generate some or all of this code based on the published [Bluetooth GATT](https://www.bluetooth.com/spec-types/gatt/) specifications are in progress. Replacing Combine with support for the built-in [Swift async/await](https://docs.swift.org/swift-book/LanguageGuide/Concurrency.html) asynchronous functionality is being considered. Perhaps support for both methods will be kept.
