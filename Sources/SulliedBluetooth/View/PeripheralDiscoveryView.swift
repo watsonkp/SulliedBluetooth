@@ -8,12 +8,10 @@ struct PeripheralDiscoveryView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("\(model.name ?? model.identifier.uuidString)").font(.headline)
-            if let services = model.services {
-                ScrollView {
-                    ForEach(services, id: \ServiceModel.uuid) { service in
-                        ServiceView(model: service, notify: controller?.notify)
-                        Divider()
-                    }
+            ScrollView {
+                ForEach(model.services, id: \ServiceModel.uuid) { service in
+                    ServiceView(model: service, notify: controller?.notify)
+                    Divider()
                 }
             }
         }
