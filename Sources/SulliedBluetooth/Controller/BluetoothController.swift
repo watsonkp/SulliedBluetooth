@@ -10,7 +10,7 @@ public protocol BluetoothControllerProtocol {
 }
 
 public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControllerProtocol {
-    private var manager: CBCentralManager
+    private var manager: CBCentralManager? = nil
     public var model: BluetoothModel = BluetoothModel()
     private let bluetoothBaseUUID = Data(base64Encoded: "AAAQAIAAAIBfmzT7")
     private let baseMemberUUID = Data(base64Encoded: "8AA=")!
@@ -23,9 +23,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
     public override init() {
         self.publisher = AnyPublisher(self.bluetoothPublisher)
-        // TODO: Consider moving this off of main thread
-        // WARNING: Confusing XPC error at runtime if this isn't set during init
-        manager = CBCentralManager(delegate: nil, queue: nil)
         super.init()
     }
     
@@ -44,16 +41,19 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func toggleScan() {
-        if manager.isScanning {
-            manager.stopScan()
-            NSLog("BluetoothController: Stopped scanning")
-        } else {
-            self.manager.delegate = self
-            if manager.state == CBManagerState.poweredOn {
-//                manager.scanForPeripherals(withServices: nil, options: nil)
-                // DEBUG: Filter to heart rate monitor for testing
-                manager.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
+        if let manager = self.manager {
+            if manager.isScanning {
+                manager.stopScan()
+                NSLog("BluetoothController: Stopped scanning")
+            } else {
+                if manager.state == CBManagerState.poweredOn {
+                    //                manager.scanForPeripherals(withServices: nil, options: nil)
+                    // DEBUG: Filter to heart rate monitor for testing
+                    manager.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
+                }
             }
+        } else {
+            self.manager = CBCentralManager(delegate: self, queue: nil)
         }
     }
 
@@ -73,7 +73,9 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
                     .store(in: &subscriptions)
                 peripheral.delegate = controller
                 peripheralControllers[id] = controller
-                manager.connect(peripheral, options: nil)
+                if let manager = self.manager {
+                    manager.connect(peripheral, options: nil)
+                }
             }
         }
     }
