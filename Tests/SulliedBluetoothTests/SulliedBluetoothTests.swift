@@ -1,11 +1,15 @@
-//    import XCTest
-//    @testable import Bluetooth
-//
-//    final class BluetoothTests: XCTestCase {
-//        func testExample() {
-//            // This is an example of a functional test case.
-//            // Use XCTAssert and related functions to verify your tests produce the correct
-//            // results.
-//            XCTAssertEqual(Bluetooth().text, "Hello, World!")
-//        }
-//    }
+import XCTest
+import CoreBluetooth
+@testable import SulliedBluetooth
+
+final class BluetoothTests: XCTestCase {
+    func testHeartRateDecode() {
+        let data = Data(base64Encoded: "EJ2HAYYBigE=")!
+        let parsed = Bluetooth.decodeHeartRateMeasurement(value: data)
+        XCTAssertEqual(parsed.heartRateMeasurementValue, 157)
+        XCTAssertEqual(parsed.sensorContactSupported, false)
+        XCTAssertEqual(parsed.sensorContactDetected, false)
+        XCTAssertEqual(parsed.energyExpended, nil)
+        XCTAssertEqual(parsed.rrInterval, [391, 390, 394])
+    }
+}
