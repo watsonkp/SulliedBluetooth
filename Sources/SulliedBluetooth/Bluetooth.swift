@@ -2,6 +2,7 @@ import Foundation
 
 public struct Bluetooth {
     public static func decodeHeartRateMeasurement(value: Data) -> HeartRateMeasurement {
+        // https://www.bluetooth.com/specifications/specs/heart-rate-service-1-0/
         var typedValue = [UInt8](repeating:0, count: 0xf)
         typedValue.withUnsafeMutableBytes({(bs: UnsafeMutableRawBufferPointer) -> Void in
             value.copyBytes(to: bs, count: value.count)
