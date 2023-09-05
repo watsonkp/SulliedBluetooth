@@ -9,7 +9,8 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     var model: PeripheralModel
     private let peripheral: CBPeripheral
     private var characteristics = [CBUUID: CBCharacteristic]()
-    var recordPublisher = PassthroughSubject<BluetoothRecord, Never>()
+//    var recordPublisher = PassthroughSubject<BluetoothRecord, Never>()
+    var recordPublisher = PassthroughSubject<DataPoint, Never>()
 
     init(peripheral: CBPeripheral, model: PeripheralModel) {
         self.peripheral = peripheral
@@ -65,7 +66,20 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                     characteristicModel.isNotifying = true
                 }
                 if characteristic.value != nil {
-                    recordPublisher.send(BluetoothRecord(characteristic: characteristic, timestamp: timestamp))
+                    let record = BluetoothRecord(characteristic: characteristic, timestamp: timestamp)
+                    switch (record.value) {
+                    case .heartRateMeasurement(let measurement):
+                        recordPublisher.send(DataPoint(date: timestamp, unit: 193, value: Int64(measurement.heartRateMeasurementValue)))
+                        if let rrIntervals = measurement.rrInterval {
+                            for rrInterval in rrIntervals {
+                                recordPublisher.send(DataPoint(date: timestamp, unit: 194, value: Int64(rrInterval)))
+                            }
+                        }
+                    default:
+                        // TODO: Something
+                        break
+                    }
+//                    recordPublisher.send(BluetoothRecord(characteristic: characteristic, timestamp: timestamp))
                 }
             }
         }

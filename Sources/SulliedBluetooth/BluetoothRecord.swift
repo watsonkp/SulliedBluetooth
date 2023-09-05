@@ -1,5 +1,11 @@
 import CoreBluetooth
 
+public struct DataPoint {
+    public let date: Date
+    public let unit: Int64
+    public let value: Int64
+}
+
 public struct BluetoothRecord {
     public let peripheral: UUID
     public let uuid: CBUUID
