@@ -1,6 +1,6 @@
 import CoreBluetooth
 
-public enum MeasurementUsage: Int, CustomStringConvertible {
+public enum MeasurementUsage: Int64, CustomStringConvertible {
     case heartRate = 1
     case rrInterval = 2
 
