@@ -16,16 +16,17 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private let baseMemberUUID = Data(base64Encoded: "8AA=")!
     private var discoveredPeripherals = [UUID: (Date, CBPeripheral)]()
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
-//    private var bluetoothPublisher = PassthroughSubject<BluetoothRecord, Never>()
     private var bluetoothPublisher = PassthroughSubject<DataPoint, Never>()
-//    public var publisher: AnyPublisher<BluetoothRecord, Never>
     public var publisher: AnyPublisher<DataPoint, Never>
     private var subscriptions: [AnyCancellable] = []
     private var didConnect = Set<UUID>()
 
     public override init() {
-        self.publisher = AnyPublisher(Publishers.Buffer(upstream: self.bluetoothPublisher, size: 4, prefetch: .keepFull, whenFull: .dropOldest))
-//        self.publisher = AnyPublisher(self.bluetoothPublisher)
+        self.publisher = AnyPublisher(Publishers.Buffer(upstream: self.bluetoothPublisher,
+                                                        size: 12,
+                                                        prefetch: .keepFull,
+                                                        whenFull: .dropOldest)
+        )
         super.init()
     }
     
