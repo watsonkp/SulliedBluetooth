@@ -73,6 +73,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         //  will drop all but the first unless there is buffering.
                         recordPublisher.send(DataPoint(date: timestamp,
                                                        unit: 193,
+                                                       usage: .heartRate,
                                                        value: Int64(measurement.heartRateMeasurementValue)))
                         if let rrIntervals = measurement.rrInterval {
                             // TODO: Handle time intervals between characteristic updates that are larger than the cumulative reported RR-intervals.
@@ -87,6 +88,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                                 offset += (Double(rrInterval) / 1000)
                                 recordPublisher.send(DataPoint(date: Date(timeIntervalSince1970: offset),
                                                                unit: 194,
+                                                               usage: .rrInterval,
                                                                value: Int64(rrInterval)))
                                 dateOffset = offset
                             }

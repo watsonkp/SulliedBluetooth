@@ -1,8 +1,23 @@
 import CoreBluetooth
 
+public enum MeasurementUsage: Int, CustomStringConvertible {
+    case heartRate = 1
+    case rrInterval = 2
+
+    public var description: String {
+        switch self {
+        case .heartRate:
+            return "Heart Rate"
+        case .rrInterval:
+            return "RR-Interval"
+        }
+    }
+}
+
 public struct DataPoint {
     public let date: Date
     public let unit: Int64
+    public let usage: MeasurementUsage
     public let value: Int64
 }
 
