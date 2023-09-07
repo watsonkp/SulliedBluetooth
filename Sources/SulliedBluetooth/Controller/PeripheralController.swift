@@ -69,7 +69,11 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                     let record = BluetoothRecord(characteristic: characteristic, timestamp: timestamp)
                     switch (record.value) {
                     case .heartRateMeasurement(let measurement):
-                        recordPublisher.send(DataPoint(date: timestamp, unit: 193, value: Int64(measurement.heartRateMeasurementValue)))
+                        // TODO: I haven't noticed large numbers (RR-intervals) being displayed by the application. Probably not being received.
+                        //  Could this be a very brittle implementation? It seemed functional because values were only published once per second?
+                        //  Rapid follow-up values might be lost or dropped?
+                        //  Seems plausible a "PassthroughSubject" drops values if there are no subscribers or demand is zero. Doesn't hold a buffer.
+//                        recordPublisher.send(DataPoint(date: timestamp, unit: 193, value: Int64(measurement.heartRateMeasurementValue)))
                         if let rrIntervals = measurement.rrInterval {
                             for rrInterval in rrIntervals {
                                 recordPublisher.send(DataPoint(date: timestamp, unit: 194, value: Int64(rrInterval)))
