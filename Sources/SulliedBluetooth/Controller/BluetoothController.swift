@@ -24,7 +24,8 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private var didConnect = Set<UUID>()
 
     public override init() {
-        self.publisher = AnyPublisher(self.bluetoothPublisher)
+        self.publisher = AnyPublisher(Publishers.Buffer(upstream: self.bluetoothPublisher, size: 4, prefetch: .keepFull, whenFull: .dropOldest))
+//        self.publisher = AnyPublisher(self.bluetoothPublisher)
         super.init()
     }
     
