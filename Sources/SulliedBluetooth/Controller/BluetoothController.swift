@@ -24,7 +24,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     public override init() {
         self.publisher = AnyPublisher(Publishers.Buffer(upstream: self.bluetoothPublisher,
                                                         size: 12,
-                                                        prefetch: .keepFull,
+                                                        prefetch: .byRequest,
                                                         whenFull: .dropOldest)
         )
         super.init()
