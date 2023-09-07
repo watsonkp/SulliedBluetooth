@@ -37,7 +37,7 @@ public struct BluetoothRecord {
                 })
                 return BluetoothValue.batteryLevel(typedValue[0])
             case CBUUID(string: "0x2a37"):
-                // https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Characteristics/org.bluetooth.characteristic.heart_rate_measurement.xml
+                // https://www.bluetooth.com/specifications/specs/heart-rate-service-1-0/
                 var typedValue = [UInt8](repeating:0, count: 0xf)
                 typedValue.withUnsafeMutableBytes({(bs: UnsafeMutableRawBufferPointer) -> Void in
                     value.copyBytes(to: bs, count: value.count)
@@ -76,7 +76,7 @@ public struct BluetoothRecord {
                     }
                 }
 
-                // Parse RR-Interval values. May be 0, 1, or more values.
+                // Parse RR-Interval values. May be 0, 1, or more values up to a maximum of 7 through 9 based on other fields.
                 var rrIntervals: [UInt16]? = nil
                 if (value[0] & 0x10) != 0 {
                     // One or more RR-Interval values are present
