@@ -10,6 +10,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     private let peripheral: CBPeripheral
     private var characteristics = [CBUUID: CBCharacteristic]()
     var recordPublisher = PassthroughSubject<DataPoint, Never>()
+    private var dateOffset: Double? = nil
 
     init(peripheral: CBPeripheral, model: PeripheralModel) {
         self.peripheral = peripheral
@@ -68,23 +69,30 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                     let record = BluetoothRecord(characteristic: characteristic, timestamp: timestamp)
                     switch (record.value) {
                     case .heartRateMeasurement(let measurement):
-                        // Rapidly publishing a set of values (typically 4) to a PassthroughSubject
+                        // Rapidly publishing a set of values (tested with 4) to a PassthroughSubject
                         //  will drop all but the first unless there is buffering.
                         recordPublisher.send(DataPoint(date: timestamp,
                                                        unit: 193,
                                                        value: Int64(measurement.heartRateMeasurementValue)))
                         if let rrIntervals = measurement.rrInterval {
+                            // TODO: Handle time intervals between characteristic updates that are larger than the cumulative reported RR-intervals.
+                            //  Measurements could be missing. The heart rate measurement specification suggests that data will be dropped.
+                            //  The assumption that no measurements are dropped will lead to skewed data.
+                            // RR-interval measurements are sequential durations so time data needs to accumulate separately from the time the device received the data.
+                            // The API aims to report time series data without requiring the receiver to use knowledge of Bluetooth.
+                            // TODO: Guarantee that the date offset is unique to a characteristic and is reset.
+                            // The initial date offset is set as the time of the first characteristic update less the measured durations.
+                            var offset = dateOffset ?? rrIntervals.reduce(into: timestamp.timeIntervalSince1970) { $0 -= (Double($1) / 1000) }
                             for rrInterval in rrIntervals {
-                                // TODO: Timestamps should be cumulative RR-interval value.
-                                //  Drop values that arrive out of order?
-                                //  Sending duplicate time stamps as is.
-                                recordPublisher.send(DataPoint(date: timestamp,
+                                offset += (Double(rrInterval) / 1000)
+                                recordPublisher.send(DataPoint(date: Date(timeIntervalSince1970: offset),
                                                                unit: 194,
                                                                value: Int64(rrInterval)))
+                                dateOffset = offset
                             }
                         }
                     default:
-                        // TODO: Something
+                        // TODO: Error handling
                         break
                     }
                 }
