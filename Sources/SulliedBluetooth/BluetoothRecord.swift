@@ -1,6 +1,7 @@
 import CoreBluetooth
 
 public enum MeasurementUsage: Int64, CustomStringConvertible {
+    case unknown = 0
     case heartRate = 1
     case rrInterval = 2
 
@@ -10,6 +11,8 @@ public enum MeasurementUsage: Int64, CustomStringConvertible {
             return "Heart Rate"
         case .rrInterval:
             return "RR-Interval"
+        default:
+            return "Unknown"
         }
     }
 }
