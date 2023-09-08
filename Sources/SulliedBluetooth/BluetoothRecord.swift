@@ -1,28 +1,5 @@
 import CoreBluetooth
-
-public enum MeasurementUsage: Int64, CustomStringConvertible {
-    case unknown = 0
-    case heartRate = 1
-    case rrInterval = 2
-
-    public var description: String {
-        switch self {
-        case .heartRate:
-            return "Heart Rate"
-        case .rrInterval:
-            return "RR-Interval"
-        default:
-            return "Unknown"
-        }
-    }
-}
-
-public struct DataPoint {
-    public let date: Date
-    public let unit: Int64
-    public let usage: MeasurementUsage
-    public let value: Int64
-}
+import SulliedMeasurement
 
 public struct BluetoothRecord {
     public let peripheral: UUID

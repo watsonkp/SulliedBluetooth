@@ -1,5 +1,6 @@
 import CoreBluetooth
 import Combine
+import SulliedMeasurement
 
 public protocol PeripheralControllerProtocol {
     func notify(enabled: Bool, id: CBUUID) -> Void
@@ -9,7 +10,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     var model: PeripheralModel
     private let peripheral: CBPeripheral
     private var characteristics = [CBUUID: CBCharacteristic]()
-    var recordPublisher = PassthroughSubject<DataPoint, Never>()
+    var recordPublisher = PassthroughSubject<IntegerDataPoint, Never>()
     private var dateOffset: Double? = nil
 
     init(peripheral: CBPeripheral, model: PeripheralModel) {
@@ -71,10 +72,10 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                     case .heartRateMeasurement(let measurement):
                         // Rapidly publishing a set of values (tested with 4) to a PassthroughSubject
                         //  will drop all but the first unless there is buffering.
-                        recordPublisher.send(DataPoint(date: timestamp,
-                                                       unit: 193,
-                                                       usage: .heartRate,
-                                                       value: Int64(measurement.heartRateMeasurementValue)))
+                        recordPublisher.send(IntegerDataPoint(date: timestamp,
+                                                              unit: UnitFrequency.beatsPerMinute,
+                                                              usage: .heartRate,
+                                                              value: Int64(measurement.heartRateMeasurementValue)))
                         if let rrIntervals = measurement.rrInterval {
                             // TODO: Handle time intervals between characteristic updates that are larger than the cumulative reported RR-intervals.
                             //  Measurements could be missing. The heart rate measurement specification suggests that data will be dropped.
@@ -86,10 +87,10 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             var offset = dateOffset ?? rrIntervals.reduce(into: timestamp.timeIntervalSince1970) { $0 -= (Double($1) / 1000) }
                             for rrInterval in rrIntervals {
                                 offset += (Double(rrInterval) / 1000)
-                                recordPublisher.send(DataPoint(date: Date(timeIntervalSince1970: offset),
-                                                               unit: 194,
-                                                               usage: .rrInterval,
-                                                               value: Int64(rrInterval)))
+                                recordPublisher.send(IntegerDataPoint(date: Date(timeIntervalSince1970: offset),
+                                                                      unit: UnitDuration.milliseconds,
+                                                                      usage: .rrInterval,
+                                                                      value: Int64(rrInterval)))
                                 dateOffset = offset
                             }
                         }

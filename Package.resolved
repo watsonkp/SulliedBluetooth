@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SulliedMeasurement",
+        "repositoryURL": "git://kubernetes.convex.watsonkp.com:31950/SulliedMeasurement",
+        "state": {
+          "branch": null,
+          "revision": "35619fccbc89bbb4328dc5f2c3d1af1e278254bb",
+          "version": "0.2.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

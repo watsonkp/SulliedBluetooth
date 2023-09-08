@@ -1,5 +1,6 @@
 import CoreBluetooth
 import Combine
+import SulliedMeasurement
 
 public protocol BluetoothControllerProtocol {
     var model: BluetoothModel { get }
@@ -16,8 +17,8 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private let baseMemberUUID = Data(base64Encoded: "8AA=")!
     private var discoveredPeripherals = [UUID: (Date, CBPeripheral)]()
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
-    private var bluetoothPublisher = PassthroughSubject<DataPoint, Never>()
-    public var publisher: AnyPublisher<DataPoint, Never>
+    private var bluetoothPublisher = PassthroughSubject<IntegerDataPoint, Never>()
+    public var publisher: AnyPublisher<IntegerDataPoint, Never>
     private var subscriptions: [AnyCancellable] = []
     private var didConnect = Set<UUID>()
 
