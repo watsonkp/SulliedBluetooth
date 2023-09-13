@@ -118,7 +118,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 //    }
 
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        NSLog("CoreBluetooth: Discovered a peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
         if discoveredPeripherals[peripheral.identifier] == nil {
             discoveredPeripherals[peripheral.identifier] = (Date(), peripheral)
             self.model.peripherals.append(PeripheralModel(peripheral))
