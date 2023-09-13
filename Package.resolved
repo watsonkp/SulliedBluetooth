@@ -6,8 +6,8 @@
         "repositoryURL": "git://kubernetes.convex.watsonkp.com:31950/SulliedMeasurement",
         "state": {
           "branch": null,
-          "revision": "e7ce9ec7bf28e2eab91bda196d7e7f55acdd6f37",
-          "version": "0.3.5"
+          "revision": "5cdf1504c2671a975727116bc33b2eaddc38d99c",
+          "version": "0.3.7"
         }
       }
     ]

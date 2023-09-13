@@ -76,7 +76,8 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                                                               unit: UnitFrequency.beatsPerMinute,
                                                               usage: .heartRate,
                                                               value: Int64(measurement.heartRateMeasurementValue),
-                                                              significantFigures: 3))
+                                                              significantFigures: 3,
+                                                              significantPosition: 0))
                         if let rrIntervals = measurement.rrInterval {
                             // TODO: Handle time intervals between characteristic updates that are larger than the cumulative reported RR-intervals.
                             //  Measurements could be missing. The heart rate measurement specification suggests that data will be dropped.
@@ -92,7 +93,8 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                                                                       unit: UnitDuration.milliseconds,
                                                                       usage: .rrInterval,
                                                                       value: Int64(rrInterval),
-                                                                      significantFigures: 4))
+                                                                      significantFigures: 4,
+                                                                      significantPosition: 0))
                                 dateOffset = offset
                             }
                         }
