@@ -46,6 +46,9 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func toggleScan() {
+        if self.manager == nil {
+            self.manager = CBCentralManager(delegate: self, queue: nil)
+        }
         if let manager = self.manager {
             if manager.isScanning {
                 manager.stopScan()
@@ -57,8 +60,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
                     manager.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
                 }
             }
-        } else {
-            self.manager = CBCentralManager(delegate: self, queue: nil)
         }
     }
 
