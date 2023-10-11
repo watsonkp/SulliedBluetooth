@@ -3,6 +3,21 @@ import CoreBluetooth
 public class BluetoothModel: ObservableObject {
     @Published var peripherals = [PeripheralModel]()
     @Published var connectedPeripherals = [PeripheralModel]()
+
+    public var isReceivingNotifications: Bool {
+        get {
+            for peripheral in connectedPeripherals {
+                for service in peripheral.services {
+                    for characteristic in service.characteristics {
+                        if characteristic.isNotifying ?? false {
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
+        }
+    }
 }
 
 struct ValueModel: CustomStringConvertible {
