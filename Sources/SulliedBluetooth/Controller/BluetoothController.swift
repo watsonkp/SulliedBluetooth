@@ -21,6 +21,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     public var publisher: AnyPublisher<IntegerDataPoint, Never>
     private var subscriptions: [AnyCancellable] = []
     private var didConnect = Set<UUID>()
+    private var isScanningRequested = false
 
     public override init() {
         self.publisher = AnyPublisher(Publishers.Buffer(upstream: self.bluetoothPublisher,
@@ -46,20 +47,26 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func toggleScan() {
-        if self.manager == nil {
+        self.isScanningRequested.toggle()
+
+        // Initialize the CoreBluetooth manager to dispatch events on the main queue.
+        if self.isScanningRequested && self.manager == nil {
             self.manager = CBCentralManager(delegate: self, queue: nil)
         }
-        if let manager = self.manager {
-            if manager.isScanning {
-                manager.stopScan()
-                NSLog("BluetoothController: Stopped scanning")
-            } else {
-                if manager.state == CBManagerState.poweredOn {
-                    //                manager.scanForPeripherals(withServices: nil, options: nil)
-                    // DEBUG: Filter to heart rate monitor for testing
-                    manager.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
-                }
-            }
+
+        // Start scanning for peripherals if it is requested and the manager is powered on.
+        if self.isScanningRequested,
+           let manager = self.manager,
+           !manager.isScanning,
+           manager.state == .poweredOn {
+            manager.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
+        }
+
+        // Stop scanning for peripherals if the manager is scanning.
+        if !self.isScanningRequested,
+           let manager = self.manager,
+           manager.isScanning{
+            manager.stopScan()
         }
     }
 
@@ -92,9 +99,17 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         switch central.state {
         case CBManagerState.poweredOff:
             NSLog("CoreBluetooth state update: powered off")
+            // TODO: If the state is lower than this clear peripheral models.
+            //  https://developer.apple.com/documentation/corebluetooth/cbcentralmanagerdelegate/1518888-centralmanagerdidupdatestate
 //            model.state = "Powered off"
         case CBManagerState.poweredOn:
             NSLog("CoreBluetooth state update: powered on")
+            // Start scanning for peripherals if requested and the manager state is now powered on.
+            if isScanningRequested {
+                if !central.isScanning {
+                    central.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
+                }
+            }
 //            model.state = "Powered on"
         case CBManagerState.resetting:
             NSLog("CoreBluetooth state: resetting")
