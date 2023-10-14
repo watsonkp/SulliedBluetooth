@@ -97,10 +97,10 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         // Guidance for each state is documented at:
         // https://developer.apple.com/documentation/corebluetooth/cbmanagerstate
         switch central.state {
+        // If the state is lower than powered off clear peripheral models.
+        //  https://developer.apple.com/documentation/corebluetooth/cbcentralmanagerdelegate/1518888-centralmanagerdidupdatestate
         case CBManagerState.poweredOff:
             NSLog("CoreBluetooth state update: powered off")
-            // TODO: If the state is lower than this clear peripheral models.
-            //  https://developer.apple.com/documentation/corebluetooth/cbcentralmanagerdelegate/1518888-centralmanagerdidupdatestate
 //            model.state = "Powered off"
         case CBManagerState.poweredOn:
             NSLog("CoreBluetooth state update: powered on")
@@ -113,15 +113,19 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 //            model.state = "Powered on"
         case CBManagerState.resetting:
             NSLog("CoreBluetooth state: resetting")
+            invalidate()
 //            model.state = "Resetting"
         case CBManagerState.unauthorized:
             NSLog("CoreBluetooth state: unauthorized")
+            invalidate()
 //            model.state = "Unauthorized"
         case CBManagerState.unknown:
             NSLog("CoreBluetooth state: unknown")
+            invalidate()
 //            model.state = "Unknown"
         case CBManagerState.unsupported:
             NSLog("CoreBluetooth state: unsupported")
+            invalidate()
 //            model.state = "Unsupported"
         default:
             // DEBUG
@@ -167,5 +171,13 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     
     public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         NSLog("CoreBluetooth: disconnected peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
+    }
+
+    private func invalidate() {
+        model.connectedPeripherals = []
+        model.peripherals = []
+        peripheralControllers = [:]
+        discoveredPeripherals = [:]
+        didConnect = Set<UUID>()
     }
 }
