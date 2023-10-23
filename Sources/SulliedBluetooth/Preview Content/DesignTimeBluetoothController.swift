@@ -42,6 +42,11 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
         peripheralControllers.removeValue(forKey: id)
     }
 
+    public func disconnectAll() {
+        model.connectedPeripherals = []
+        peripheralControllers.removeAll()
+    }
+
     public func filterConnectedPeripherals() {
         let connectedIDs = Set<UUID>(model.connectedPeripherals.map { $0.identifier })
         model.peripherals.removeAll(where: { connectedIDs.contains($0.identifier) })

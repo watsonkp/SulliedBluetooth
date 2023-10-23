@@ -61,7 +61,7 @@ public struct ConnectionView: View {
                 }.onAppear(perform: { controller.filterConnectedPeripherals() })
             }.navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         scanning = !scanning
                         controller.toggleScan()
@@ -70,7 +70,13 @@ public struct ConnectionView: View {
                             .font(.headline)
                     })
                 }
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { controller.disconnectAll() }) {
+                        Label("Disconnect All",
+                              systemImage: "xmark.circle")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                     }, label: {
                         Text("Filter")

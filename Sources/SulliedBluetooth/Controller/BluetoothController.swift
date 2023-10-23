@@ -9,6 +9,7 @@ public protocol BluetoothControllerProtocol {
     func connect(_ id: UUID) -> Void
     func disconnect(indices: IndexSet) -> Void
     func disconnect(_ id: UUID) -> Void
+    func disconnectAll() -> Void
     func filterConnectedPeripherals() -> Void
 }
 
@@ -107,6 +108,10 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         if let peripheral = discoveredPeripherals[id]?.1 {
             manager?.cancelPeripheralConnection(peripheral)
         }
+    }
+
+    public func disconnectAll() {
+        invalidate()
     }
 
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
