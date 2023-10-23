@@ -7,6 +7,7 @@ public protocol BluetoothControllerProtocol {
     var peripheralControllers: [UUID: PeripheralControllerProtocol] { get }
     func toggleScan() -> Void
     func connect(_ id: UUID) -> Void
+    func disconnect(_ id: UUID) -> Void
     func filterConnectedPeripherals() -> Void
 }
 
@@ -93,6 +94,12 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         }
     }
 
+    public func disconnect(_ id: UUID) {
+        if let peripheral = discoveredPeripherals[id]?.1 {
+            manager?.cancelPeripheralConnection(peripheral)
+        }
+    }
+
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
         // Guidance for each state is documented at:
         // https://developer.apple.com/documentation/corebluetooth/cbmanagerstate
@@ -170,10 +177,17 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
     
     public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        NSLog("CoreBluetooth: disconnected peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
+        // TODO: An AnyCancellable instance automatically calls cancel when deinitialized.
+        //  AnyCancellables are stored in subscriptions property.
+        //  https://developer.apple.com/documentation/combine/anycancellable
+        model.connectedPeripherals.removeAll(where: { $0.identifier == peripheral.identifier })
+        peripheralControllers.removeValue(forKey: peripheral.identifier)
     }
 
     private func invalidate() {
+        for peripheral in model.connectedPeripherals {
+            disconnect(peripheral.identifier)
+        }
         model.connectedPeripherals = []
         model.peripherals = []
         peripheralControllers = [:]
