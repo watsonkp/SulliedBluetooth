@@ -40,6 +40,11 @@ public struct ConnectionView: View {
                                        label: {
                                         ConnectedPeripheralView(model: peripheral)})
                     }
+                    .onDelete(perform: { indices in
+                        withAnimation {
+                            controller.disconnect(indices: indices)
+                        }
+                    })
                 } header: {
                     Text("Connected")
                 }

@@ -7,6 +7,7 @@ public protocol BluetoothControllerProtocol {
     var peripheralControllers: [UUID: PeripheralControllerProtocol] { get }
     func toggleScan() -> Void
     func connect(_ id: UUID) -> Void
+    func disconnect(indices: IndexSet) -> Void
     func disconnect(_ id: UUID) -> Void
     func filterConnectedPeripherals() -> Void
 }
@@ -91,6 +92,14 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
                     manager.connect(peripheral, options: nil)
                 }
             }
+        }
+    }
+
+    public func disconnect(indices: IndexSet) {
+        let ids = indices.map { model.connectedPeripherals[$0].identifier }
+
+        for id in ids {
+            disconnect(id)
         }
     }
 
