@@ -10,9 +10,8 @@ public struct ConnectionView: View {
     let controller: BluetoothControllerProtocol
     @ObservedObject
     var model: BluetoothModel
-
-    @State var filteredServices = Set<UUID>()
-    var serviceIDs = [BluetoothServiceID(id: 0x180d, name: "Heart Rate")]
+    @State var isEditingFilter: Bool = false
+    @State private var serviceFilter = Set<CBUUID>()
     @State private var selectedPeripheral: UUID? = nil {
         willSet {
             if newValue != nil {
@@ -62,26 +61,51 @@ public struct ConnectionView: View {
             }.navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        scanning = !scanning
-                        controller.toggleScan()
-                    }, label: {
-                        Text("\(scanning ? "Stop" : "Scan")")
-                            .font(.headline)
-                    })
+                    if #available(iOS 15, *) {
+                        Button(action: {
+                            scanning = !scanning
+                            controller.toggleScan(serviceFilter: serviceFilter)
+                        }, label: {
+                            Text("\(scanning ? "Stop" : "Scan")")
+                                .font(.headline)
+                        })
+                        .buttonStyle(.borderedProminent)
+                    } else {
+                        Button(action: {
+                            scanning = !scanning
+                            controller.toggleScan(serviceFilter: serviceFilter)
+                        }, label: {
+                            Text("\(scanning ? "Stop" : "Scan")")
+                                .font(.headline)
+                        })
+                    }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { controller.disconnectAll() }) {
-                        Label("Disconnect All",
-                              systemImage: "xmark.circle")
+                    if #available(iOS 15, *) {
+                        Button(role: .destructive, action: { controller.disconnectAll() }) {
+                            Label("Disconnect All",
+                                  systemImage: "xmark.circle")
+                            .labelStyle(.titleAndIcon)
+                        }
+                        .buttonStyle(.bordered)
+                    } else {
+                        Button(action: { controller.disconnectAll() }) {
+                            Label("Disconnect All",
+                                  systemImage: "xmark.circle")
+                        }
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                    }, label: {
-                        Text("Filter")
-                            .font(.headline)
-                    })
+                    Button(action: { self.isEditingFilter.toggle() }) {
+                        Label("Filter", systemImage: "line.3.horizontal.decrease")
+                    }.sheet(isPresented: $isEditingFilter) {
+                        VStack {
+                            ServiceFilterView(serviceFilter: $serviceFilter)
+                            Button(action: { self.isEditingFilter.toggle() }) {
+                                Text("Done")
+                            }
+                        }
+                    }
                 }
             }
         }

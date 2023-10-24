@@ -5,7 +5,7 @@ import SulliedMeasurement
 public protocol BluetoothControllerProtocol {
     var model: BluetoothModel { get }
     var peripheralControllers: [UUID: PeripheralControllerProtocol] { get }
-    func toggleScan() -> Void
+    func toggleScan(serviceFilter: Set<CBUUID>) -> Void
     func connect(_ id: UUID) -> Void
     func disconnect(indices: IndexSet) -> Void
     func disconnect(_ id: UUID) -> Void
@@ -49,7 +49,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         }
     }
 
-    public func toggleScan() {
+    public func toggleScan(serviceFilter: Set<CBUUID> = []) {
         self.isScanningRequested.toggle()
 
         // Initialize the CoreBluetooth manager to dispatch events on the main queue.
@@ -62,7 +62,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
            let manager = self.manager,
            !manager.isScanning,
            manager.state == .poweredOn {
-            manager.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
+            manager.scanForPeripherals(withServices: serviceFilter.count != 0 ? Array(serviceFilter) : nil, options: nil)
         }
 
         // Stop scanning for peripherals if the manager is scanning.

@@ -5,7 +5,7 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
     var isScanning = false
     
-    public func toggleScan() {
+    public func toggleScan(serviceFilter: Set<CBUUID> = []) {
         NSLog("toggleScan()")
         if isScanning {
             isScanning = false

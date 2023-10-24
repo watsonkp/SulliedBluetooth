@@ -1,6 +1,11 @@
 import CoreBluetooth
 import SulliedMeasurement
 
+struct SupportedService: Identifiable, Hashable, CustomStringConvertible {
+    let id: CBUUID
+    let description: String
+}
+
 public struct BluetoothRecord {
     public let peripheral: UUID
     public let uuid: CBUUID
@@ -9,6 +14,11 @@ public struct BluetoothRecord {
     public let value: BluetoothValue
     public let raw: Data
     public let serviceUUID: CBUUID
+
+    static let supportedServices = [SupportedService(id: CBUUID(string: "0x180d"), description: String(describing: CBUUID(string: "0x180d"))),
+                                    SupportedService(id: CBUUID(string: "0x180a"), description: String(describing: CBUUID(string: "0x180a"))),
+                                    SupportedService(id: CBUUID(string: "0x180f"), description: String(describing: CBUUID(string: "0x180f"))),
+                                    SupportedService(id: CBUUID(string: "0x181c"), description: "User Data")]
 
     init(characteristic: CBCharacteristic, timestamp: Date) {
         self.peripheral = characteristic.service!.peripheral!.identifier
