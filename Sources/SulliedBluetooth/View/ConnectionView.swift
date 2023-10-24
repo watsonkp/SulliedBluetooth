@@ -12,13 +12,13 @@ public struct ConnectionView: View {
     var model: BluetoothModel
     @State var isEditingFilter: Bool = false
     @State private var serviceFilter = Set<CBUUID>()
-    @State private var selectedPeripheral: UUID? = nil {
-        willSet {
-            if newValue != nil {
-                controller.connect(newValue!)
-            }
-        }
-    }
+//    @State private var selectedPeripheral: UUID? = nil {
+//        willSet {
+//            if newValue != nil {
+//                controller.connect(newValue!)
+//            }
+//        }
+//    }
     
     @State var scanning: Bool = false
 
@@ -34,8 +34,8 @@ public struct ConnectionView: View {
                 Section {
                     ForEach(model.connectedPeripherals, id: \PeripheralModel.identifier) { peripheral in
                         NavigationLink(destination: PeripheralDiscoveryView(controller: controller.peripheralControllers[peripheral.identifier], model: peripheral),
-                                       tag: peripheral.identifier,
-                                       selection: Binding<UUID?>(get: { selectedPeripheral }, set: { selectedPeripheral = $0 }),
+//                                       tag: peripheral.identifier,
+//                                       selection: Binding<UUID?>(get: { selectedPeripheral }, set: { selectedPeripheral = $0 }),
                                        label: {
                                         ConnectedPeripheralView(model: peripheral)})
                     }
@@ -49,15 +49,18 @@ public struct ConnectionView: View {
                 }
                 Section {
                     ForEach(model.peripherals, id: \PeripheralModel.identifier) { peripheral in
-                        NavigationLink(destination: PeripheralDiscoveryView(controller: controller.peripheralControllers[peripheral.identifier], model: peripheral),
-                                       tag: peripheral.identifier,
-                                       selection: Binding<UUID?>(get: { selectedPeripheral }, set: { selectedPeripheral = $0 }),
-                                       label: {
-                                        PeripheralView(model: peripheral)})
+                        Button(action: { controller.connect(peripheral.identifier) }) {
+                            PeripheralView(model: peripheral)
+                        }
+//                        NavigationLink(destination: PeripheralDiscoveryView(controller: controller.peripheralControllers[peripheral.identifier], model: peripheral),
+//                                       tag: peripheral.identifier,
+//                                       selection: Binding<UUID?>(get: { selectedPeripheral }, set: { selectedPeripheral = $0 }),
+//                                       label: {
+//                                        PeripheralView(model: peripheral)})
                     }
                 } header: {
                     Text("Discovered")
-                }.onAppear(perform: { controller.filterConnectedPeripherals() })
+                }//.onAppear(perform: { controller.filterConnectedPeripherals() })
             }.navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

@@ -10,7 +10,7 @@ public protocol BluetoothControllerProtocol {
     func disconnect(indices: IndexSet) -> Void
     func disconnect(_ id: UUID) -> Void
     func disconnectAll() -> Void
-    func filterConnectedPeripherals() -> Void
+//    func filterConnectedPeripherals() -> Void
 }
 
 public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControllerProtocol {
@@ -23,7 +23,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private var bluetoothPublisher = PassthroughSubject<IntegerDataPoint, Never>()
     public var publisher: AnyPublisher<IntegerDataPoint, Never>
     private var subscriptions: [AnyCancellable] = []
-    private var didConnect = Set<UUID>()
+//    private var didConnect = Set<UUID>()
     private var isScanningRequested = false
 
     public override init() {
@@ -80,19 +80,20 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
                 NSLog("Already \(peripheral.state) to \(id). Skipping new connection attempt.")
                 return
             }
-            if let peripheralModel = model.peripherals.filter({ $0.identifier == peripheral.identifier }).first {
+//            if let peripheralModel = model.peripherals.filter({ $0.identifier == peripheral.identifier }).first {
                 // TODO: Remove model from model.peripherals and move it to connected peripherals
 //                self.model.connectedPeripherals.append(peripheralModel)
                 
-                let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
-                controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })
-                    .store(in: &subscriptions)
-                peripheral.delegate = controller
-                peripheralControllers[id] = controller
+//                let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
+//                controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })
+//                    .store(in: &subscriptions)
+//                peripheral.delegate = controller
+//                peripheralControllers[id] = controller
+            model.peripherals.removeAll(where: { $0.identifier == id })
                 if let manager = self.manager {
                     manager.connect(peripheral, options: nil)
                 }
-            }
+//            }
         }
     }
 
@@ -111,7 +112,9 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func disconnectAll() {
-        invalidate()
+        for peripheral in model.connectedPeripherals {
+            disconnect(peripheral.identifier)
+        }
     }
 
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -167,7 +170,14 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         NSLog("CoreBluetooth: connected to: \(peripheral.name ?? peripheral.identifier.uuidString)")
-        self.didConnect.insert(peripheral.identifier)
+//        self.didConnect.insert(peripheral.identifier)
+        let peripheralModel = PeripheralModel(peripheral)
+        let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
+        controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })
+            .store(in: &subscriptions)
+        peripheral.delegate = controller
+        peripheralControllers[peripheral.identifier] = controller
+        model.connectedPeripherals.append(peripheralModel)
 
         peripheral.discoverServices(nil)
     }
@@ -175,19 +185,20 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     // Removes members of the connectedPeripherals model property from the peripherals model property
     // Workaround to update the model after returning from the discovery view
     // Connecting on navigation and moving the model simultaneously is trouble
-    public func filterConnectedPeripherals() {
-        NSLog("filterConnectedPeripherals()")
-        for id in self.didConnect {
-            if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
-                model.connectedPeripherals.append(model.peripherals[index])
-            }
-        }
-
-        model.peripherals.removeAll(where: { didConnect.contains($0.identifier) })
-    }
+//    public func filterConnectedPeripherals() {
+//        NSLog("filterConnectedPeripherals()")
+//        for id in self.didConnect {
+//            if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
+//                model.connectedPeripherals.append(model.peripherals[index])
+//            }
+//        }
+//
+//        model.peripherals.removeAll(where: { didConnect.contains($0.identifier) })
+//    }
 
     public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         NSLog("CoreBluetooth: failed to connect to peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
+        model.peripherals.append(PeripheralModel(peripheral))
     }
     
     public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
@@ -196,6 +207,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         //  https://developer.apple.com/documentation/combine/anycancellable
         model.connectedPeripherals.removeAll(where: { $0.identifier == peripheral.identifier })
         peripheralControllers.removeValue(forKey: peripheral.identifier)
+        model.peripherals.append(PeripheralModel(peripheral))
     }
 
     private func invalidate() {
@@ -206,6 +218,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         model.peripherals = []
         peripheralControllers = [:]
         discoveredPeripherals = [:]
-        didConnect = Set<UUID>()
+//        didConnect = Set<UUID>()
     }
 }
