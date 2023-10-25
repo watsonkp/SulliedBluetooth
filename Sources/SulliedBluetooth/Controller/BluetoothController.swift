@@ -10,7 +10,6 @@ public protocol BluetoothControllerProtocol {
     func disconnect(indices: IndexSet) -> Void
     func disconnect(_ id: UUID) -> Void
     func disconnectAll() -> Void
-//    func filterConnectedPeripherals() -> Void
 }
 
 public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothControllerProtocol {
@@ -23,7 +22,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private var bluetoothPublisher = PassthroughSubject<IntegerDataPoint, Never>()
     public var publisher: AnyPublisher<IntegerDataPoint, Never>
     private var subscriptions: [AnyCancellable] = []
-//    private var didConnect = Set<UUID>()
     private var isScanningRequested = false
 
     public override init() {
@@ -75,25 +73,15 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
     public func connect(_ id: UUID) {
         NSLog("Connection attempt to: \(id)")
+        model.peripherals.removeAll(where: { $0.identifier == id })
         if let peripheral = discoveredPeripherals[id]?.1 {
             if peripheral.state != .disconnected {
                 NSLog("Already \(peripheral.state) to \(id). Skipping new connection attempt.")
                 return
             }
-//            if let peripheralModel = model.peripherals.filter({ $0.identifier == peripheral.identifier }).first {
-                // TODO: Remove model from model.peripherals and move it to connected peripherals
-//                self.model.connectedPeripherals.append(peripheralModel)
-                
-//                let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
-//                controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })
-//                    .store(in: &subscriptions)
-//                peripheral.delegate = controller
-//                peripheralControllers[id] = controller
-            model.peripherals.removeAll(where: { $0.identifier == id })
-                if let manager = self.manager {
-                    manager.connect(peripheral, options: nil)
-                }
-//            }
+            if let manager = self.manager {
+                manager.connect(peripheral, options: nil)
+            }
         }
     }
 
@@ -125,7 +113,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         //  https://developer.apple.com/documentation/corebluetooth/cbcentralmanagerdelegate/1518888-centralmanagerdidupdatestate
         case CBManagerState.poweredOff:
             NSLog("CoreBluetooth state update: powered off")
-//            model.state = "Powered off"
         case CBManagerState.poweredOn:
             NSLog("CoreBluetooth state update: powered on")
             // Start scanning for peripherals if requested and the manager state is now powered on.
@@ -134,23 +121,18 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
                     central.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
                 }
             }
-//            model.state = "Powered on"
         case CBManagerState.resetting:
             NSLog("CoreBluetooth state: resetting")
             invalidate()
-//            model.state = "Resetting"
         case CBManagerState.unauthorized:
             NSLog("CoreBluetooth state: unauthorized")
             invalidate()
-//            model.state = "Unauthorized"
         case CBManagerState.unknown:
             NSLog("CoreBluetooth state: unknown")
             invalidate()
-//            model.state = "Unknown"
         case CBManagerState.unsupported:
             NSLog("CoreBluetooth state: unsupported")
             invalidate()
-//            model.state = "Unsupported"
         default:
             // DEBUG
             fatalError("ERROR: Unknown enum value for CBManagerState in BluetoothController.centralManagerDidUpdateState")
@@ -170,7 +152,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         NSLog("CoreBluetooth: connected to: \(peripheral.name ?? peripheral.identifier.uuidString)")
-//        self.didConnect.insert(peripheral.identifier)
         let peripheralModel = PeripheralModel(peripheral)
         let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
         controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })
@@ -181,20 +162,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
         peripheral.discoverServices(nil)
     }
-    
-    // Removes members of the connectedPeripherals model property from the peripherals model property
-    // Workaround to update the model after returning from the discovery view
-    // Connecting on navigation and moving the model simultaneously is trouble
-//    public func filterConnectedPeripherals() {
-//        NSLog("filterConnectedPeripherals()")
-//        for id in self.didConnect {
-//            if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
-//                model.connectedPeripherals.append(model.peripherals[index])
-//            }
-//        }
-//
-//        model.peripherals.removeAll(where: { didConnect.contains($0.identifier) })
-//    }
 
     public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         NSLog("CoreBluetooth: failed to connect to peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
@@ -218,6 +185,5 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         model.peripherals = []
         peripheralControllers = [:]
         discoveredPeripherals = [:]
-//        didConnect = Set<UUID>()
     }
 }
