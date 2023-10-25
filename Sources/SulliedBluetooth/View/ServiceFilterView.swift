@@ -2,7 +2,7 @@ import SwiftUI
 import CoreBluetooth
 
 struct ServiceFilterView: View {
-    @Environment(\.editMode) private var editMode
+    @State private var editMode = EditMode.inactive
     @Binding var serviceFilter: Set<CBUUID>
 
     var body: some View {
@@ -11,20 +11,16 @@ struct ServiceFilterView: View {
                 List(BluetoothRecord.supportedServices, id: \.id, selection: $serviceFilter) { service in
                     Label(String(describing: service), systemImage: "waveform")
                 }
-                .environment(\.editMode, self.editMode)
+                .environment(\.editMode, $editMode)
             }
             .toolbar{
                 ToolbarItem {
                     Button(action: {
                         withAnimation {
-                            if editMode?.wrappedValue == .active {
-                                editMode?.wrappedValue = .inactive
-                            } else {
-                                editMode?.wrappedValue = .active
-                            }
+                            editMode = editMode == .active ? .inactive : .active
                         }
                     }) {
-                        Text(editMode?.wrappedValue == .active ? "Single" : "Multiple")
+                        Text(editMode == .inactive ? "Single" : "Multiple")
                     }
                 }
             }
