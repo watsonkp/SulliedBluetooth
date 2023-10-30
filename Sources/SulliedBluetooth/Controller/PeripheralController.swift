@@ -86,13 +86,13 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             // The API aims to report time series data without requiring the receiver to use knowledge of Bluetooth.
                             // TODO: Guarantee that the date offset is unique to a characteristic and is reset.
                             // The initial date offset is set as the time of the first characteristic update less the measured durations.
-                            var offset = dateOffset ?? rrIntervals.reduce(into: timestamp.timeIntervalSince1970) { $0 -= (Double($1) / 1000) }
+                            var offset = dateOffset ?? rrIntervals.reduce(into: timestamp.timeIntervalSince1970) { $0 -= (Double($1) / 1024) }
                             for rrInterval in rrIntervals {
-                                offset += (Double(rrInterval) / 1000)
+                                offset += (Double(rrInterval) / 1024)
                                 recordPublisher.send(IntegerDataPoint(date: Date(timeIntervalSince1970: offset),
                                                                       unit: UnitDuration.milliseconds,
                                                                       usage: .rrInterval,
-                                                                      value: Int64(rrInterval),
+                                                                      value: Int64(Double(rrInterval) / 1024.0 * 1000.0),
                                                                       significantFigures: 4,
                                                                       significantPosition: 0))
                                 dateOffset = offset
