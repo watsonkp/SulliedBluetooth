@@ -20,7 +20,7 @@ struct ServiceFilterView: View {
                             editMode = editMode == .active ? .inactive : .active
                         }
                     }) {
-                        Text(editMode == .inactive ? "Single" : "Multiple")
+                        Text(editMode == .inactive ? "Multiple" : "Single")
                     }
                 }
             }
