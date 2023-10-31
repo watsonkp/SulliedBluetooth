@@ -6,7 +6,6 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
     var isScanning = false
     
     public func toggleScan(serviceFilter: Set<CBUUID> = []) {
-        NSLog("toggleScan()")
         if isScanning {
             isScanning = false
         } else if model.peripherals.count == 0 {
@@ -21,7 +20,6 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
     public init() {}
 
     public func connect(_ id: UUID) {
-        NSLog("connect()")
         if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
             let peripheral = model.peripherals[index]
 //            model.peripherals.remove(at: index)

@@ -72,11 +72,9 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func connect(_ id: UUID) {
-        NSLog("Connection attempt to: \(id)")
         model.peripherals.removeAll(where: { $0.identifier == id })
         if let peripheral = discoveredPeripherals[id]?.1 {
             if peripheral.state != .disconnected {
-                NSLog("Already \(peripheral.state) to \(id). Skipping new connection attempt.")
                 return
             }
             if let manager = self.manager {
@@ -112,9 +110,10 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         // If the state is lower than powered off clear peripheral models.
         //  https://developer.apple.com/documentation/corebluetooth/cbcentralmanagerdelegate/1518888-centralmanagerdidupdatestate
         case CBManagerState.poweredOff:
-            NSLog("CoreBluetooth state update: powered off")
+            // TODO: Report errors in UI or handle. Do not log.
+//            NSLog("CoreBluetooth state update: powered off")
+            break
         case CBManagerState.poweredOn:
-            NSLog("CoreBluetooth state update: powered on")
             // Start scanning for peripherals if requested and the manager state is now powered on.
             if isScanningRequested {
                 if !central.isScanning {
@@ -122,20 +121,22 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
                 }
             }
         case CBManagerState.resetting:
-            NSLog("CoreBluetooth state: resetting")
             invalidate()
         case CBManagerState.unauthorized:
-            NSLog("CoreBluetooth state: unauthorized")
+            // TODO: Report errors in UI or handle. Do not log.
+//            NSLog("CoreBluetooth state: unauthorized")
             invalidate()
         case CBManagerState.unknown:
-            NSLog("CoreBluetooth state: unknown")
+            // TODO: Report errors in UI or handle. Do not log.
+//            NSLog("CoreBluetooth state: unknown")
             invalidate()
         case CBManagerState.unsupported:
-            NSLog("CoreBluetooth state: unsupported")
+            // TODO: Report errors in UI or handle. Do not log.
+//            NSLog("CoreBluetooth state: unsupported")
             invalidate()
         default:
-            // DEBUG
-            fatalError("ERROR: Unknown enum value for CBManagerState in BluetoothController.centralManagerDidUpdateState")
+            model.errorMessage = "ERROR: Unknown enum value for CBManagerState in BluetoothController.centralManagerDidUpdateState"
+            model.didFail = true
         }
     }
 
@@ -151,7 +152,6 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        NSLog("CoreBluetooth: connected to: \(peripheral.name ?? peripheral.identifier.uuidString)")
         let peripheralModel = PeripheralModel(peripheral)
         let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
         controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })
@@ -164,7 +164,8 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        NSLog("CoreBluetooth: failed to connect to peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)")
+        model.errorMessage = "CoreBluetooth: failed to connect to peripheral: \(peripheral.name ?? peripheral.identifier.uuidString)"
+        model.didFail = true
         model.peripherals.append(PeripheralModel(peripheral))
     }
     

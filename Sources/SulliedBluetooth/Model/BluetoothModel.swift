@@ -3,6 +3,8 @@ import CoreBluetooth
 public class BluetoothModel: ObservableObject {
     @Published var peripherals = [PeripheralModel]()
     @Published var connectedPeripherals = [PeripheralModel]()
+    @Published var didFail = false
+    @Published var errorMessage = ""
 
     public var isReceivingNotifications: Bool {
         get {
@@ -146,7 +148,9 @@ struct ValueModel: CustomStringConvertible {
                 case 0x11:
                     heartRate = Int(UInt16((value[1]<<8) | value[2]))
                 default:
-                    NSLog("ERROR: Unexpected heart rate format")
+                    // TODO: Report errors in UI or handle. Do not log.
+//                    NSLog("ERROR: Unexpected heart rate format")
+                    break
                 }
                 return String(heartRate)
             case CBUUID(string: "0x2a38"):

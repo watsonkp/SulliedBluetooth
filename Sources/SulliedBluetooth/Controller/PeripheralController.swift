@@ -21,7 +21,6 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     
     func notify(enabled: Bool, id: CBUUID) {
         if let characteristic = characteristics[id] {
-            NSLog("CoreBluetooth: notify for \(characteristic.uuid) set to \(enabled)")
             self.peripheral.setNotifyValue(enabled, for: characteristic)
         }
     }
@@ -37,7 +36,10 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     }
 
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        NSLog("CoreBluetooth: Discovered characteristics for service \(service.uuid)")
+        if let error = error {
+            model.errorMessage = "Error discovering Bluetooth characteristics for service \(service.uuid): \(error)"
+            model.didFail = true
+        }
 
         if let serviceModel = model.services.filter({ $0.uuid == service.uuid }).first {
             if let characteristics = service.characteristics {
@@ -57,7 +59,6 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     }
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-//        NSLog("CoreBluetooth: didUpdateValueFor \(characteristic.uuid)")
         let timestamp = Date()
         // TODO: Publish the value
         if let serviceModel = model.services.filter({ $0.uuid == characteristic.service?.uuid }).first {
@@ -109,13 +110,13 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         if let error = error {
-            NSLog("CoreBluetooth: ERROR didUpdateNotificationStateFor \(error)")
+            model.errorMessage = "Error changing notification for Bluetooth characteristic \(characteristic.uuid): \(error)"
+            model.didFail = true
         }
-        NSLog("CoreBluetooth: didUpdateNotificationStateFor \(characteristic.uuid) to \(characteristic.isNotifying)")
+
         if let serviceModel = model.services.filter({ $0.uuid == characteristic.service?.uuid }).first {
             if let characteristicModel = serviceModel.characteristics.filter({ $0.uuid == characteristic.uuid }).first {
                 characteristicModel.isNotifying = characteristic.isNotifying
-                NSLog("Update isNotifying of characteristicModel")
             }
         }
     }
