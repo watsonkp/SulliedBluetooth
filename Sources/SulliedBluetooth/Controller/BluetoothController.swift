@@ -72,9 +72,9 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func connect(_ id: UUID) {
-        model.peripherals.removeAll(where: { $0.identifier == id })
+        model.peripherals.first(where: { $0.identifier == id })?.connectionState = .connecting
         if let peripheral = discoveredPeripherals[id]?.1 {
-            if peripheral.state != .disconnected {
+            guard peripheral.state == .disconnected else {
                 return
             }
             if let manager = self.manager {
@@ -152,6 +152,9 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     }
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        // Remove the peripheral from the published list of discovered peripherals
+        self.model.peripherals.removeAll(where: { $0.identifier == peripheral.identifier })
+
         let peripheralModel = PeripheralModel(peripheral)
         let controller = PeripheralController(peripheral: peripheral, model: peripheralModel)
         controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })

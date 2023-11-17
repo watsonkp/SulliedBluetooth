@@ -41,6 +41,7 @@ public struct ConnectionView: View {
                         Button(action: { controller.connect(peripheral.identifier) }) {
                             PeripheralView(model: peripheral)
                         }
+                        .disabled(peripheral.connectionState != .disconnected)
                     }
                 } header: {
                     Text("Discovered")
