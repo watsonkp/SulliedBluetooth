@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PeripheralView: View {
-    let model: PeripheralModel
+    @ObservedObject var model: PeripheralModel
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
