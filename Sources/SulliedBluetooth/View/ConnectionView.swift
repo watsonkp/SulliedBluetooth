@@ -85,7 +85,14 @@ public struct ConnectionView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { self.isEditingFilter.toggle() }) {
-                        Label("Filter", systemImage: "line.3.horizontal.decrease")
+                        if #available(iOS 15, *) {
+                            Label("Filter", systemImage: "line.3.horizontal.decrease")
+                                .accessibilityRepresentation {
+                                    Text("Filter devices by service")
+                                }
+                        } else {
+                            Label("Filter", systemImage: "line.3.horizontal.decrease")
+                        }
                     }.sheet(isPresented: $isEditingFilter) {
                         VStack {
                             ServiceFilterView(serviceFilter: $serviceFilter)

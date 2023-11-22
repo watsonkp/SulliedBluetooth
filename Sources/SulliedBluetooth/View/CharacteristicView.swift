@@ -12,14 +12,11 @@ struct CharacteristicView: View {
         }
     }
     var body: some View {
-        HStack {
-            Text("\(model.name):").font(.caption)
-            Text(model.parsedValue.description)
+        VStack(alignment: .leading) {
+            Text("\(model.name) (\(model.parsedValue.description))")//.font(.caption)
             if model.properties.contains(.notify) {
-                Text("n")
-                Toggle("", isOn: Binding<Bool>(get: { notifying }, set: { notifying = $0 }))
+                Toggle("Record", isOn: Binding<Bool>(get: { notifying }, set: { notifying = $0 }))
             }
-            Spacer()
         }
     }
 }

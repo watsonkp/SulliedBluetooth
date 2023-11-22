@@ -20,11 +20,18 @@ struct ServiceFilterView: View {
                             editMode = editMode == .active ? .inactive : .active
                         }
                     }) {
-                        Text(editMode == .inactive ? "Multiple" : "Single")
+                        if #available(iOS 15, *) {
+                            Text(editMode == .inactive ? "Multiple" : "Single")
+                                .accessibilityRepresentation {
+                                    Text(editMode == .inactive ? "Multiple services" : "Single service")
+                                }
+                        } else {
+                            Text(editMode == .inactive ? "Multiple" : "Single")
+                        }
                     }
                 }
             }
-            .navigationTitle("Peripherals with")
+            .navigationTitle("Services")
         }
     }
 }
