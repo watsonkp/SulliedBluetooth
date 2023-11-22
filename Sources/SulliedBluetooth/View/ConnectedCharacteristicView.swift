@@ -6,6 +6,7 @@ struct ConnectedCharacteristicView: View {
         if let notifying = model.isNotifying {
             HStack {
                 Text("\(model.name):")
+                    .lineLimit(1)
                 Text("\(notifying ? model.parsedValue.description : "Not recording")")
             }
         }
