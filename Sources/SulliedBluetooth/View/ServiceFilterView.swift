@@ -31,7 +31,7 @@ struct ServiceFilterView: View {
                     }
                 }
             }
-            .navigationTitle("Services")
+            .navigationTitle(editMode == .inactive ? "Service" : "Services")
         }
     }
 }

@@ -5,7 +5,9 @@ struct ConnectedPeripheralView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("\(model.name ?? "???")")
-            Text("\(model.identifier)").font(.footnote)
+                .font(.headline)
+            Text("\(model.identifier)")
+                .font(.caption)
             ForEach(model.services, id: \ServiceModel.uuid) { service in
                 ConnectedServiceView(model: service)
             }

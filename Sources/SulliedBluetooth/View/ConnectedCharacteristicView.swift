@@ -5,7 +5,7 @@ struct ConnectedCharacteristicView: View {
     var body: some View {
         if let notifying = model.isNotifying {
             HStack {
-                Text("\(model.name):").font(.caption)
+                Text("\(model.name):")
                 Text("\(notifying ? model.parsedValue.description : "Not recording")")
             }
         }

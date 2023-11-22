@@ -6,7 +6,9 @@ struct PeripheralView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text("\(model.name ?? "???")")
-                Text("\(model.identifier)").font(.footnote)
+                    .font(.headline)
+                Text("\(model.identifier)")
+                    .font(.caption)
             }
             if model.connectionState == .connecting {
                 Spacer()

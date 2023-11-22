@@ -7,7 +7,8 @@ struct ServiceView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(model.name)")
+            Text("\(model.name) Service")
+                .font(.headline)
             ForEach(model.characteristics, id: \CharacteristicModel.uuid) { characteristic in
                 CharacteristicView(model: characteristic, notify: notify)
             }

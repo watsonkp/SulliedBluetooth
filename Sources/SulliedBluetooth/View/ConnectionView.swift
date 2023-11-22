@@ -34,7 +34,7 @@ public struct ConnectionView: View {
                         }
                     })
                 } header: {
-                    Text("Connected")
+                    Text("Connected devices")
                 }
                 Section {
                     ForEach(model.peripherals, id: \PeripheralModel.identifier) { peripheral in
@@ -44,7 +44,7 @@ public struct ConnectionView: View {
                         .disabled(peripheral.connectionState != .disconnected)
                     }
                 } header: {
-                    Text("Discovered")
+                    Text("Discovered devices")
                 }
             }.navigationBarTitleDisplayMode(.inline)
             .toolbar {
