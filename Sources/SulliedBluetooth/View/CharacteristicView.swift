@@ -13,7 +13,7 @@ struct CharacteristicView: View {
     }
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(model.name) (\(model.parsedValue.description))")//.font(.caption)
+            Text("\(model.name) (\(model.parsedValue.description))")
             if model.properties.contains(.notify) {
                 Toggle("Record", isOn: Binding<Bool>(get: { notifying }, set: { notifying = $0 }))
             }

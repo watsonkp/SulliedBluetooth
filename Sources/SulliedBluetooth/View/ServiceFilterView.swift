@@ -2,7 +2,8 @@ import SwiftUI
 import CoreBluetooth
 
 struct ServiceFilterView: View {
-    @State private var editMode = EditMode.inactive
+    // WARNING: iPhone SE on iOS 15 does not have a functioning single selection for .inactive.
+    @State private var editMode = EditMode.active
     @Binding var serviceFilter: Set<CBUUID>
 
     var body: some View {
@@ -13,25 +14,7 @@ struct ServiceFilterView: View {
                 }
                 .environment(\.editMode, $editMode)
             }
-            .toolbar{
-                ToolbarItem {
-                    Button(action: {
-                        withAnimation {
-                            editMode = editMode == .active ? .inactive : .active
-                        }
-                    }) {
-                        if #available(iOS 15, *) {
-                            Text(editMode == .inactive ? "Multiple" : "Single")
-                                .accessibilityRepresentation {
-                                    Text(editMode == .inactive ? "Multiple services" : "Single service")
-                                }
-                        } else {
-                            Text(editMode == .inactive ? "Multiple" : "Single")
-                        }
-                    }
-                }
-            }
-            .navigationTitle(editMode == .inactive ? "Service" : "Services")
+            .navigationTitle("Services")
         }
     }
 }
@@ -40,5 +23,9 @@ struct ServiceFilterView_Previews: PreviewProvider {
     static var previews: some View {
         @State var serviceFilter = Set<CBUUID>()
         ServiceFilterView(serviceFilter: $serviceFilter)
+            .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
+        ServiceFilterView(serviceFilter: $serviceFilter)
+            .previewDevice(PreviewDevice(rawValue: "iPhone SE (1st generation)"))
+            .previewDisplayName("iPhone SE")
     }
 }
