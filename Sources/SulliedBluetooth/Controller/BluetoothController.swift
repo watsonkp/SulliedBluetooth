@@ -4,6 +4,7 @@ import SulliedMeasurement
 
 public protocol BluetoothControllerProtocol {
     var model: BluetoothModel { get }
+    var publisher: AnyPublisher<IntegerDataPoint, Never> { get }
     var peripheralControllers: [UUID: PeripheralControllerProtocol] { get }
     func toggleScan(serviceFilter: Set<CBUUID>) -> Void
     func connect(_ id: UUID) -> Void

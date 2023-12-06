@@ -1,7 +1,10 @@
 import CoreBluetooth
+import Combine
+import SulliedMeasurement
 
 public class DesignTimeBluetoothController: BluetoothControllerProtocol {
     public var model: BluetoothModel = BluetoothModel()
+    public var publisher: AnyPublisher<IntegerDataPoint, Never>
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
     var isScanning = false
     
@@ -17,7 +20,18 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
         }
     }
     
-    public init() {}
+    public init() {
+        let start = Date.now
+        publisher = AnyPublisher(Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect().map {
+            let delta_t = $0.timeIntervalSince(start)
+            return IntegerDataPoint(date: $0,
+                                    unit: UnitFrequency.beatsPerMinute,
+                                    usage: .heartRate,
+                                    value: Int64(160 + 10 * sin(delta_t * Double.pi / 10.0)),
+                                    significantFigures: 3,
+                                    significantPosition: 0)
+        })
+    }
 
     public func connect(_ id: UUID) {
         if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
