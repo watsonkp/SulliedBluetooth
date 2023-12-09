@@ -4,7 +4,7 @@ class CharacteristicModel: ObservableObject {
     var characteristic: CBCharacteristic?
     var uuid: CBUUID
     var properties: CBCharacteristicProperties
-    @Published var value: String? = nil
+    @Published var value: Data? = nil
     @Published var isNotifying: Bool? = nil
     private static let characteristicNames: [CBUUID: String] = [CBUUID(string: "0x2a19"): "Battery Level",
                                                                 CBUUID(string: "0x2a23"): "System ID",
@@ -39,7 +39,7 @@ class CharacteristicModel: ObservableObject {
     
     var parsedValue: ValueModel {
         get {
-            return ValueModel(id: uuid, value: characteristic?.value)
+            return ValueModel(id: uuid, value: characteristic?.value ?? value)
         }
     }
 
@@ -48,7 +48,8 @@ class CharacteristicModel: ObservableObject {
         self.uuid = characteristic.uuid
         self.properties = characteristic.properties
     }
-    
+
+    // For design time previews and simulators
     init(uuid: CBUUID, properties: CBCharacteristicProperties) {
         self.uuid = uuid
         self.properties = properties

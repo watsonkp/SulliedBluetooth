@@ -19,6 +19,8 @@ struct PeripheralDiscoveryView: View {
 
 struct PeripheralDiscoveryView_Previews: PreviewProvider {
     static var previews: some View {
-        PeripheralDiscoveryView(controller: DesignTimePeripheralController(), model: DesignTimeModel.populatedPeripheral())
+        let peripheral = DesignTimeModel.populatedPeripheral()
+        PeripheralDiscoveryView(controller: DesignTimePeripheralController(model: peripheral),
+                                model: peripheral)
     }
 }

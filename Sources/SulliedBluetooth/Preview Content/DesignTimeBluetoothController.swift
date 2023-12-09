@@ -4,8 +4,10 @@ import SulliedMeasurement
 
 public class DesignTimeBluetoothController: BluetoothControllerProtocol {
     public var model: BluetoothModel = BluetoothModel()
+    private var bluetoothPublisher = PassthroughSubject<IntegerDataPoint, Never>()
     public var publisher: AnyPublisher<IntegerDataPoint, Never>
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
+    private var subscriptions: [AnyCancellable] = []
     var isScanning = false
     
     public func toggleScan(serviceFilter: Set<CBUUID> = []) {
@@ -21,23 +23,22 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
     }
     
     public init() {
-        let start = Date.now
-        publisher = AnyPublisher(Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect().map {
-            let delta_t = $0.timeIntervalSince(start)
-            return IntegerDataPoint(date: $0,
-                                    unit: UnitFrequency.beatsPerMinute,
-                                    usage: .heartRate,
-                                    value: Int64(160 + 10 * sin(delta_t * Double.pi / 10.0)),
-                                    significantFigures: 3,
-                                    significantPosition: 0)
-        })
+        self.publisher = AnyPublisher(Publishers.Buffer(upstream: self.bluetoothPublisher,
+                                                        size: 12,
+                                                        prefetch: .byRequest,
+                                                        whenFull: .dropOldest)
+        )
     }
 
     public func connect(_ id: UUID) {
         if let index = model.peripherals.firstIndex(where: { $0.identifier == id }) {
             let peripheral = model.peripherals[index]
-//            model.peripherals.remove(at: index)
+            model.peripherals.remove(at: index)
             model.connectedPeripherals.append(peripheral)
+            let controller = DesignTimePeripheralController(model: peripheral)
+            controller.recordPublisher.sink(receiveValue: { self.bluetoothPublisher.send($0) })
+                .store(in: &subscriptions)
+            peripheralControllers[peripheral.identifier] = controller
         }
     }
 

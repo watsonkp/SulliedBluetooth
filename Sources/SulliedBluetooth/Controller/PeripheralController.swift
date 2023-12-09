@@ -4,6 +4,7 @@ import SulliedMeasurement
 
 public protocol PeripheralControllerProtocol {
     func notify(enabled: Bool, id: CBUUID) -> Void
+    var recordPublisher: PassthroughSubject<IntegerDataPoint, Never> { get }
 }
 
 class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralControllerProtocol {
@@ -63,7 +64,6 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
         // TODO: Publish the value
         if let serviceModel = model.services.filter({ $0.uuid == characteristic.service?.uuid }).first {
             if let characteristicModel = serviceModel.characteristics.filter({ $0.uuid == characteristic.uuid }).first {
-                characteristicModel.value = characteristic.value?.base64EncodedString()
                 if characteristic.isNotifying {
                     characteristicModel.isNotifying = true
                 }
