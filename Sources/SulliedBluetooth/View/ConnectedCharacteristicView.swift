@@ -3,13 +3,13 @@ import SwiftUI
 struct ConnectedCharacteristicView: View {
     @ObservedObject var model: CharacteristicModel
     var body: some View {
-        if let notifying = model.isNotifying {
+//        if let notifying = model.isNotifying {
             HStack {
                 Text("\(model.name):")
                     .lineLimit(1)
-                Text("\(notifying ? model.parsedValue.description : "Not recording")")
+                Text("\(model.isNotifying ? model.parsedValue.description : "Not recording")")
             }
-        }
+//        }
     }
 }
 

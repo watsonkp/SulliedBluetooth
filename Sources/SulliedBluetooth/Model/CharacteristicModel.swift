@@ -5,7 +5,7 @@ class CharacteristicModel: ObservableObject {
     var uuid: CBUUID
     var properties: CBCharacteristicProperties
     @Published var value: Data? = nil
-    @Published var isNotifying: Bool? = nil
+    @Published var isNotifying: Bool = false
     private static let characteristicNames: [CBUUID: String] = [CBUUID(string: "0x2a19"): "Battery Level",
                                                                 CBUUID(string: "0x2a23"): "System ID",
                                                                 CBUUID(string: "0x2a24"): "Model Number String",

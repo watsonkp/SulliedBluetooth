@@ -106,7 +106,7 @@ class DesignTimeModel {
     
     static func heartRateCharacteristic() -> CharacteristicModel {
         let characteristic = CharacteristicModel(uuid: CBUUID(string: "0x2a37"), properties: [.notify])
-        characteristic.isNotifying = true
+        characteristic.isNotifying = false
         return characteristic
     }
 }
