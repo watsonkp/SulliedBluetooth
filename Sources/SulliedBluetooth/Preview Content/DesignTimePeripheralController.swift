@@ -5,6 +5,7 @@ import SulliedMeasurement
 class DesignTimePeripheralController: PeripheralControllerProtocol {
     let model: PeripheralModel
     func notify(enabled: Bool, id: CBUUID) {
+        model.services.first(where: {$0.uuid == id} )?.characteristics.first?.isNotifying = enabled
         // TODO: Update notification property of the matching CharacteristicModel
     }
     var recordPublisher = PassthroughSubject<IntegerDataPoint, Never>()
@@ -24,7 +25,13 @@ class DesignTimePeripheralController: PeripheralControllerProtocol {
         // Publish heart rate characteristic values
         Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect().map { _ in
             Int64(model.services.first(where: { $0.uuid == CBUUID(string: "0x180d") })!.characteristics.first!.parsedValue.description)!
-        }.sink(receiveValue: { self.recordPublisher.send(IntegerDataPoint(date: Date.now, unit: UnitFrequency.beatsPerMinute, usage: .heartRate, value: $0, significantFigures: 3, significantPosition: 0)) })
-
+        }.sink(receiveValue: {
+            self.recordPublisher.send(IntegerDataPoint(date: Date.now,
+                                                       unit: UnitFrequency.beatsPerMinute,
+                                                       usage: .heartRate,
+                                                       value: $0,
+                                                       significantFigures: 3,
+                                                       significantPosition: 0))
+        })
     }
 }
