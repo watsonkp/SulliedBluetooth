@@ -15,7 +15,6 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
             isScanning = false
         } else if model.peripherals.count == 0 {
             model.peripherals.append(DesignTimeModel.populatedPeripheral())
-            model.peripherals.append(DesignTimeModel.populatedPeripheral())
             isScanning = true
         } else {
             isScanning = true
