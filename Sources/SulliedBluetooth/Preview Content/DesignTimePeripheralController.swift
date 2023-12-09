@@ -5,8 +5,9 @@ import SulliedMeasurement
 class DesignTimePeripheralController: PeripheralControllerProtocol {
     let model: PeripheralModel
     func notify(enabled: Bool, id: CBUUID) {
-        model.services.first(where: {$0.uuid == id} )?.characteristics.first?.isNotifying = enabled
-        // TODO: Update notification property of the matching CharacteristicModel
+        for service in model.services {
+            service.characteristics.first(where: { $0.uuid == id })?.isNotifying = enabled
+        }
     }
     var recordPublisher = PassthroughSubject<IntegerDataPoint, Never>()
 
