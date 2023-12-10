@@ -19,7 +19,9 @@ class DesignTimePeripheralController: PeripheralControllerProtocol {
         // Publish heart rate characteristic values
         Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect()
             .compactMap {
-                guard let value = self.model.services.first(where: { $0.uuid == CBUUID(string: "0x180d") })?.characteristics.first?.parsedValue.description,
+                guard let value = self.model.services.first(where: { $0.uuid == CBUUID(string: "0x180d") })?
+                    .characteristics.filter({ $0.isNotifying }).first?
+                    .parsedValue.description,
                 let measurement = Int64(value) else {
                     return nil
                 }

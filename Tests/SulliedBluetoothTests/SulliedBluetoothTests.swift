@@ -28,4 +28,11 @@ final class BluetoothTests: XCTestCase {
         XCTAssertEqual(parsed2.energyExpended, nil)
         XCTAssertEqual(parsed2.rrInterval, [351, 351, 351])
     }
+
+    func testDesignTimeModel() {
+        var data = Data(count: 2)
+        data[1] = UInt8(170 + 10  * sin(12 * Double.pi / 8))
+        let value = ValueModel(id: CBUUID(string: "0x2a37"), value: data)
+        XCTAssertEqual("160", String(describing: value))
+    }
 }
