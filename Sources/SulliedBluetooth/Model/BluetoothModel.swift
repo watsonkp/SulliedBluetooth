@@ -11,9 +11,7 @@ public class BluetoothModel: ObservableObject {
             for peripheral in connectedPeripherals {
                 for service in peripheral.services {
                     for characteristic in service.characteristics {
-                        if characteristic.isNotifying ?? false {
-                            return true
-                        }
+                        return characteristic.isNotifying
                     }
                 }
             }
