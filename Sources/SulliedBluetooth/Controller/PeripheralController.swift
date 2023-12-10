@@ -4,7 +4,6 @@ import SulliedMeasurement
 
 public protocol PeripheralControllerProtocol {
     func notify(enabled: Bool, id: CBUUID) -> Void
-    var recordPublisher: PassthroughSubject<IntegerDataPoint, Never> { get }
 }
 
 class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralControllerProtocol {
