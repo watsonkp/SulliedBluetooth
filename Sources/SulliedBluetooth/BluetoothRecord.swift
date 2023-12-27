@@ -34,6 +34,32 @@ public struct BluetoothRecord {
     public static func decode(characteristic id: CBUUID, value: Data?) -> BluetoothValue {
         if let value = value {
             switch id {
+            case CBUUID(string: "0x2A5B"):
+                // Cycling Speed and Cadence Service 1.0
+                //  https://www.bluetooth.com/specifications/specs/cycling-speed-and-cadence-service-1-0/
+                var index = 1
+                var cumulativeWheelRevolutions: UInt32? = nil
+                var wheelEventTime: UInt16? = nil
+                if (value[0] & 0x1) != 0 {
+                    cumulativeWheelRevolutions = BluetoothRecord.readUInt32(at: index, of: value)
+                    index += 4
+                    wheelEventTime = BluetoothRecord.readUInt16(at: index, of: value)
+                    index += 2
+                }
+
+                var cumulativeCrankRevolutions: UInt16? = nil
+                var crankEventTime: UInt16? = nil
+                if (value[0] & 0x2) != 0 {
+                    cumulativeCrankRevolutions = BluetoothRecord.readUInt16(at: index, of: value)
+                    index += 2
+                    crankEventTime = BluetoothRecord.readUInt16(at: index, of: value)
+                    index += 2
+                }
+
+                return BluetoothValue.cyclingSpeedAndCadence(CSCMeasurement(cumulativeWheelRevolutions: cumulativeWheelRevolutions,
+                                                                            wheelEventTime: wheelEventTime,
+                                                                            cumulativeCrankRevolutions: cumulativeCrankRevolutions,
+                                                                            crankEventTime: crankEventTime))
             case CBUUID(string: "0x2a19"):
                 // https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Characteristics/org.bluetooth.characteristic.battery_level.xml
                 var typedValue = [UInt8](repeating:0, count: 1)
@@ -124,10 +150,25 @@ public struct BluetoothRecord {
         }
         return BluetoothValue.none
     }
+
+    private static func readUInt16(at i: Int, of data: Data) -> UInt16? {
+        guard i + 1 < data.count else {
+            return nil
+        }
+        return UInt16(data[i])<<8 | UInt16(data[i+1])
+    }
+
+    private static func readUInt32(at i: Int, of data: Data) -> UInt32? {
+        guard i + 3 < data.count else {
+            return nil
+        }
+        return UInt32(data[i])<<24 | UInt32(data[i+1])<<16 | UInt32(data[i+2])<<8 | UInt32(data[i+3])
+    }
 }
 
 public enum BluetoothValue: CustomStringConvertible {
     case batteryLevel(UInt8)
+    case cyclingSpeedAndCadence(CSCMeasurement)
     case heartRateMeasurement(HeartRateMeasurement)
     case raw(Data)
     case none
@@ -136,6 +177,8 @@ public enum BluetoothValue: CustomStringConvertible {
             switch self {
             case .batteryLevel(let level):
                 return "\(level)%"
+            case .cyclingSpeedAndCadence(let speed):
+                return "\(speed)"
             case .heartRateMeasurement(let measurement):
                 return "\(measurement)"
             case .raw(let data):
