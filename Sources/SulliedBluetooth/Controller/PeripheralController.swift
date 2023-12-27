@@ -69,6 +69,43 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                 if characteristic.value != nil {
                     let record = BluetoothRecord(characteristic: characteristic, timestamp: timestamp)
                     switch (record.value) {
+                    case .cyclingSpeedAndCadence(let measurement):
+                        if let cumulativeWheelRevolutions = measurement.cumulativeWheelRevolutions {
+                            let significantFigures = cumulativeWheelRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeWheelRevolutions))) : 0
+                            recordPublisher.send(IntegerDataPoint(date: timestamp,
+                                                                  unit: UnitUnknown.unknown,
+                                                                  usage: .speed,
+                                                                  value: Int64(cumulativeWheelRevolutions),
+                                                                  significantFigures: significantFigures,
+                                                                  significantPosition: 0))
+                        }
+                        if let wheelEventTime = measurement.wheelEventTime {
+                            let significantFigures = wheelEventTime > 0 ? 1 + Int64(log10(Double(wheelEventTime))) : 0
+                            recordPublisher.send(IntegerDataPoint(date: timestamp,
+                                                                  unit: UnitDuration.milliseconds,
+                                                                  usage: .speed,
+                                                                  value: Int64(wheelEventTime),
+                                                                  significantFigures: significantFigures,
+                                                                  significantPosition: 0))
+                        }
+                        if let cumulativeCrankRevolutions = measurement.cumulativeCrankRevolutions {
+                            let significantFigures = cumulativeCrankRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeCrankRevolutions))) : 0
+                            recordPublisher.send(IntegerDataPoint(date: timestamp,
+                                                                  unit: UnitUnknown.unknown,
+                                                                  usage: .cadence,
+                                                                  value: Int64(cumulativeCrankRevolutions),
+                                                                  significantFigures: significantFigures,
+                                                                  significantPosition: 0))
+                        }
+                        if let crankEventTime = measurement.crankEventTime {
+                            let significantFigures = crankEventTime > 0 ? 1 + Int64(log10(Double(crankEventTime))) : 0
+                            recordPublisher.send(IntegerDataPoint(date: timestamp,
+                                                                  unit: UnitDuration.milliseconds,
+                                                                  usage: .cadence,
+                                                                  value: Int64(crankEventTime),
+                                                                  significantFigures: significantFigures,
+                                                                  significantPosition: 0))
+                        }
                     case .heartRateMeasurement(let measurement):
                         // Rapidly publishing a set of values (tested with 4) to a PassthroughSubject
                         //  will drop all but the first unless there is buffering.
