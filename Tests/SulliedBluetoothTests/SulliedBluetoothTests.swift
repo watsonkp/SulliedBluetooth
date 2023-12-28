@@ -81,6 +81,62 @@ final class BluetoothTests: XCTestCase {
         XCTAssertEqual(String(describing: parsedMeasurement), "Crank(1027, 513)")
     }
 
+    // Test the cycling power service
+    func testCyclingPower() {
+        // Test the Cycling Power Measurement characteristic of the service.
+        let full_data = Data(base64Encoded: "/x8BAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIA==")
+        var parsed = BluetoothRecord.decode(characteristic: CBUUID(string: "0x2A63"), value: full_data)
+        guard case .cyclingPower(let parsedMeasurement) = parsed else {
+            XCTAssertTrue(false)
+            return
+        }
+        XCTAssertEqual(parsedMeasurement.instantaneousPower, 0x0102)
+        XCTAssertEqual(parsedMeasurement.pedalPowerBalance, 0x03)
+        XCTAssertEqual(parsedMeasurement.pedalPowerBalanceReference, .left)
+        XCTAssertEqual(parsedMeasurement.accumulatedTorque, 0x0405)
+        XCTAssertEqual(parsedMeasurement.accumulatedTorqueSource, .crank)
+        XCTAssertEqual(parsedMeasurement.cumulativeWheelRevolutions, 0x06070809)
+        XCTAssertEqual(parsedMeasurement.wheelEventTime, 0x0a0b)
+        XCTAssertEqual(parsedMeasurement.cumulativeCrankRevolutions, 0x0c0d)
+        XCTAssertEqual(parsedMeasurement.crankEventTime, 0x0e0f)
+        XCTAssertEqual(parsedMeasurement.maximumForceMagnitude, 0x1011)
+        XCTAssertEqual(parsedMeasurement.minimumForceMagnitude, 0x1213)
+        XCTAssertEqual(parsedMeasurement.maximumTorqueMagnitude, 0x1415)
+        XCTAssertEqual(parsedMeasurement.minimumTorqueMagnitude, 0x1617)
+        XCTAssertEqual(parsedMeasurement.maximumAngle, 0x0181)
+        XCTAssertEqual(parsedMeasurement.minimumAngle, 0x91a)
+        XCTAssertEqual(parsedMeasurement.topDeadSpotAngle, 0x1b1c)
+        XCTAssertEqual(parsedMeasurement.bottomDeadSpotAngle, 0x1d1e)
+        XCTAssertEqual(parsedMeasurement.accumulatedEnergy, 0x1f20)
+        XCTAssertEqual(parsedMeasurement.offsetCompensationIndicator, true)
+
+        let minimal_data = Data(base64Encoded: "AAAD6A==")
+        parsed = BluetoothRecord.decode(characteristic: CBUUID(string: "0x2A63"), value: minimal_data)
+        guard case .cyclingPower(let parsedMeasurement) = parsed else {
+            XCTAssertTrue(false)
+            return
+        }
+        XCTAssertEqual(parsedMeasurement.instantaneousPower, 1000)
+        XCTAssertEqual(parsedMeasurement.pedalPowerBalance, nil)
+        XCTAssertEqual(parsedMeasurement.pedalPowerBalanceReference, .unknown)
+        XCTAssertEqual(parsedMeasurement.accumulatedTorque, nil)
+        XCTAssertEqual(parsedMeasurement.accumulatedTorqueSource, .wheel)
+        XCTAssertEqual(parsedMeasurement.cumulativeWheelRevolutions, nil)
+        XCTAssertEqual(parsedMeasurement.wheelEventTime, nil)
+        XCTAssertEqual(parsedMeasurement.cumulativeCrankRevolutions, nil)
+        XCTAssertEqual(parsedMeasurement.crankEventTime, nil)
+        XCTAssertEqual(parsedMeasurement.maximumForceMagnitude, nil)
+        XCTAssertEqual(parsedMeasurement.minimumForceMagnitude, nil)
+        XCTAssertEqual(parsedMeasurement.maximumTorqueMagnitude, nil)
+        XCTAssertEqual(parsedMeasurement.minimumTorqueMagnitude, nil)
+        XCTAssertEqual(parsedMeasurement.maximumAngle, nil)
+        XCTAssertEqual(parsedMeasurement.minimumAngle, nil)
+        XCTAssertEqual(parsedMeasurement.topDeadSpotAngle, nil)
+        XCTAssertEqual(parsedMeasurement.bottomDeadSpotAngle, nil)
+        XCTAssertEqual(parsedMeasurement.accumulatedEnergy, nil)
+        XCTAssertEqual(parsedMeasurement.offsetCompensationIndicator, false)
+    }
+
     func testDesignTimeModel() {
         var data = Data(count: 2)
         data[1] = UInt8(170 + 10  * sin(12 * Double.pi / 8))
