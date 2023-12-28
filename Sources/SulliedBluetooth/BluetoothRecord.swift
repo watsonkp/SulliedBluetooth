@@ -62,6 +62,11 @@ public struct BluetoothRecord {
                                                                             wheelEventTime: wheelEventTime,
                                                                             cumulativeCrankRevolutions: cumulativeCrankRevolutions,
                                                                             crankEventTime: crankEventTime))
+            case CBUUID(string: "0x2A5D"):
+                guard let sensorLocation = SensorLocation(rawValue: value[0]) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.sensorLocation(sensorLocation)
             case CBUUID(string: "0x2A63"):
                 guard let measurement = CyclingPowerMeasurement(value: value) else {
                     return BluetoothValue.raw(value)
@@ -184,6 +189,7 @@ public enum BluetoothValue: CustomStringConvertible {
     case batteryLevel(UInt8)
     case cyclingPower(CyclingPowerMeasurement)
     case cyclingSpeedAndCadence(CSCMeasurement)
+    case sensorLocation(SensorLocation)
     case heartRateMeasurement(HeartRateMeasurement)
     case raw(Data)
     case none
@@ -196,6 +202,8 @@ public enum BluetoothValue: CustomStringConvertible {
                 return String(describing: measurement)
             case .cyclingSpeedAndCadence(let speed):
                 return "\(speed)"
+            case .sensorLocation(let location):
+                return String(describing: location)
             case .heartRateMeasurement(let measurement):
                 return "\(measurement)"
             case .raw(let data):
