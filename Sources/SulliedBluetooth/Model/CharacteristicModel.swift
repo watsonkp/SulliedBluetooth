@@ -16,6 +16,9 @@ class CharacteristicModel: ObservableObject {
                                                                 CBUUID(string: "0x2a29"): "Manufacturer Name String",
                                                                 CBUUID(string: "0x2a37"): "Heart Rate Measurement",
                                                                 CBUUID(string: "0x2a38"): "Body Location",
+                                                                CBUUID(string: "0x2a5b"): "CSC Measurement",
+                                                                CBUUID(string: "0x2a5d"): "Sensor Location",
+                                                                CBUUID(string: "0x2a63"): "Cycling Power Measurement",
                                                                 CBUUID(string: "0x2a80"): "Age",
                                                                 CBUUID(string: "0x2a8a"): "First Name",
                                                                 CBUUID(string: "0x2a8c"): "Gender",
@@ -36,12 +39,18 @@ class CharacteristicModel: ObservableObject {
             }
         }
     }
-    
-    var parsedValue: ValueModel {
+
+    var parsedValue: BluetoothValue {
         get {
-            return ValueModel(id: uuid, value: characteristic?.value ?? value)
+            BluetoothRecord.decode(characteristic: uuid, value: value)
         }
     }
+
+//    var parsedValue: ValueModel {
+//        get {
+//            return ValueModel(id: uuid, value: characteristic?.value ?? value)
+//        }
+//    }
 
     init(_ characteristic: CBCharacteristic) {
         self.characteristic = characteristic
