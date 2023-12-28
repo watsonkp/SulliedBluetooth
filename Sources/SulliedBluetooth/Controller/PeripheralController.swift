@@ -69,6 +69,18 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                 if characteristic.value != nil {
                     let record = BluetoothRecord(characteristic: characteristic, timestamp: timestamp)
                     switch (record.value) {
+                    case .cyclingPower(let measurement):
+                        let significantFigures = measurement.instantaneousPower > 0 ? 1 + Int64(log10(Double(measurement.instantaneousPower))) : 0
+                        // Could there be multiple types of power source in a single activity?
+                        //  Trainer, pedal, crank, etc. for comparison.
+                        //  Even left pedal and right pedal.
+                        // TODO: Use the Sensor Location characteristic to set the usage.
+                        recordPublisher.send(IntegerDataPoint(date: timestamp,
+                                                              unit: UnitPower.watts,
+                                                              usage: .unknown,
+                                                              value: Int64(measurement.instantaneousPower),
+                                                              significantFigures: significantFigures,
+                                                              significantPosition: 0))
                     case .cyclingSpeedAndCadence(let measurement):
                         if let cumulativeWheelRevolutions = measurement.cumulativeWheelRevolutions {
                             let significantFigures = cumulativeWheelRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeWheelRevolutions))) : 0

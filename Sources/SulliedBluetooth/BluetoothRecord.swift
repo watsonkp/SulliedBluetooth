@@ -18,6 +18,8 @@ public struct BluetoothRecord {
     static let supportedServices = [SupportedService(id: CBUUID(string: "0x180d"), description: String(describing: CBUUID(string: "0x180d"))),
                                     SupportedService(id: CBUUID(string: "0x180a"), description: String(describing: CBUUID(string: "0x180a"))),
                                     SupportedService(id: CBUUID(string: "0x180f"), description: String(describing: CBUUID(string: "0x180f"))),
+                                    SupportedService(id: CBUUID(string: "0x1816"), description: String(describing: CBUUID(string: "0x1816"))),
+                                    SupportedService(id: CBUUID(string: "0x1818"), description: String(describing: CBUUID(string: "0x1818"))),
                                     SupportedService(id: CBUUID(string: "0x181c"), description: "User Data")]
 
     init(characteristic: CBCharacteristic, timestamp: Date) {
@@ -60,6 +62,11 @@ public struct BluetoothRecord {
                                                                             wheelEventTime: wheelEventTime,
                                                                             cumulativeCrankRevolutions: cumulativeCrankRevolutions,
                                                                             crankEventTime: crankEventTime))
+            case CBUUID(string: "0x2A63"):
+                guard let measurement = CyclingPowerMeasurement(value: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.cyclingPower(measurement)
             case CBUUID(string: "0x2a19"):
                 // https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Characteristics/org.bluetooth.characteristic.battery_level.xml
                 var typedValue = [UInt8](repeating:0, count: 1)
@@ -151,6 +158,13 @@ public struct BluetoothRecord {
         return BluetoothValue.none
     }
 
+    private static func readInt16(at i: Int, of data: Data) -> Int16? {
+        guard i + 1 < data.count else {
+            return nil
+        }
+        return Int16(data[i])<<8 | Int16(data[i+1])
+    }
+
     private static func readUInt16(at i: Int, of data: Data) -> UInt16? {
         guard i + 1 < data.count else {
             return nil
@@ -168,6 +182,7 @@ public struct BluetoothRecord {
 
 public enum BluetoothValue: CustomStringConvertible {
     case batteryLevel(UInt8)
+    case cyclingPower(CyclingPowerMeasurement)
     case cyclingSpeedAndCadence(CSCMeasurement)
     case heartRateMeasurement(HeartRateMeasurement)
     case raw(Data)
@@ -177,6 +192,8 @@ public enum BluetoothValue: CustomStringConvertible {
             switch self {
             case .batteryLevel(let level):
                 return "\(level)%"
+            case .cyclingPower(let measurement):
+                return String(describing: measurement)
             case .cyclingSpeedAndCadence(let speed):
                 return "\(speed)"
             case .heartRateMeasurement(let measurement):
