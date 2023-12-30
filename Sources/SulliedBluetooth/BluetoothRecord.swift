@@ -19,7 +19,7 @@ public struct BluetoothRecord {
                                     SupportedService(id: CBUUID(string: "0x180a"), description: String(describing: CBUUID(string: "0x180a"))),
                                     SupportedService(id: CBUUID(string: "0x180f"), description: String(describing: CBUUID(string: "0x180f"))),
                                     SupportedService(id: CBUUID(string: "0x1816"), description: String(describing: CBUUID(string: "0x1816"))),
-                                    SupportedService(id: CBUUID(string: "0x1818"), description: String(describing: CBUUID(string: "0x1818"))),
+                                    SupportedService(id: CBUUID(string: "0x1818"), description: "Cycling Power"),
                                     SupportedService(id: CBUUID(string: "0x181c"), description: "User Data")]
 
     init(characteristic: CBCharacteristic, timestamp: Date) {
@@ -37,31 +37,7 @@ public struct BluetoothRecord {
         if let value = value {
             switch id {
             case CBUUID(string: "0x2A5B"):
-                // Cycling Speed and Cadence Service 1.0
-                //  https://www.bluetooth.com/specifications/specs/cycling-speed-and-cadence-service-1-0/
-                var index = 1
-                var cumulativeWheelRevolutions: UInt32? = nil
-                var wheelEventTime: UInt16? = nil
-                if (value[0] & 0x1) != 0 {
-                    cumulativeWheelRevolutions = BluetoothRecord.readUInt32(at: index, of: value)
-                    index += 4
-                    wheelEventTime = BluetoothRecord.readUInt16(at: index, of: value)
-                    index += 2
-                }
-
-                var cumulativeCrankRevolutions: UInt16? = nil
-                var crankEventTime: UInt16? = nil
-                if (value[0] & 0x2) != 0 {
-                    cumulativeCrankRevolutions = BluetoothRecord.readUInt16(at: index, of: value)
-                    index += 2
-                    crankEventTime = BluetoothRecord.readUInt16(at: index, of: value)
-                    index += 2
-                }
-
-                return BluetoothValue.cyclingSpeedAndCadence(CSCMeasurement(cumulativeWheelRevolutions: cumulativeWheelRevolutions,
-                                                                            wheelEventTime: wheelEventTime,
-                                                                            cumulativeCrankRevolutions: cumulativeCrankRevolutions,
-                                                                            crankEventTime: crankEventTime))
+                return BluetoothValue.cyclingSpeedAndCadence(CSCMeasurement(value: value))
             case CBUUID(string: "0x2A5D"):
                 guard let sensorLocation = SensorLocation(rawValue: value[0]) else {
                     return BluetoothValue.raw(value)
@@ -90,7 +66,7 @@ public struct BluetoothRecord {
                 var heartRate: UInt16 = 0
                 if (value[0] & 0x1) != 0 {
                     // Heart Rate Value Format is set to UINT16
-                    heartRate = UInt16((value[1]<<8) | value[2])
+                    heartRate = UInt16((value[1]) | value[2]<<8)
                 } else {
                     // Heart Rate Value Format is set to UINT8
                     heartRate = UInt16(value[1])
@@ -112,10 +88,10 @@ public struct BluetoothRecord {
                     // Energy Expended field is present
                     if (value[0] & 0x1) != 0 {
                         // Heart Rate Value Format is set to UINT16
-                        energyExpended = UInt16((value[3]<<8) | value[4])
+                        energyExpended = UInt16(value[3] | (value[4]<<8))
                     } else {
                         // Heart Rate Value Format is set to UINT8
-                        energyExpended = UInt16((value[2]<<8) | value[3])
+                        energyExpended = UInt16(value[2] | (value[3]<<8))
                     }
                 }
 
@@ -161,27 +137,6 @@ public struct BluetoothRecord {
             }
         }
         return BluetoothValue.none
-    }
-
-    private static func readInt16(at i: Int, of data: Data) -> Int16? {
-        guard i + 1 < data.count else {
-            return nil
-        }
-        return Int16(data[i])<<8 | Int16(data[i+1])
-    }
-
-    private static func readUInt16(at i: Int, of data: Data) -> UInt16? {
-        guard i + 1 < data.count else {
-            return nil
-        }
-        return UInt16(data[i])<<8 | UInt16(data[i+1])
-    }
-
-    private static func readUInt32(at i: Int, of data: Data) -> UInt32? {
-        guard i + 3 < data.count else {
-            return nil
-        }
-        return UInt32(data[i])<<24 | UInt32(data[i+1])<<16 | UInt32(data[i+2])<<8 | UInt32(data[i+3])
     }
 }
 

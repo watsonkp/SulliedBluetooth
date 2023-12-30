@@ -1,7 +1,10 @@
 import Foundation
 
+// Cycling Speed and Cadence Service 1.0
+//  https://www.bluetooth.com/specifications/specs/cycling-speed-and-cadence-service-1-0/
+
 // CSCMeasurement characteristic
-public struct CSCMeasurement: CustomStringConvertible {
+public struct CSCMeasurement: CustomStringConvertible, DecodedCharacteristic {
     public let cumulativeWheelRevolutions: UInt32?
     public let wheelEventTime: UInt16?
     public let cumulativeCrankRevolutions: UInt16?
@@ -23,6 +26,30 @@ public struct CSCMeasurement: CustomStringConvertible {
             } else {
                 return "--"
             }
+        }
+    }
+
+    public init(value: Data) {
+        var index = 1
+
+        if (value[0] & 0x1) != 0 {
+            cumulativeWheelRevolutions = CSCMeasurement.readUInt32(at: index, of: value)
+            index += 4
+            wheelEventTime = CSCMeasurement.readUInt16(at: index, of: value)
+            index += 2
+        } else {
+            cumulativeWheelRevolutions = nil
+            wheelEventTime = nil
+        }
+
+        if (value[0] & 0x2) != 0 {
+            cumulativeCrankRevolutions = CSCMeasurement.readUInt16(at: index, of: value)
+            index += 2
+            crankEventTime = CSCMeasurement.readUInt16(at: index, of: value)
+            index += 2
+        } else {
+            cumulativeCrankRevolutions = nil
+            crankEventTime = nil
         }
     }
 }
