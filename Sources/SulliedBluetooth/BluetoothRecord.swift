@@ -159,6 +159,11 @@ public struct BluetoothRecord {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.bodySensorLocation(bodySensorLocation)
+            case CBUUID(string: "0x2A65"):
+                guard let features = Bluetooth.readUInt32(at: 0, of: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.cyclingPowerFeature(CyclingPowerFeature(rawValue: features))
             case CBUUID(string: "0x2A99"):
                 guard let increment = Bluetooth.readUInt32(at: 0, of: value) else {
                     return BluetoothValue.raw(value)
@@ -191,6 +196,7 @@ public enum BluetoothValue: CustomStringConvertible {
     case sensorLocation(SensorLocation)
     case heartRateMeasurement(HeartRateMeasurement)
     case bodySensorLocation(BodySensorLocation)
+    case cyclingPowerFeature(CyclingPowerFeature)
     case databaseChangeIncrement(UInt32)
     case userIndex(UserIndex)
     case raw(Data)
@@ -224,6 +230,8 @@ public enum BluetoothValue: CustomStringConvertible {
                 return "\(measurement)"
             case .bodySensorLocation(let location):
                 return String(describing: location)
+            case .cyclingPowerFeature(let features):
+                return String(describing: features)
             case .databaseChangeIncrement(let increment):
                 return "\(increment)"
             case .userIndex(let index):
