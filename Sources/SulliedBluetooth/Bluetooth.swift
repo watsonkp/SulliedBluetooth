@@ -81,6 +81,13 @@ public struct Bluetooth {
         )
     }
 
+    static func readUInt32(at i: Int, of data: Data) -> UInt32? {
+        guard i + 3 < data.count else {
+            return nil
+        }
+        return UInt32(data[i]) | UInt32(data[i+1])<<8 | UInt32(data[i+2])<<16 | UInt32(data[i+3])<<24
+    }
+
     static func readString(at i: Int, of data: Data) -> String {
         return String(unsafeUninitializedCapacity: data.count) {
             _ = $0.initialize(from: data)
