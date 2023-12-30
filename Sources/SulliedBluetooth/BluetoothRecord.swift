@@ -65,9 +65,9 @@ public struct BluetoothRecord {
                 }
                 return BluetoothValue.systemID(id)
             case CBUUID(string: "0x2A24"):
-                return BluetoothValue.modelNumber(ModelNumber(value: value))
+                return BluetoothValue.modelNumber(Bluetooth.readString(at: 0, of: value))
             case CBUUID(string: "0x2A25"):
-                return BluetoothValue.serialNumberString(SerialNumberString(value: value))
+                return BluetoothValue.serialNumberString(Bluetooth.readString(at: 0, of: value))
             case CBUUID(string: "0x2A26"):
                 return BluetoothValue.firmwareRevisionString(Bluetooth.readString(at: 0, of: value))
             case CBUUID(string: "0x2A27"):
@@ -181,8 +181,8 @@ public enum BluetoothValue: CustomStringConvertible {
     case batteryLevel(UInt8)
     case cyclingPower(CyclingPowerMeasurement)
     case systemID(SystemID)
-    case modelNumber(ModelNumber)
-    case serialNumberString(SerialNumberString)
+    case modelNumber(String)
+    case serialNumberString(String)
     case firmwareRevisionString(String)
     case hardwareRevisionString(String)
     case softwareRevisionString(String)
@@ -205,9 +205,9 @@ public enum BluetoothValue: CustomStringConvertible {
             case .systemID(let id):
                 return String(describing: id)
             case .modelNumber(let modelNumber):
-                return String(describing: modelNumber)
+                return modelNumber
             case .serialNumberString(let serialNumber):
-                return String(describing: serialNumber)
+                return serialNumber
             case .firmwareRevisionString(let firmwareRevision):
                 return firmwareRevision
             case .hardwareRevisionString(let hardwareRevision):
