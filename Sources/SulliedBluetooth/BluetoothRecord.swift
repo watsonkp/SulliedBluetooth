@@ -15,6 +15,8 @@ public struct BluetoothRecord {
     public let raw: Data
     public let serviceUUID: CBUUID
 
+    // YAML reference of service UUIDs
+    //  https://bitbucket.org/bluetooth-SIG/public/src/main/assigned_numbers/uuids/service_uuids.yaml
     static let supportedServices = [SupportedService(id: CBUUID(string: "0x180d"), description: String(describing: CBUUID(string: "0x180d"))),
                                     SupportedService(id: CBUUID(string: "0x180a"), description: String(describing: CBUUID(string: "0x180a"))),
                                     SupportedService(id: CBUUID(string: "0x180f"), description: String(describing: CBUUID(string: "0x180f"))),
@@ -35,6 +37,8 @@ public struct BluetoothRecord {
 
     public static func decode(characteristic id: CBUUID, value: Data?) -> BluetoothValue {
         if let value = value {
+            // YAML reference of characteristic UUIDs
+            //  https://bitbucket.org/bluetooth-SIG/public/src/main/assigned_numbers/uuids/characteristic_uuids.yaml
             switch id {
             case CBUUID(string: "0x2A5B"):
                 return BluetoothValue.cyclingSpeedAndCadence(CSCMeasurement(value: value))
