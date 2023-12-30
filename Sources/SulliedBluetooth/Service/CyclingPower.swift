@@ -223,7 +223,21 @@ public struct CyclingPowerMeasurement: DecodedCharacteristic {
 extension CyclingPowerMeasurement: CustomStringConvertible {
     public var description: String {
         get {
-            return Measurement(value: Double(instantaneousPower), unit: UnitPower.watts).formatted()
+            let power = Measurement(value: Double(instantaneousPower), unit: UnitPower.watts).formatted()
+            if let cumulativeWheelRevolutions = cumulativeWheelRevolutions,
+               let wheelEventTime = wheelEventTime,
+               let cumulativeCrankRevolutions = cumulativeCrankRevolutions,
+               let crankEventTime = crankEventTime {
+                return "\(power) Wheel(\(cumulativeWheelRevolutions), \(Double(wheelEventTime) / 2048)), Crank(\(cumulativeCrankRevolutions), \(Double(crankEventTime) / 1024)"
+            } else if let cumulativeWheelRevolutions = cumulativeWheelRevolutions,
+                      let wheelEventTime = wheelEventTime {
+                return "\(power) Wheel(\(cumulativeWheelRevolutions), \(Double(wheelEventTime) / 2048)"
+            } else if let cumulativeCrankRevolutions = cumulativeCrankRevolutions,
+                      let crankEventTime = crankEventTime {
+                return "\(power) Crank(\(cumulativeCrankRevolutions), \(Double(crankEventTime) / 1024))"
+            } else {
+                return power
+            }
         }
     }
 }
