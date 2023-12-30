@@ -80,4 +80,11 @@ public struct Bluetooth {
                                     rrInterval: rrIntervals
         )
     }
+
+    static func readString(at i: Int, of data: Data) -> String {
+        return String(unsafeUninitializedCapacity: data.count) {
+            _ = $0.initialize(from: data)
+            return data.count
+        }
+    }
 }
