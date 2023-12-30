@@ -59,6 +59,11 @@ public struct BluetoothRecord {
                     value.copyBytes(to: bs, count: value.count)
                 })
                 return BluetoothValue.batteryLevel(typedValue[0])
+            case CBUUID(string: "0x2A23"):
+                guard let id = SystemID(value: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.systemID(id)
             case CBUUID(string: "0x2a37"):
                 // https://www.bluetooth.com/specifications/specs/heart-rate-service-1-0/
                 var typedValue = [UInt8](repeating:0, count: 0xf)
@@ -147,6 +152,7 @@ public struct BluetoothRecord {
 public enum BluetoothValue: CustomStringConvertible {
     case batteryLevel(UInt8)
     case cyclingPower(CyclingPowerMeasurement)
+    case systemID(SystemID)
     case cyclingSpeedAndCadence(CSCMeasurement)
     case sensorLocation(SensorLocation)
     case heartRateMeasurement(HeartRateMeasurement)
@@ -159,6 +165,8 @@ public enum BluetoothValue: CustomStringConvertible {
                 return "\(level)%"
             case .cyclingPower(let measurement):
                 return String(describing: measurement)
+            case .systemID(let id):
+                return String(describing: id)
             case .cyclingSpeedAndCadence(let speed):
                 return "\(speed)"
             case .sensorLocation(let location):
