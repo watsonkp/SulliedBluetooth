@@ -74,6 +74,8 @@ public struct BluetoothRecord {
                 return BluetoothValue.hardwareRevisionString(Bluetooth.readString(at: 0, of: value))
             case CBUUID(string: "0x2A28"):
                 return BluetoothValue.softwareRevisionString(Bluetooth.readString(at: 0, of: value))
+            case CBUUID(string: "0x2A29"):
+                return BluetoothValue.manufacturerNameString(Bluetooth.readString(at: 0, of: value))
             case CBUUID(string: "0x2a37"):
                 // https://www.bluetooth.com/specifications/specs/heart-rate-service-1-0/
                 var typedValue = [UInt8](repeating:0, count: 0xf)
@@ -168,6 +170,7 @@ public enum BluetoothValue: CustomStringConvertible {
     case firmwareRevisionString(String)
     case hardwareRevisionString(String)
     case softwareRevisionString(String)
+    case manufacturerNameString(String)
     case cyclingSpeedAndCadence(CSCMeasurement)
     case sensorLocation(SensorLocation)
     case heartRateMeasurement(HeartRateMeasurement)
@@ -192,6 +195,8 @@ public enum BluetoothValue: CustomStringConvertible {
                 return hardwareRevision
             case .softwareRevisionString(let softwareRevision):
                 return softwareRevision
+            case .manufacturerNameString(let manufacturerName):
+                return manufacturerName
             case .cyclingSpeedAndCadence(let speed):
                 return "\(speed)"
             case .sensorLocation(let location):
