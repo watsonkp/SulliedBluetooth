@@ -42,7 +42,7 @@ class CharacteristicModel: ObservableObject {
 
     var parsedValue: BluetoothValue {
         get {
-            BluetoothRecord.decode(characteristic: uuid, value: value)
+            BluetoothRecord.decode(characteristic: uuid, value: characteristic?.value ?? value)
         }
     }
 
