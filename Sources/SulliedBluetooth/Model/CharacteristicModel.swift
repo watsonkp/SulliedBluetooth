@@ -4,6 +4,11 @@ class CharacteristicModel: ObservableObject {
     var characteristic: CBCharacteristic?
     var uuid: CBUUID
     var properties: CBCharacteristicProperties
+    var canNotify: Bool {
+        get {
+            properties.contains(.notify)
+        }
+    }
     @Published var value: Data? = nil
     @Published var isNotifying: Bool = false
     private static let characteristicNames: [CBUUID: String] = [CBUUID(string: "0x2a19"): "Battery Level",

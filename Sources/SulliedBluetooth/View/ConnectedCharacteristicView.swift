@@ -6,7 +6,10 @@ struct ConnectedCharacteristicView: View {
         HStack {
             Text("\(model.name):")
                 .lineLimit(1)
-            Text("\(model.isNotifying ? model.parsedValue.description : "Not recording")")
+            Text(String(describing: model.parsedValue))
+            if model.canNotify {
+                Image(systemName: model.isNotifying ? "stop.circle" : "record.circle")
+            }
         }
     }
 }
