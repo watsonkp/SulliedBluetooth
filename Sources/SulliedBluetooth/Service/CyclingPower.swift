@@ -3,71 +3,6 @@ import Foundation
 // Cycling Power Service 1.1
 //  https://www.bluetooth.com/specifications/specs/cycling-power-service-1-1/
 
-// Sensor Location characteristic
-//  https://bitbucket.org/bluetooth-SIG/public/src/main/gss/org.bluetooth.characteristic.sensor_location.yaml
-public enum SensorLocation: UInt8 {
-    case other = 0
-    case topOfShoe = 1
-    case inShoe = 2
-    case hip = 3
-    case frontWheel = 4
-    case leftCrank = 5
-    case rightCrank = 6
-    case leftPedal = 7
-    case rightPedal = 8
-    case frontHub = 9
-    case rearDropout = 10
-    case chainstay = 11
-    case rearWheel = 12
-    case rearHub = 13
-    case chest = 14
-    case spider = 15
-    case chainRing = 16
-}
-
-extension SensorLocation: CustomStringConvertible {
-    public var description: String {
-        get {
-            switch self {
-            case .other:
-                return "Other"
-            case .topOfShoe:
-                return "Top of shoe"
-            case .inShoe:
-                return "In shoe"
-            case .hip:
-                return "Hip"
-            case .frontWheel:
-                return "Front wheel"
-            case .leftCrank:
-                return "Left crank"
-            case .rightCrank:
-                return "Right crank"
-            case .leftPedal:
-                return "Left pedal"
-            case .rightPedal:
-                return "Right pedal"
-            case .frontHub:
-                return "Front hub"
-            case .rearDropout:
-                return "Rear dropout"
-            case .chainstay:
-                return "Chainstay"
-            case .rearWheel:
-                return "Rear wheel"
-            case .rearHub:
-                return "Rear hub"
-            case .chest:
-                return "Chest"
-            case .spider:
-                return "Spider"
-            case .chainRing:
-                return "Chain ring"
-            }
-        }
-    }
-}
-
 // Cycling Power Measurement characteristic
 //  https://bitbucket.org/bluetooth-SIG/public/src/main/gss/org.bluetooth.characteristic.cycling_power_measurement.yaml
 public struct CyclingPowerMeasurement: DecodedCharacteristic {
@@ -239,40 +174,5 @@ extension CyclingPowerMeasurement: CustomStringConvertible {
                 return power
             }
         }
-    }
-}
-
-protocol DecodedCharacteristic {
-    // TODO: List of string descriptions for each field present in the characteristic.
-//    var fieldDescriptions: [String] { get }
-}
-
-extension DecodedCharacteristic {
-    static func readInt16(at i: Int, of data: Data) -> Int16? {
-        guard i + 1 < data.count else {
-            return nil
-        }
-        return Int16(data[i]) | Int16(data[i+1])<<8
-    }
-
-    static func read2UInt12(at i: Int, of data: Data) -> (UInt16?, UInt16?) {
-        guard i + 2 < data.count else {
-            return (nil, nil)
-        }
-        return (UInt16(data[i]) | UInt16(data[i+1] & 0xf0)<<4, UInt16(data[i+1] & 0x0f) | UInt16(data[i+2])<<4)
-    }
-
-    static func readUInt16(at i: Int, of data: Data) -> UInt16? {
-        guard i + 1 < data.count else {
-            return nil
-        }
-        return UInt16(data[i]) | UInt16(data[i+1]<<8)
-    }
-
-    static func readUInt32(at i: Int, of data: Data) -> UInt32? {
-        guard i + 3 < data.count else {
-            return nil
-        }
-        return UInt32(data[i]) | UInt32(data[i+1])<<8 | UInt32(data[i+2])<<16 | UInt32(data[i+3])<<24
     }
 }
