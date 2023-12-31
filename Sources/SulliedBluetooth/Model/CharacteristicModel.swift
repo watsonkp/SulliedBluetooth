@@ -24,6 +24,8 @@ class CharacteristicModel: ObservableObject {
                                                                 CBUUID(string: "0x2a5b"): "CSC Measurement",
                                                                 CBUUID(string: "0x2a5d"): "Sensor Location",
                                                                 CBUUID(string: "0x2a63"): "Cycling Power Measurement",
+                                                                CBUUID(string: "0x2A65"): "Cycling Power Feature",
+                                                                CBUUID(string: "0x2A66"): "Cycling Power Control Point",
                                                                 CBUUID(string: "0x2a80"): "Age",
                                                                 CBUUID(string: "0x2a8a"): "First Name",
                                                                 CBUUID(string: "0x2a8c"): "Gender",
@@ -33,7 +35,13 @@ class CharacteristicModel: ObservableObject {
                                                                 CBUUID(string: "0x2a99"): "Database Change Increment",
                                                                 CBUUID(string: "0x2a9a"): "User Index",
                                                                 CBUUID(string: "0x2a9f"): "User Control Point",
-                                                                CBUUID(string: "0x2aa2"): "Language"]
+                                                                CBUUID(string: "0x2AA2"): "Language",
+                                                                CBUUID(string: "0x2ACC"): "Fitness Machine Feature",
+                                                                CBUUID(string: "0x2AD2"): "Indoor Bike Data",
+                                                                CBUUID(string: "0x2AD6"): "Supported Resistance Level Range",
+                                                                CBUUID(string: "0x2AD8"): "Supported Power Range",
+                                                                CBUUID(string: "0x2AD9"): "Fitness Machine Control Point",
+                                                                CBUUID(string: "0x2ADA"): "Fitness Machine Status"]
 
     var name: String {
         get {

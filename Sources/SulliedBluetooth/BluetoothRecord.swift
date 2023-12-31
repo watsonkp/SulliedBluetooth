@@ -22,7 +22,8 @@ public struct BluetoothRecord {
                                     SupportedService(id: CBUUID(string: "0x180f"), description: String(describing: CBUUID(string: "0x180f"))),
                                     SupportedService(id: CBUUID(string: "0x1816"), description: String(describing: CBUUID(string: "0x1816"))),
                                     SupportedService(id: CBUUID(string: "0x1818"), description: "Cycling Power"),
-                                    SupportedService(id: CBUUID(string: "0x181c"), description: "User Data")]
+                                    SupportedService(id: CBUUID(string: "0x181c"), description: "User Data"),
+                                    SupportedService(id: CBUUID(string: "0x1826"), description: "Fitness Machine")]
 
     init(characteristic: CBCharacteristic, timestamp: Date) {
         self.peripheral = characteristic.service!.peripheral!.identifier
