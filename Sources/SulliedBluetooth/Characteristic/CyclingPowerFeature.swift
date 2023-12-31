@@ -105,7 +105,7 @@ extension CyclingPowerFeature: CustomStringConvertible {
                 featureDescription += "Distributed system support unspecified (legacy sensor), "
             }
 
-            return featureDescription
+            return String(featureDescription.prefix(upTo: featureDescription.lastIndex(of: ",") ?? featureDescription.startIndex))
         }
     }
 }
