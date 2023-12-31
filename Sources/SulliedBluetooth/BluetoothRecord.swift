@@ -179,6 +179,11 @@ public struct BluetoothRecord {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.supportedResistanceLevelRange(range)
+            case CBUUID(string: "0x2AD8"):
+                guard let range = SupportedPowerRange(value: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.supportedPowerRange(range)
             default:
                 return BluetoothValue.raw(value)
             }
@@ -205,6 +210,7 @@ public enum BluetoothValue: CustomStringConvertible {
     case databaseChangeIncrement(UInt32)
     case userIndex(UserIndex)
     case supportedResistanceLevelRange(SupportedResistanceLevelRange)
+    case supportedPowerRange(SupportedPowerRange)
     case raw(Data)
     case none
     public var description: String {
@@ -243,6 +249,8 @@ public enum BluetoothValue: CustomStringConvertible {
             case .userIndex(let index):
                 return String(describing: index)
             case .supportedResistanceLevelRange(let range):
+                return String(describing: range)
+            case .supportedPowerRange(let range):
                 return String(describing: range)
             case .raw(let data):
                 return "\(data)"
