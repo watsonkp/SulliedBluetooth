@@ -33,6 +33,8 @@ public struct CyclingPowerMeasurement: DecodedCharacteristic {
     let accumulatedEnergy: UInt16?
     let offsetCompensationIndicator: Bool
 
+    private static let durationStyle = Measurement<UnitDuration>.FormatStyle(width: .wide, numberFormatStyle: .number.precision(.significantDigits(1..<5)))
+
     enum PedalPowerBalanceReference {
         case unknown
         case left
@@ -163,13 +165,13 @@ extension CyclingPowerMeasurement: CustomStringConvertible {
                let wheelEventTime = wheelEventTime,
                let cumulativeCrankRevolutions = cumulativeCrankRevolutions,
                let crankEventTime = crankEventTime {
-                return "\(power) Wheel(\(cumulativeWheelRevolutions), \(Double(wheelEventTime) / 2048)), Crank(\(cumulativeCrankRevolutions), \(Double(crankEventTime) / 1024)"
+                return "\(power) Wheel(\(cumulativeWheelRevolutions), \(CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(wheelEventTime) / 2048, unit: UnitDuration.seconds))), Crank(\(cumulativeCrankRevolutions), \(CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(crankEventTime) / 1024, unit: UnitDuration.seconds)))"
             } else if let cumulativeWheelRevolutions = cumulativeWheelRevolutions,
                       let wheelEventTime = wheelEventTime {
-                return "\(power) Wheel(\(cumulativeWheelRevolutions), \(Double(wheelEventTime) / 2048)"
+                return "\(power) Wheel(\(cumulativeWheelRevolutions), \(CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(wheelEventTime) / 2048, unit: UnitDuration.seconds)))"
             } else if let cumulativeCrankRevolutions = cumulativeCrankRevolutions,
                       let crankEventTime = crankEventTime {
-                return "\(power) Crank(\(cumulativeCrankRevolutions), \(Double(crankEventTime) / 1024))"
+                return "\(power) Crank(\(cumulativeCrankRevolutions), \(CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(crankEventTime) / 1024, unit: UnitDuration.seconds))))"
             } else {
                 return power
             }
