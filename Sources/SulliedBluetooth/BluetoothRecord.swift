@@ -175,6 +175,11 @@ public struct BluetoothRecord {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.userIndex(UserIndex(userIndex: index))
+            case CBUUID(string: "0x2ACC"):
+                guard let features = FitnessMachineFeature(value: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.fitnessMachineFeature(features)
             case CBUUID(string: "0x2AD6"):
                 guard let range = SupportedResistanceLevelRange(value: value) else {
                     return BluetoothValue.raw(value)
@@ -210,6 +215,7 @@ public enum BluetoothValue: CustomStringConvertible {
     case cyclingPowerFeature(CyclingPowerFeature)
     case databaseChangeIncrement(UInt32)
     case userIndex(UserIndex)
+    case fitnessMachineFeature(FitnessMachineFeature)
     case supportedResistanceLevelRange(SupportedResistanceLevelRange)
     case supportedPowerRange(SupportedPowerRange)
     case raw(Data)
@@ -249,6 +255,8 @@ public enum BluetoothValue: CustomStringConvertible {
                 return "\(increment)"
             case .userIndex(let index):
                 return String(describing: index)
+            case .fitnessMachineFeature(let features):
+                return String(describing: features)
             case .supportedResistanceLevelRange(let range):
                 return String(describing: range)
             case .supportedPowerRange(let range):
