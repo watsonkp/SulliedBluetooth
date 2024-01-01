@@ -83,7 +83,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                                                               significantPosition: 0))
                         if let cumulativeWheelRevolutions = measurement.cumulativeWheelRevolutions {
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
-                                                                  unit: UnitUnknown.unknown,
+                                                                  unit: UnitCount.revolutions,
                                                                   usage: .revolution,
                                                                   value: Int64(cumulativeWheelRevolutions),
                                                                   significantFigures: 6,
@@ -99,7 +99,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         }
                         if let cumulativeCrankRevolutions = measurement.cumulativeCrankRevolutions {
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
-                                                                  unit: UnitUnknown.unknown,
+                                                                  unit: UnitCount.revolutions,
                                                                   usage: .cadence,
                                                                   value: Int64(cumulativeCrankRevolutions),
                                                                   significantFigures: 6,
@@ -117,7 +117,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         if let cumulativeWheelRevolutions = measurement.cumulativeWheelRevolutions {
                             let significantFigures = cumulativeWheelRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeWheelRevolutions))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
-                                                                  unit: UnitUnknown.unknown,
+                                                                  unit: UnitCount.revolutions,
                                                                   usage: .revolution,
                                                                   value: Int64(cumulativeWheelRevolutions),
                                                                   significantFigures: significantFigures,
@@ -135,7 +135,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         if let cumulativeCrankRevolutions = measurement.cumulativeCrankRevolutions {
                             let significantFigures = cumulativeCrankRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeCrankRevolutions))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
-                                                                  unit: UnitUnknown.unknown,
+                                                                  unit: UnitCount.revolutions,
                                                                   usage: .cadence,
                                                                   value: Int64(cumulativeCrankRevolutions),
                                                                   significantFigures: significantFigures,
