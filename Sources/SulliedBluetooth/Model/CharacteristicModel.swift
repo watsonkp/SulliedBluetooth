@@ -9,6 +9,11 @@ class CharacteristicModel: ObservableObject {
             properties.contains(.notify)
         }
     }
+    var canRecord: Bool {
+        get {
+            canNotify && PeripheralController.supportedRecordingCharacteristics.contains(uuid)
+        }
+    }
     @Published var value: Data? = nil
     @Published var isNotifying: Bool = false
     private static let characteristicNames: [CBUUID: String] = [CBUUID(string: "0x2a19"): "Battery Level",

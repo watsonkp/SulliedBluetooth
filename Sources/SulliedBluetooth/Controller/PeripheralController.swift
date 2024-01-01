@@ -12,6 +12,11 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     private var characteristics = [CBUUID: CBCharacteristic]()
     var recordPublisher = PassthroughSubject<IntegerDataPoint, Never>()
     private var dateOffset: Double? = nil
+    public static let supportedRecordingCharacteristics: Set<CBUUID> = [
+        CBUUID(string: "0x2A37"),
+        CBUUID(string: "0x2A5B"),
+        CBUUID(string: "0x2A63")
+    ]
 
     init(peripheral: CBPeripheral, model: PeripheralModel) {
         self.peripheral = peripheral

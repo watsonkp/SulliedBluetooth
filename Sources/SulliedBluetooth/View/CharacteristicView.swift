@@ -14,7 +14,7 @@ struct CharacteristicView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("\(model.name) (\(model.parsedValue.description))")
-            if model.properties.contains(.notify) {
+            if model.canRecord {
                 Toggle("Record", isOn: Binding<Bool>(get: { model.isNotifying }, set: { notifying = $0 }))
             }
         }
