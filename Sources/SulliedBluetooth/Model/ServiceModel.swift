@@ -8,7 +8,8 @@ class ServiceModel: ObservableObject {
                                                          CBUUID(string: "0x180f"): "Battery",
                                                          CBUUID(string: "0x1816"): String(describing: CBUUID(string: "0x1816")),
                                                          CBUUID(string: "0x1818"): "Cycling Power",
-                                                         CBUUID(string: "0x181c"): "User Data"]
+                                                         CBUUID(string: "0x181c"): "User Data",
+                                                         CBUUID(string: "0x1826"): "Fitness Machine"]
 
     var name: String {
         if let name = ServiceModel.serviceNames[self.uuid] {
