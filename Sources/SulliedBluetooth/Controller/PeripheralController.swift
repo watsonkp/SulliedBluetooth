@@ -77,7 +77,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         // TODO: Use the Sensor Location characteristic to set the usage.
                         recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                               unit: UnitPower.watts,
-                                                              usage: .unknown,
+                                                              usage: .cyclingPower,
                                                               value: Int64(measurement.instantaneousPower),
                                                               significantFigures: significantFigures,
                                                               significantPosition: 0))
@@ -85,7 +85,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             let significantFigures = cumulativeWheelRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeWheelRevolutions))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitUnknown.unknown,
-                                                                  usage: .speed,
+                                                                  usage: .revolution,
                                                                   value: Int64(cumulativeWheelRevolutions),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
@@ -94,7 +94,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             let significantFigures = wheelEventTime > 0 ? 1 + Int64(log10(Double(wheelEventTime))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
-                                                                  usage: .speed,
+                                                                  usage: .revolution,
                                                                   value: Int64(wheelEventTime),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
@@ -122,7 +122,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             let significantFigures = cumulativeWheelRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeWheelRevolutions))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitUnknown.unknown,
-                                                                  usage: .speed,
+                                                                  usage: .revolution,
                                                                   value: Int64(cumulativeWheelRevolutions),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
@@ -131,7 +131,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             let significantFigures = wheelEventTime > 0 ? 1 + Int64(log10(Double(wheelEventTime))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
-                                                                  usage: .speed,
+                                                                  usage: .revolution,
                                                                   value: Int64(wheelEventTime),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
