@@ -54,7 +54,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                     if characteristic.properties.contains(.notify) {
                         characteristicModel.isNotifying = characteristic.isNotifying
                     }
-                    serviceModel.characteristics.append(characteristicModel)
+                    serviceModel.characteristics.insert(characteristicModel, at: serviceModel.characteristics.firstIndex(where: { characteristicModel.uuid.uuidString < $0.uuid.uuidString }) ?? serviceModel.characteristics.endIndex)
                     if characteristic.properties.contains(.read) {
                         peripheral.readValue(for: characteristic)
                     }
