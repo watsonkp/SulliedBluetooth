@@ -24,7 +24,7 @@ extension DecodedCharacteristic {
         guard i + 1 < data.count else {
             return nil
         }
-        return UInt16(data[i]) | UInt16(data[i+1]<<8)
+        return UInt16(data[i]) | UInt16(data[i+1])<<8
     }
 
     static func readUInt32(at i: Int, of data: Data) -> UInt32? {
