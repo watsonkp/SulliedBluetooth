@@ -9,7 +9,6 @@ struct CharacteristicView: View {
             if let notify = notify {
                 notify(newValue, model.uuid)
             }
-            model.isNotifying = newValue
         }
     }
     var body: some View {

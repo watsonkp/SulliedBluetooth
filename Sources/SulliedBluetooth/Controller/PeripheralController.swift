@@ -3,6 +3,7 @@ import Combine
 import SulliedMeasurement
 
 public protocol PeripheralControllerProtocol {
+    var isNotifying: Bool { get }
     func notify(enabled: Bool, id: CBUUID) -> Void
 }
 
@@ -18,6 +19,12 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
         CBUUID(string: "0x2A63")
     ]
 
+    var isNotifying: Bool {
+        get {
+            characteristics.first(where: { $0.value.isNotifying }) != nil
+        }
+    }
+
     init(peripheral: CBPeripheral, model: PeripheralModel) {
         self.peripheral = peripheral
         self.model = model
@@ -27,9 +34,17 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     func notify(enabled: Bool, id: CBUUID) {
         if let characteristic = characteristics[id] {
             self.peripheral.setNotifyValue(enabled, for: characteristic)
+
+            // Update the model
+            for service in model.services {
+                guard let index = service.characteristics.firstIndex(where: { $0.uuid == id }) else {
+                    continue
+                }
+                service.characteristics[index].isNotifying = true
+            }
         }
     }
-    
+
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         // TODO: Check for error
         if let services = peripheral.services {

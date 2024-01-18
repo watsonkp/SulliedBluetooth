@@ -33,7 +33,13 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
         )
         super.init()
     }
-    
+
+    public var isNotifying: Bool {
+        get {
+            peripheralControllers.first(where: { $0.value.isNotifying }) != nil
+        }
+    }
+
     private func isBluetoothBaseUUID(_ id: CBUUID) -> Bool {
         // Companies can request 16 bit IDs. They are all above 0xF000.
         if id.data.count == 2 && id.data[0] >= baseMemberUUID[0] {

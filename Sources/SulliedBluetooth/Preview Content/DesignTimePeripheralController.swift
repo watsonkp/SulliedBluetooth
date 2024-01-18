@@ -3,6 +3,8 @@ import Combine
 import SulliedMeasurement
 
 class DesignTimePeripheralController: PeripheralControllerProtocol {
+    // TODO: This is wrong.
+    var isNotifying: Bool = true
     let model: PeripheralModel
     func notify(enabled: Bool, id: CBUUID) {
         for service in model.services {
