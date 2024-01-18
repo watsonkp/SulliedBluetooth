@@ -9,13 +9,14 @@ struct CharacteristicView: View {
             if let notify = notify {
                 notify(newValue, model.uuid)
             }
+            model.isNotifying = newValue
         }
     }
     var body: some View {
         VStack(alignment: .leading) {
             Text("\(model.name) (\(model.parsedValue.description))")
             if model.canRecord {
-                Toggle("Record", isOn: Binding<Bool>(get: { model.isNotifying }, set: { notifying = $0; model.isNotifying = $0 }))
+                Toggle("Record", isOn: Binding<Bool>(get: { model.isNotifying }, set: { notifying = $0 }))
             }
         }
     }
