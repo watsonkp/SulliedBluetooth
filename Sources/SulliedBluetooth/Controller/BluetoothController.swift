@@ -6,6 +6,7 @@ public protocol BluetoothControllerProtocol {
     var model: BluetoothModel { get }
     var publisher: AnyPublisher<IntegerDataPoint, Never> { get }
     var peripheralControllers: [UUID: PeripheralControllerProtocol] { get }
+    var isNotifying: Bool { get }
     func toggleScan(serviceFilter: Set<CBUUID>) -> Void
     func connect(_ id: UUID) -> Void
     func disconnect(indices: IndexSet) -> Void

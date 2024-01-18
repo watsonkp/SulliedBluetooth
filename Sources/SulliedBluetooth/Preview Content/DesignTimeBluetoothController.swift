@@ -9,7 +9,10 @@ public class DesignTimeBluetoothController: BluetoothControllerProtocol {
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
     private var subscriptions: [AnyCancellable] = []
     var isScanning = false
-    
+
+    // TODO: This is wrong.
+    public var isNotifying: Bool = true
+
     public func toggleScan(serviceFilter: Set<CBUUID> = []) {
         if isScanning {
             isScanning = false
