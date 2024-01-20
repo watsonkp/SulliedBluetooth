@@ -120,7 +120,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         if let cumulativeCrankRevolutions = measurement.cumulativeCrankRevolutions {
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitCount.revolutions,
-                                                                  usage: .cadence,
+                                                                  usage: .crankRevolution,
                                                                   value: Int64(cumulativeCrankRevolutions),
                                                                   significantFigures: 6,
                                                                   significantPosition: 0))
@@ -128,7 +128,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         if let crankEventTime = measurement.crankEventTime {
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
-                                                                  usage: .cadence,
+                                                                  usage: .crankRevolution,
                                                                   value: Int64(crankEventTime),
                                                                   significantFigures: 6,
                                                                   significantPosition: 0))
@@ -156,7 +156,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             let significantFigures = cumulativeCrankRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeCrankRevolutions))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitCount.revolutions,
-                                                                  usage: .cadence,
+                                                                  usage: .crankRevolution,
                                                                   value: Int64(cumulativeCrankRevolutions),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
@@ -165,7 +165,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             let significantFigures = crankEventTime > 0 ? 1 + Int64(log10(Double(crankEventTime))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
-                                                                  usage: .cadence,
+                                                                  usage: .crankRevolution,
                                                                   value: Int64(crankEventTime),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
