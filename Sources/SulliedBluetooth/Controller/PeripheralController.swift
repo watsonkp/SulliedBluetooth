@@ -104,7 +104,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         if let cumulativeWheelRevolutions = measurement.cumulativeWheelRevolutions {
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitCount.revolutions,
-                                                                  usage: .speed,
+                                                                  usage: .distance,
                                                                   value: Int64(cumulativeWheelRevolutions),
                                                                   significantFigures: 6,
                                                                   significantPosition: 0))
@@ -112,7 +112,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         if let wheelEventTime = measurement.wheelEventTime {
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
-                                                                  usage: .speed,
+                                                                  usage: .distance,
                                                                   value: Int64(wheelEventTime),
                                                                   significantFigures: 6,
                                                                   significantPosition: 0))
@@ -138,7 +138,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             let significantFigures = cumulativeWheelRevolutions > 0 ? 1 + Int64(log10(Double(cumulativeWheelRevolutions))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitCount.revolutions,
-                                                                  usage: .speed,
+                                                                  usage: .distance,
                                                                   value: Int64(cumulativeWheelRevolutions),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
@@ -147,7 +147,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             let significantFigures = wheelEventTime > 0 ? 1 + Int64(log10(Double(wheelEventTime))) : 0
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
-                                                                  usage: .speed,
+                                                                  usage: .distance,
                                                                   value: Int64(wheelEventTime),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
