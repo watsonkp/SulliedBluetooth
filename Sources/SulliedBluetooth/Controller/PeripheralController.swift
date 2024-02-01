@@ -113,7 +113,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
                                                                   usage: .wheelDistance,
-                                                                  value: Int64(wheelEventTime),
+                                                                  value: Int64(Double(wheelEventTime) / 2048 * 1000),
                                                                   significantFigures: 6,
                                                                   significantPosition: 0))
                         }
@@ -129,7 +129,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
                                                                   usage: .crankRevolution,
-                                                                  value: Int64(crankEventTime),
+                                                                  value: Int64(Double(crankEventTime) / 1024 * 1000),
                                                                   significantFigures: 6,
                                                                   significantPosition: 0))
                         }
@@ -148,7 +148,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
                                                                   usage: .wheelDistance,
-                                                                  value: Int64(wheelEventTime),
+                                                                  value: Int64(Double(wheelEventTime) / 1024 * 1000),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
                         }
@@ -166,7 +166,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             recordPublisher.send(IntegerDataPoint(date: timestamp,
                                                                   unit: UnitDuration.milliseconds,
                                                                   usage: .crankRevolution,
-                                                                  value: Int64(crankEventTime),
+                                                                  value: Int64(Double(crankEventTime) / 1024 * 1000),
                                                                   significantFigures: significantFigures,
                                                                   significantPosition: 0))
                         }

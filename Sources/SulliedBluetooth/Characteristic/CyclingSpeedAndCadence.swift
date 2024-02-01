@@ -6,8 +6,10 @@ import Foundation
 // CSCMeasurement characteristic
 public struct CSCMeasurement: CustomStringConvertible, DecodedCharacteristic {
     public let cumulativeWheelRevolutions: UInt32?
+    // Unit is 1/1024 of a seecond
     public let wheelEventTime: UInt16?
     public let cumulativeCrankRevolutions: UInt16?
+    // Unit is 1/1024 of a second
     public let crankEventTime: UInt16?
 
     public var description: String {
