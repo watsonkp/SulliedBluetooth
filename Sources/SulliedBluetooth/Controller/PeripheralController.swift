@@ -114,7 +114,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                                                                   unit: UnitDuration.milliseconds,
                                                                   usage: .wheelDistance,
                                                                   value: Int64(Double(wheelEventTime) / 2048 * 1000),
-                                                                  significantFigures: 6,
+                                                                  significantFigures: Int64(SignificantDigits.significantDigits(of: Int(wheelEventTime))),
                                                                   significantPosition: 0))
                         }
                         if let cumulativeCrankRevolutions = measurement.cumulativeCrankRevolutions {
@@ -130,7 +130,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                                                                   unit: UnitDuration.milliseconds,
                                                                   usage: .crankRevolution,
                                                                   value: Int64(Double(crankEventTime) / 1024 * 1000),
-                                                                  significantFigures: 6,
+                                                                  significantFigures: Int64(SignificantDigits.significantDigits(of: Int(crankEventTime))),
                                                                   significantPosition: 0))
                         }
                     case .cyclingSpeedAndCadence(let measurement):
