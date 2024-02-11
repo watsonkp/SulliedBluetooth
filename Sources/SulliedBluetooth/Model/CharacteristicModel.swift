@@ -27,6 +27,12 @@ class CharacteristicModel: ObservableObject {
         }
     }
 
+    var fields: [FieldModel] {
+        get {
+            parsedValue.fieldDescriptions.map { FieldModel(characteristicID: uuid, valueDescription: $0) }
+        }
+    }
+
     var isAssignedNumber: Bool {
         get {
             Bluetooth.isAssignedNumber(uuid)

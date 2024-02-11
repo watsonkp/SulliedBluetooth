@@ -21,7 +21,9 @@ struct CharacteristicView: View {
                     Text(model.name)
                         .font(.headline)
                 }
-                Text(model.parsedValue.description)
+                ForEach(model.fields) { field in
+                    Text(String(describing: field))
+                }
             } else {
                 Text("Non-Standard Characteristic")
                     .font(.headline)
