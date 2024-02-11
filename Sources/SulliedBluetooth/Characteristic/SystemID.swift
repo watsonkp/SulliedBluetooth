@@ -52,3 +52,12 @@ extension SystemID: CustomStringConvertible {
         }
     }
 }
+
+extension SystemID {
+    public var fieldDescriptions: [String] {
+        get {
+            [String(format: "OUI: %X", organizationallyUniqueIdentifier),
+             String(format: "MDI: %X", manufacturerDefinedIdentifier)]
+        }
+    }
+}

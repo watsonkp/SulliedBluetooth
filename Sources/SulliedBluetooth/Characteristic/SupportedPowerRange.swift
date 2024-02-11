@@ -24,3 +24,15 @@ extension SupportedPowerRange: CustomStringConvertible {
         }
     }
 }
+
+extension SupportedPowerRange {
+    public var fieldDescriptions: [String] {
+        get {
+            [
+                "Minimum: \(Measurement(value: Double(minimumPower), unit: UnitPower.watts))",
+                "Maximum: \(Measurement(value: Double(maximumPower), unit: UnitPower.watts))",
+                "Increment: \(Measurement(value: Double(increment), unit: UnitPower.watts))"
+            ]
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import Foundation
+import SulliedMeasurement
 
 // Cycling Power Service 1.1
 //  https://www.bluetooth.com/specifications/specs/cycling-power-service-1-1/
@@ -175,6 +176,25 @@ extension CyclingPowerMeasurement: CustomStringConvertible {
             } else {
                 return power
             }
+        }
+    }
+}
+
+extension CyclingPowerMeasurement {
+    public var fieldDescriptions: [String] {
+        get {
+            var fields = [Measurement(value: Double(instantaneousPower), unit: UnitPower.watts).formatted()]
+            if let cumulativeWheelRevolutions,
+               let wheelEventTime = wheelEventTime {
+                fields.append(Measurement(value: Double(cumulativeWheelRevolutions), unit: UnitCount.revolutions).formatted())
+                fields.append(CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(wheelEventTime) / 2048, unit: UnitDuration.seconds)))
+            }
+            if let cumulativeCrankRevolutions = cumulativeCrankRevolutions,
+               let crankEventTime = crankEventTime {
+                fields.append(Measurement(value: Double(cumulativeCrankRevolutions), unit: UnitCount.revolutions).formatted())
+                fields.append(CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(crankEventTime) / 1024, unit: UnitDuration.seconds)))
+            }
+            return fields
         }
     }
 }

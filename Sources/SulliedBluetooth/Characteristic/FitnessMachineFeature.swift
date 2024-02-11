@@ -23,6 +23,14 @@ extension FitnessMachineFeature: CustomStringConvertible {
     }
 }
 
+extension FitnessMachineFeature {
+    public var fieldDescriptions: [String] {
+        get {
+            fitnessMachineFeatures.featureDescriptions + targetSettingFeatures.featureDescriptions
+        }
+    }
+}
+
 public struct FitnessMachineFeatures: OptionSet {
     public let rawValue: UInt32
 
@@ -52,59 +60,69 @@ public struct FitnessMachineFeatures: OptionSet {
 extension FitnessMachineFeatures: CustomStringConvertible {
     public var description: String {
         get {
-            var featureDescription = ""
+            featureDescriptions.joined(separator: ", ")
+        }
+    }
+}
+
+extension FitnessMachineFeatures {
+    public var featureDescriptions: [String] {
+        get {
+            var featureDescriptions: [String] = []
+
             if self.contains(.averageSpeedSupported) {
-                featureDescription += "Average Speed, "
+                featureDescriptions.append("Average Speed")
             }
             if self.contains(.cadenceSupported) {
-                featureDescription += "Cadence, "
+                featureDescriptions.append("Cadence")
             }
             if self.contains(.totalDistanceSupported) {
-                featureDescription += "Total Distance, "
+                featureDescriptions.append("Total Distance")
             }
             if self.contains(.inclinationSupported) {
-                featureDescription += "Inclination, "
+                featureDescriptions.append("Inclination")
             }
             if self.contains(.elevationGainSupported) {
-                featureDescription += "Elevation Gain, "
+                featureDescriptions.append("Elevation Gain")
             }
             if self.contains(.paceSupported) {
-                featureDescription += "Pace, "
+                featureDescriptions.append("Pace")
             }
             if self.contains(.stepCountSupported) {
-                featureDescription += "Step Count, "
+                featureDescriptions.append("Step Count")
             }
             if self.contains(.resistanceLevelSupported) {
-                featureDescription += "Resistance Level, "
+                featureDescriptions.append("Resistance Level")
             }
             if self.contains(.strideCountSupported) {
-                featureDescription += "Stride Count, "
+                featureDescriptions.append("Stride Count")
             }
             if self.contains(.expendedEnergySupported) {
-                featureDescription += "Expended Energy, "
+                featureDescriptions.append("Expended Energy")
             }
             if self.contains(.heartRateMeasurementSupported) {
-                featureDescription += "Heart Rate Measurement, "
+                featureDescriptions.append("Heart Rate Measurement")
             }
             if self.contains(.metabolicEquivalentSupported) {
-                featureDescription += "Metabolic Equivalent, "
+                featureDescriptions.append("Metabolic Equivalent")
             }
             if self.contains(.elapsedTimeSupported) {
-                featureDescription += "Elapsed Time, "
+                featureDescriptions.append("Elapsed Time")
             }
             if self.contains(.remainingTimeSupported) {
-                featureDescription += "Remaining Time, "
+                featureDescriptions.append("Remaining Time")
             }
             if self.contains(.powerMeasurementSupported) {
-                featureDescription += "Power Measurement, "
+                featureDescriptions.append("Power Measurement")
             }
             if self.contains(.forceonBeltandPowerOutputSupported) {
-                featureDescription += "Force on Belt and Power Output, "
+                featureDescriptions.append("Force on Belt and Power Output")
             }
             if self.contains(.userDataRetentionSupported) {
-                featureDescription += "User Data Retention, "
+                featureDescriptions.append("User Data Retention")
             }
-            return String(featureDescription.prefix(upTo: featureDescription.lastIndex(of: ",") ?? featureDescription.startIndex))
+
+            return featureDescriptions
         }
     }
 }
@@ -138,60 +156,69 @@ public struct TargetSettingFeatures: OptionSet {
 extension TargetSettingFeatures: CustomStringConvertible {
     public var description: String {
         get {
-            var featureDescription = ""
+            featureDescriptions.joined(separator: ", ")
+        }
+    }
+}
+
+extension TargetSettingFeatures {
+    public var featureDescriptions: [String] {
+        get {
+            var featureDescriptions: [String] = []
+
             if self.contains(.speedTargetSettingSupported) {
-                featureDescription += "Speed Target Setting, "
+                featureDescriptions.append("Speed Target Setting")
             }
             if self.contains(.inclinationTargetSettingSupported) {
-                featureDescription += "Inclination Target Setting, "
+                featureDescriptions.append("Inclination Target Setting")
             }
             if self.contains(.resistanceTargetSettingSupported) {
-                featureDescription += "Resistance Target Setting, "
+                featureDescriptions.append("Resistance Target Setting")
             }
             if self.contains(.powerTargetSettingSupported) {
-                featureDescription += "Power Target Setting, "
+                featureDescriptions.append("Power Target Setting")
             }
             if self.contains(.heartRateTargetSettingSupported) {
-                featureDescription += "Heart Rate Target Setting, "
+                featureDescriptions.append("Heart Rate Target Setting")
             }
             if self.contains(.targetedExpendedEnergyConfigurationSupported) {
-                featureDescription += "Targeted Expended Energy Configuration, "
+                featureDescriptions.append("Targeted Expended Energy Configuration")
             }
             if self.contains(.targetedStepNumberConfigurationSupported) {
-                featureDescription += "Targeted Step Number Configuration, "
+                featureDescriptions.append("Targeted Step Number Configuration")
             }
             if self.contains(.targetedStrideNumberConfigurationSupported) {
-                featureDescription += "Targeted Stride Number Configuration, "
+                featureDescriptions.append("Targeted Stride Number Configuration")
             }
             if self.contains(.targetedDistanceConfigurationSupported) {
-                featureDescription += "Targeted Distance Configuration, "
+                featureDescriptions.append("Targeted Distance Configuration")
             }
             if self.contains(.targetedTrainingTimeConfigurationSupported) {
-                featureDescription += "Targeted Training Time Configuration, "
+                featureDescriptions.append("Targeted Training Time Configuration")
             }
             if self.contains(.targetedTimeinTwoHeartRateZonesConfigurationSupported) {
-                featureDescription += "Targeted Time in Two Heart Rate Zones Configuration, "
+                featureDescriptions.append("Targeted Time in Two Heart Rate Zones Configuration")
             }
             if self.contains(.targetedTimeinThreeHeartRateZonesConfigurationSupported) {
-                featureDescription += "Targeted Time in Three Heart Rate Zones Configuration, "
+                featureDescriptions.append("Targeted Time in Three Heart Rate Zones Configuration")
             }
             if self.contains(.targetedTimeinFiveHeartRateZonesConfigurationSupported) {
-                featureDescription += "Targeted Time in Five Heart Rate Zones Configuration, "
+                featureDescriptions.append("Targeted Time in Five Heart Rate Zones Configuration")
             }
             if self.contains(.indoorBikeSimulationParametersSupported) {
-                featureDescription += "Indoor Bike Simulation Parameters, "
+                featureDescriptions.append("Indoor Bike Simulation Parameters")
             }
             if self.contains(.wheelCircumferenceConfigurationSupported) {
-                featureDescription += "Wheel Circumference Configuration, "
+                featureDescriptions.append("Wheel Circumference Configuration")
             }
             if self.contains(.spinDownControlSupported) {
-                featureDescription += "Spin Down Control, "
+                featureDescriptions.append("Spin Down Control")
             }
             if self.contains(.targetedCadenceConfigurationSupported) {
-                featureDescription += "Targeted Cadence Configuration, "
+                featureDescriptions.append("Targeted Cadence Configuration")
             }
 
-            return String(featureDescription.prefix(upTo: featureDescription.lastIndex(of: ",") ?? featureDescription.startIndex))
+            return featureDescriptions
         }
     }
 }

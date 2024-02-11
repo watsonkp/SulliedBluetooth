@@ -1,4 +1,5 @@
 import Foundation
+import SulliedMeasurement
 
 // Cycling Speed and Cadence Service 1.0
 //  https://www.bluetooth.com/specifications/specs/cycling-speed-and-cadence-service-1-0/
@@ -11,6 +12,8 @@ public struct CSCMeasurement: CustomStringConvertible, DecodedCharacteristic {
     public let cumulativeCrankRevolutions: UInt16?
     // Unit is 1/1024 of a second
     public let crankEventTime: UInt16?
+
+    private static let durationStyle = Measurement<UnitDuration>.FormatStyle(width: .wide, numberFormatStyle: .number.precision(.significantDigits(1..<5)))
 
     public var description: String {
         get {
@@ -52,6 +55,25 @@ public struct CSCMeasurement: CustomStringConvertible, DecodedCharacteristic {
         } else {
             cumulativeCrankRevolutions = nil
             crankEventTime = nil
+        }
+    }
+}
+
+extension CSCMeasurement {
+    public var fieldDescriptions: [String] {
+        get {
+            var fields: [String] = []
+            if let cumulativeWheelRevolutions,
+               let wheelEventTime = wheelEventTime {
+                fields.append(Measurement(value: Double(cumulativeWheelRevolutions), unit: UnitCount.revolutions).formatted())
+                fields.append(CSCMeasurement.durationStyle.format(Measurement(value: Double(wheelEventTime) / 1024, unit: UnitDuration.seconds)))
+            }
+            if let cumulativeCrankRevolutions = cumulativeCrankRevolutions,
+               let crankEventTime = crankEventTime {
+                fields.append(Measurement(value: Double(cumulativeCrankRevolutions), unit: UnitCount.revolutions).formatted())
+                fields.append(CSCMeasurement.durationStyle.format(Measurement(value: Double(crankEventTime) / 1024, unit: UnitDuration.seconds)))
+            }
+            return fields
         }
     }
 }
