@@ -16,14 +16,16 @@ struct CharacteristicView: View {
             if model.isAssignedNumber {
                 if model.canRecord {
                     Toggle(model.name, isOn: Binding<Bool>(get: { model.isNotifying }, set: { notifying = $0 }))
+                        .font(.headline)
                 } else {
                     Text(model.name)
+                        .font(.headline)
                 }
                 Text(model.parsedValue.description)
             } else {
                 Text("Non-Standard Characteristic")
+                    .font(.headline)
                 Text(model.name)
-                    .font(.caption)
             }
         }
     }
