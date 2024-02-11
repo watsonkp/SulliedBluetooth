@@ -12,7 +12,7 @@ struct ServiceView: View {
             }
         } header: {
             if model.isAssignedNumber {
-                Text("\(model.name) Service")
+                Text("\(model.name)")
             } else {
                 Text("Non-Standard Service")
             }
