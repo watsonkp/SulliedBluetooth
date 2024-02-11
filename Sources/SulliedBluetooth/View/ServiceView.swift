@@ -6,27 +6,28 @@ struct ServiceView: View {
     var notify: ((Bool, CBUUID) -> ())?
 
     var body: some View {
-        VStack(alignment: .leading) {
-            if model.isAssignedNumber {
-                Text("\(model.name) Service")
-                    .font(.headline)
-            } else {
-                Text("Non-Standard Service")
-                    .font(.headline)
-                Text(model.name)
-                    .font(.subheadline)
-            }
+        Section {
             ForEach(model.characteristics, id: \CharacteristicModel.uuid) { characteristic in
                 CharacteristicView(model: characteristic, notify: notify)
             }
-        }.padding()
+        } header: {
+            if model.isAssignedNumber {
+                Text("\(model.name) Service")
+            } else {
+                Text("Non-Standard Service")
+            }
+        } footer: {
+            if !model.isAssignedNumber {
+                Text(model.uuid.uuidString)
+            }
+        }
     }
 }
 
 struct ServiceView_Previews: PreviewProvider {
     static var previews: some View {
-        ServiceView(model: DesignTimeModel.populatedService()) { enabled, id in
-            // TODO: notify
+        List {
+            ServiceView(model: DesignTimeModel.populatedService()) { _, _ in }
         }
     }
 }

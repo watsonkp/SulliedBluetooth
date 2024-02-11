@@ -83,7 +83,10 @@ class DesignTimeModel {
     }
     
     static func populatedService() -> ServiceModel {
-        return heartRateService()
+        let service = ServiceModel(uuid: CBUUID(string: "0x180d"))
+        service.characteristics.append(heartRateCharacteristic())
+        service.characteristics.append(nonStandardCharacteristic())
+        return service
     }
     
     static func heartRateService() -> ServiceModel {
@@ -110,6 +113,11 @@ class DesignTimeModel {
         let characteristic = CharacteristicModel(uuid: CBUUID(string: "0x2a37"), properties: [.notify])
         characteristic.isNotifying = false
         return characteristic
+    }
+
+    static func nonStandardCharacteristic() -> CharacteristicModel {
+        return CharacteristicModel(uuid: CBUUID(string: "6217FF4B-FB31-1140-AD5A-A45545D7ECF3"),
+                                   properties: [])
     }
 }
 

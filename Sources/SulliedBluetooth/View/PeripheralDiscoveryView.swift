@@ -6,21 +6,21 @@ struct PeripheralDiscoveryView: View {
     @ObservedObject var model: PeripheralModel
 
     var body: some View {
-        ScrollView {
-            Text("\(model.name ?? model.identifier.uuidString)")
-                .font(.headline)
+        List {
             ForEach(model.services, id: \ServiceModel.uuid) { service in
                 ServiceView(model: service, notify: controller?.notify)
-                Divider()
             }
         }
+        .navigationTitle(model.name ?? model.identifier.uuidString)
     }
 }
 
 struct PeripheralDiscoveryView_Previews: PreviewProvider {
     static var previews: some View {
         let peripheral = DesignTimeModel.populatedPeripheral()
-        PeripheralDiscoveryView(controller: DesignTimePeripheralController(model: peripheral),
-                                model: peripheral)
+        NavigationView {
+            PeripheralDiscoveryView(controller: DesignTimePeripheralController(model: peripheral),
+                                    model: peripheral)
+        }
     }
 }
