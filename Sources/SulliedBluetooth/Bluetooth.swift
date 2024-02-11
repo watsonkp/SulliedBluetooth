@@ -1,6 +1,25 @@
 import Foundation
+import CoreBluetooth
 
 public struct Bluetooth {
+    private static let bluetoothBaseUUID = Array<UInt8>([0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0x80, 0x5f, 0x9b, 0x34, 0xfb])
+        .withUnsafeBufferPointer({ Data(buffer: $0) })
+    private static let baseMemberUUID = Array<UInt8>([0xf0, 0x00])
+        .withUnsafeBufferPointer({ Data(buffer: $0) })
+    static func isAssignedNumber(_ id: CBUUID) -> Bool {
+        // Companies can request 16 bit IDs. They are all above 0xF000.
+        if id.data.count == 2 && id.data[0] >= Bluetooth.baseMemberUUID[0] {
+            return false
+        }
+        // Pre-allocated UUIDs are shifted left 96 bits and added to the Bluetooth base UUID of 00000000-0000-1000-8000-00805F9B34FB
+        // Bluetooth Core specification 5.3 Part B Section 2.5.1 page 1181
+        if (id.data.count == 2) || (id.data.count == 4) || ((id.data.count == 16) && (Bluetooth.bluetoothBaseUUID == id.data[4 ..< 16])) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     public static func decodeHeartRateMeasurement(value: Data) -> HeartRateMeasurement {
         // https://www.bluetooth.com/specifications/specs/heart-rate-service-1-0/
         var typedValue = [UInt8](repeating:0, count: 0xf)

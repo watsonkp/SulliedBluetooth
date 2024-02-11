@@ -27,6 +27,12 @@ class CharacteristicModel: ObservableObject {
         }
     }
 
+    var isAssignedNumber: Bool {
+        get {
+            Bluetooth.isAssignedNumber(uuid)
+        }
+    }
+
 //    var parsedValue: ValueModel {
 //        get {
 //            return ValueModel(id: uuid, value: characteristic?.value ?? value)

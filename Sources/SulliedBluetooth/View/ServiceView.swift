@@ -7,8 +7,15 @@ struct ServiceView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(model.name) Service")
-                .font(.headline)
+            if model.isAssignedNumber {
+                Text("\(model.name) Service")
+                    .font(.headline)
+            } else {
+                Text("Non-Standard Service")
+                    .font(.headline)
+                Text(model.name)
+                    .font(.subheadline)
+            }
             ForEach(model.characteristics, id: \CharacteristicModel.uuid) { characteristic in
                 CharacteristicView(model: characteristic, notify: notify)
             }

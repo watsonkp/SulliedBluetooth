@@ -70,5 +70,6 @@ let ServiceUUIDDescriptions: [CBUUID : String] = [
     CBUUID(string: "0x1856") : "Public Broadcast Announcement",
     CBUUID(string: "0x1857") : "Electronic Shelf Label",
     CBUUID(string: "0x1858") : "Gaming Audio",
-    CBUUID(string: "0x1859") : "Mesh Proxy Solicitation"
+    CBUUID(string: "0x1859") : "Mesh Proxy Solicitation",
+    CBUUID(string: "0xFEEE") : "Polar Electro Oy"
 ]

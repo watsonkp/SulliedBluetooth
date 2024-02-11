@@ -15,4 +15,10 @@ class ServiceModel: ObservableObject {
     init(uuid: CBUUID) {
         self.uuid = uuid
     }
+
+    var isAssignedNumber: Bool {
+        get {
+            Bluetooth.isAssignedNumber(uuid)
+        }
+    }
 }

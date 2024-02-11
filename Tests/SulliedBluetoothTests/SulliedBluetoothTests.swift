@@ -3,6 +3,39 @@ import CoreBluetooth
 @testable import SulliedBluetooth
 
 final class BluetoothTests: XCTestCase {
+    func testUUID() {
+        // Service UUIDs
+        XCTAssertTrue(Bluetooth.isAssignedNumber(CBUUID(string: "0x1818")))
+        XCTAssertTrue(Bluetooth.isAssignedNumber(CBUUID(string: "0x00001818-0000-1000-8000-00805F9B34FB")))
+        // Polar H10
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "6217FF4B-FB31-1140-AD5A-A45545D7ECF3")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "FB005C80-02E7-F387-1CAD-8ACD2D8DF0C8")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "FEEE")))
+        // Tacx Flux
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "669AA501-0C08-969E-E211-86AD5062675F")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "669AA605-0C08-969E-E211-86AD5062675F")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "6E40FEC1-B5A3-F393-E0A9-E50E24DCCA9E")))
+
+        // Characteristic UUIDs
+        XCTAssertTrue(Bluetooth.isAssignedNumber(CBUUID(string: "0x2A5B")))
+        // Polar H10
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "6217FF4C-C8EC-B1FB-1380-3AD986708E2D")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "6217FF4D-91BB-91D0-7E2A-7CD3BDA8A1F3")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "FB005C51-02E7-F387-1CAD-8ACD2D8DF0C8")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "FB005C52-02E7-F387-1CAD-8ACD2D8DF0C8")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "FB005C53-02E7-F387-1CAD-8ACD2D8DF0C8")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "FB005C81-02E7-F387-1CAD-8ACD2D8DF0C8")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "FB005C82-02E7-F387-1CAD-8ACD2D8DF0C8")))
+        // Tacx Flux
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "669AAB01-0C08-969E-E211-86AD5062675F")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "669AAB02-0C08-969E-E211-86AD5062675F")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "669AAB21-0C08-969E-E211-86AD5062675F")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "669AAB22-0C08-969E-E211-86AD5062675F")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "669AAC01-0C08-969E-E211-86AD5062675F")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "6E40FEC2-B5A3-F393-E0A9-E50E24DCCA9E")))
+        XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "6E40FEC3-B5A3-F393-E0A9-E50E24DCCA9E")))
+    }
+
     func testHeartRateDecode() {
         let data0 = Data(base64Encoded: "EJ2HAYYBigE=")!
         let parsed0 = Bluetooth.decodeHeartRateMeasurement(value: data0)

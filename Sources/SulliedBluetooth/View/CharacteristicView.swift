@@ -13,7 +13,11 @@ struct CharacteristicView: View {
     }
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(model.name) (\(model.parsedValue.description))")
+            if model.isAssignedNumber {
+                Text("\(model.name) (\(model.parsedValue.description))")
+            } else {
+                Text("Non-Standard Characteristic (\(model.name)")
+            }
             if model.canRecord {
                 Toggle("Record", isOn: Binding<Bool>(get: { model.isNotifying }, set: { notifying = $0 }))
             }
