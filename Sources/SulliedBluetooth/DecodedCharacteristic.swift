@@ -20,6 +20,13 @@ extension DecodedCharacteristic {
         return (UInt16(data[i]) | UInt16(data[i+1] & 0xf0)<<4, UInt16(data[i+1] & 0x0f) | UInt16(data[i+2])<<4)
     }
 
+    static func readUInt8(at i: Int, of data: Data) -> UInt8? {
+        guard i < data.count else {
+            return nil
+        }
+        return UInt8(data[i])
+    }
+
     static func readUInt16(at i: Int, of data: Data) -> UInt16? {
         guard i + 1 < data.count else {
             return nil
