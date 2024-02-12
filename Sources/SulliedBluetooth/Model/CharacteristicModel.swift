@@ -52,8 +52,9 @@ class CharacteristicModel: ObservableObject {
     }
 
     // For design time previews and simulators
-    init(uuid: CBUUID, properties: CBCharacteristicProperties) {
+    init(uuid: CBUUID, properties: CBCharacteristicProperties, value: Data? = nil) {
         self.uuid = uuid
         self.properties = properties
+        self.value = value
     }
 }
