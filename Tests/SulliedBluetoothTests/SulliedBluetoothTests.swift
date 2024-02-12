@@ -36,30 +36,36 @@ final class BluetoothTests: XCTestCase {
         XCTAssertFalse(Bluetooth.isAssignedNumber(CBUUID(string: "6E40FEC3-B5A3-F393-E0A9-E50E24DCCA9E")))
     }
 
-    func testHeartRateDecode() {
-        let data0 = Data(base64Encoded: "EJ2HAYYBigE=")!
-        let parsed0 = Bluetooth.decodeHeartRateMeasurement(value: data0)
-        XCTAssertEqual(parsed0.heartRateMeasurementValue, 157)
-        XCTAssertEqual(parsed0.sensorContactSupported, false)
-        XCTAssertEqual(parsed0.sensorContactDetected, false)
-        XCTAssertEqual(parsed0.energyExpended, nil)
-        XCTAssertEqual(parsed0.rrInterval, [391, 390, 394])
+    func testHeartRateCharacteristic() {
+        let characteristic = CharacteristicModel(uuid: CBUUID(string: "0x2a37"),
+                                                 properties: [.notify],
+                                                 value: [0x10, 0xa0, 0x00, 0x04, 0x00, 0x03].withUnsafeBufferPointer({ Data($0) }))
+        XCTAssertEqual(characteristic.fields[0].description, "160 bpm")
+        XCTAssertEqual(characteristic.fields[1].description, "1.024 secs., 0.768 secs.")
 
-        let data1 = Data(base64Encoded: "EJOeAaEBogE=")!
-        let parsed1 = Bluetooth.decodeHeartRateMeasurement(value: data1)
-        XCTAssertEqual(parsed1.heartRateMeasurementValue, 147)
-        XCTAssertEqual(parsed1.sensorContactSupported, false)
-        XCTAssertEqual(parsed1.sensorContactDetected, false)
-        XCTAssertEqual(parsed1.energyExpended, nil)
-        XCTAssertEqual(parsed1.rrInterval, [414, 417, 418])
+        let characteristic16Bit = CharacteristicModel(uuid: CBUUID(string: "0x2a37"),
+                                                 properties: [.notify],
+                                                 value: [0x11, 0x05, 0x01, 0x00, 0x04, 0x00, 0x03].withUnsafeBufferPointer({ Data($0) }))
+        XCTAssertEqual(characteristic16Bit.fields[0].description, "261 bpm")
+        XCTAssertEqual(characteristic16Bit.fields[1].description, "1.024 secs., 0.768 secs.")
 
-        let data2 = Data(base64Encoded: "EK5fAV8BXwE=")!
-        let parsed2 = Bluetooth.decodeHeartRateMeasurement(value: data2)
-        XCTAssertEqual(parsed2.heartRateMeasurementValue, 174)
-        XCTAssertEqual(parsed2.sensorContactSupported, false)
-        XCTAssertEqual(parsed2.sensorContactDetected, false)
-        XCTAssertEqual(parsed2.energyExpended, nil)
-        XCTAssertEqual(parsed2.rrInterval, [351, 351, 351])
+        let characteristicEnergy = CharacteristicModel(uuid: CBUUID(string: "0x2a37"),
+                                                       properties: [.notify],
+                                                       value: [0x08, 0xa0, 0x80, 0x04].withUnsafeBufferPointer({ Data($0) }))
+        XCTAssertEqual(characteristicEnergy.fields[0].description, "160 bpm")
+        XCTAssertEqual(characteristicEnergy.fields[1].description, "275 Calories")
+    }
+
+    func testCyclingPowerCharacteristic() {
+        let characteristic = CharacteristicModel(uuid: CBUUID(string: "0x2a63"),
+                                                 properties: [.notify],
+                                                 value: [0x30, 0x00, 0x10, 0x01, 0xAB, 0xAD, 0x1D, 0xEA,
+                                                         0x00, 0x0a, 0x00, 0x10, 0x00, 0x03].withUnsafeBufferPointer({ Data($0) }))
+        XCTAssertEqual(characteristic.fields[0].description, "272 W")
+        XCTAssertEqual(characteristic.fields[1].description, "3,927,813,547 revolutions")
+        XCTAssertEqual(characteristic.fields[2].description, "1.25 seconds")
+        XCTAssertEqual(characteristic.fields[3].description, "4,096 revolutions")
+        XCTAssertEqual(characteristic.fields[4].description, "0.75 seconds")
     }
 
     // Test the cycling speed and cadence service

@@ -85,82 +85,10 @@ public struct BluetoothRecord {
             case CBUUID(string: "0x2A29"):
                 return BluetoothValue.manufacturerNameString(Bluetooth.readString(at: 0, of: value))
             case CBUUID(string: "0x2a37"):
-                // https://www.bluetooth.com/specifications/specs/heart-rate-service-1-0/
-                var typedValue = [UInt8](repeating:0, count: 0xf)
-                typedValue.withUnsafeMutableBytes({(bs: UnsafeMutableRawBufferPointer) -> Void in
-                    value.copyBytes(to: bs, count: value.count)
-                })
-
-                // TODO: Could OptionSet be helpful with this mess?
-                var heartRate: UInt16 = 0
-                if (value[0] & 0x1) != 0 {
-                    // Heart Rate Value Format is set to UINT16
-                    heartRate = UInt16((value[1]) | value[2]<<8)
-                } else {
-                    // Heart Rate Value Format is set to UINT8
-                    heartRate = UInt16(value[1])
+                guard let measurement = HeartRateMeasurement(value: value) else {
+                    return BluetoothValue.raw(value)
                 }
-
-                var sensorContactSupported = false
-                var sensorContactDetected = false
-                if (value[0] & 0x6) == 0x6 {
-                    // Sensor Contact feature is supported and contact is detected
-                    sensorContactSupported = true
-                    sensorContactDetected = true
-                } else if (value[0] & 0x6) == 0x4 {
-                    // Sensor Contact feature is supported, but contact is not detected
-                    sensorContactSupported = true
-                }
-
-                var energyExpended: UInt16? = nil
-                if (value[0] & 0x8) != 0 {
-                    // Energy Expended field is present
-                    if (value[0] & 0x1) != 0 {
-                        // Heart Rate Value Format is set to UINT16
-                        energyExpended = UInt16(value[3] | (value[4]<<8))
-                    } else {
-                        // Heart Rate Value Format is set to UINT8
-                        energyExpended = UInt16(value[2] | (value[3]<<8))
-                    }
-                }
-
-                // Parse RR-Interval values. May be 0, 1, or more values up to a maximum of 7 through 9 based on other fields.
-                var rrIntervals: [UInt16]? = nil
-                if (value[0] & 0x10) != 0 {
-                    // One or more RR-Interval values are present
-                    rrIntervals = [UInt16]()
-                    var start: Int = 0
-                    if (value[0] & 0x1) != 0 {
-                        // Heart Rate Value Format is set to UINT16
-                        if (value[0] & 0x8) != 0 {
-                            // Energy Expended field is present
-                            start = 5
-                        } else {
-                            // Energy Expended field is not present
-                            start = 3
-                        }
-                    } else {
-                        // Heart Rate Value Format is set to UINT8
-                        if (value[0] & 0x8) != 0 {
-                            // Energy Expended field is present
-                            start = 4
-                        } else {
-                            // Energy Expended field is not present
-                            start = 2
-                        }
-                    }
-
-                    for i in stride(from: start, to: value.count, by: 2){
-                        let rrInterval: UInt16 = value[i...i+1].withUnsafeBytes { $0.load(as: UInt16.self) }
-                        rrIntervals?.append(rrInterval)
-                    }
-                }
-
-                return BluetoothValue.heartRateMeasurement(HeartRateMeasurement(heartRateMeasurementValue: heartRate,
-                                                                                sensorContactSupported: sensorContactSupported,
-                                                                                sensorContactDetected: sensorContactDetected,
-                                                                                energyExpended: energyExpended,
-                                                                                rrInterval: rrIntervals))
+                return BluetoothValue.heartRateMeasurement(measurement)
             case CBUUID(string: "0x2A38"):
                 guard value.count == 1,
                       let bodySensorLocation = BodySensorLocation(rawValue: value[0]) else {
@@ -322,46 +250,6 @@ public enum BluetoothValue: CustomStringConvertible {
             case .none:
                 return ["No value"]
             }
-        }
-    }
-}
-
-public struct HeartRateMeasurement: CustomStringConvertible {
-    private static let formatter = {
-        let f = MeasurementFormatter()
-        f.unitOptions = .providedUnit
-        return f
-    }()
-    public let heartRateMeasurementValue: UInt16
-    public let sensorContactSupported: Bool
-    public let sensorContactDetected: Bool
-    public let energyExpended: UInt16?
-    public let rrInterval: [UInt16]?
-    public var description: String {
-        get {
-            return "\(heartRateMeasurementValue) bpm"
-        }
-    }
-
-    public init(heartRateMeasurementValue: UInt16, sensorContactSupported: Bool, sensorContactDetected: Bool, energyExpended: UInt16?, rrInterval: [UInt16]?) {
-        self.heartRateMeasurementValue = heartRateMeasurementValue
-        self.sensorContactSupported = sensorContactSupported
-        self.sensorContactDetected = sensorContactDetected
-        self.energyExpended = energyExpended
-        self.rrInterval = rrInterval
-    }
-}
-
-extension HeartRateMeasurement {
-    public var fieldDescriptions: [String] {
-        get {
-            var fields = [HeartRateMeasurement.formatter.string(from: Measurement<UnitFrequency>(value: Double(heartRateMeasurementValue), unit: UnitFrequency.beatsPerMinute))]
-
-            if let rrInterval = rrInterval {
-                fields.append(contentsOf: [rrInterval.map { Measurement(value: Double($0), unit: UnitDuration.milliseconds).formatted() }.joined(separator: ", ")])
-            }
-
-            return fields
         }
     }
 }
