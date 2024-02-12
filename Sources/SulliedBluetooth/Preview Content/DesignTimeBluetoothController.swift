@@ -110,7 +110,9 @@ class DesignTimeModel {
     }
     
     static func heartRateCharacteristic() -> CharacteristicModel {
-        let characteristic = CharacteristicModel(uuid: CBUUID(string: "0x2a37"), properties: [.notify])
+        let characteristic = CharacteristicModel(uuid: CBUUID(string: "0x2a37"),
+                                                 properties: [.notify],
+                                                 value: [0x18, 0xa0, 0x80, 0x04, 0x00, 0x04, 0x00, 0x03].withUnsafeBufferPointer({ Data($0) }))
         characteristic.isNotifying = false
         return characteristic
     }
