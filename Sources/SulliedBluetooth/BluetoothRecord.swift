@@ -302,7 +302,7 @@ public enum BluetoothValue: CustomStringConvertible {
             case .sensorLocation(let location):
                 return [String(describing: location)]
             case .heartRateMeasurement(let measurement):
-                return ["\(measurement)"]
+                return measurement.fieldDescriptions
             case .bodySensorLocation(let location):
                 return [String(describing: location)]
             case .cyclingPowerFeature(let features):
@@ -327,6 +327,11 @@ public enum BluetoothValue: CustomStringConvertible {
 }
 
 public struct HeartRateMeasurement: CustomStringConvertible {
+    private static let formatter = {
+        let f = MeasurementFormatter()
+        f.unitOptions = .providedUnit
+        return f
+    }()
     public let heartRateMeasurementValue: UInt16
     public let sensorContactSupported: Bool
     public let sensorContactDetected: Bool
@@ -344,5 +349,19 @@ public struct HeartRateMeasurement: CustomStringConvertible {
         self.sensorContactDetected = sensorContactDetected
         self.energyExpended = energyExpended
         self.rrInterval = rrInterval
+    }
+}
+
+extension HeartRateMeasurement {
+    public var fieldDescriptions: [String] {
+        get {
+            var fields = [HeartRateMeasurement.formatter.string(from: Measurement<UnitFrequency>(value: Double(heartRateMeasurementValue), unit: UnitFrequency.beatsPerMinute))]
+
+            if let rrInterval = rrInterval {
+                fields.append(contentsOf: [rrInterval.map { Measurement(value: Double($0), unit: UnitDuration.milliseconds).formatted() }.joined(separator: ", ")])
+            }
+
+            return fields
+        }
     }
 }
