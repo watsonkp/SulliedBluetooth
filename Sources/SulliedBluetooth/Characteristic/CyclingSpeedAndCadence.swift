@@ -60,18 +60,18 @@ public struct CSCMeasurement: CustomStringConvertible, DecodedCharacteristic {
 }
 
 extension CSCMeasurement {
-    public var fieldDescriptions: [String] {
+    public var fieldDescriptions: [String : String] {
         get {
-            var fields: [String] = []
+            var fields: [String : String] = [:]
             if let cumulativeWheelRevolutions,
                let wheelEventTime = wheelEventTime {
-                fields.append(Measurement(value: Double(cumulativeWheelRevolutions), unit: UnitCount.revolutions).formatted())
-                fields.append(CSCMeasurement.durationStyle.format(Measurement(value: Double(wheelEventTime) / 1024, unit: UnitDuration.seconds)))
+                fields["Cumulative Wheel Revolutions"] = Measurement(value: Double(cumulativeWheelRevolutions), unit: UnitCount.revolutions).formatted()
+                fields["Last Wheel Event Time"] = CSCMeasurement.durationStyle.format(Measurement(value: Double(wheelEventTime) / 1024, unit: UnitDuration.seconds))
             }
             if let cumulativeCrankRevolutions = cumulativeCrankRevolutions,
                let crankEventTime = crankEventTime {
-                fields.append(Measurement(value: Double(cumulativeCrankRevolutions), unit: UnitCount.revolutions).formatted())
-                fields.append(CSCMeasurement.durationStyle.format(Measurement(value: Double(crankEventTime) / 1024, unit: UnitDuration.seconds)))
+                fields["Cumulative Crank Revolutions"] = Measurement(value: Double(cumulativeCrankRevolutions), unit: UnitCount.revolutions).formatted()
+                fields["Last Crank Event Time"] = CSCMeasurement.durationStyle.format(Measurement(value: Double(crankEventTime) / 1024, unit: UnitDuration.seconds))
             }
             return fields
         }

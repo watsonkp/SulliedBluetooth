@@ -2,7 +2,7 @@ import Foundation
 
 protocol DecodedCharacteristic {
     // List of string descriptions for each field present in the characteristic.
-    var fieldDescriptions: [String] { get }
+    var fieldDescriptions: [String : String] { get }
 }
 
 extension DecodedCharacteristic {

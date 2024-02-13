@@ -54,10 +54,10 @@ extension SystemID: CustomStringConvertible {
 }
 
 extension SystemID {
-    public var fieldDescriptions: [String] {
+    public var fieldDescriptions: [String : String] {
         get {
-            [String(format: "OUI: %X", organizationallyUniqueIdentifier),
-             String(format: "MDI: %X", manufacturerDefinedIdentifier)]
+            ["OUI" : String(format: "%X", organizationallyUniqueIdentifier),
+             "MDI" : String(format: "%X", manufacturerDefinedIdentifier)]
         }
     }
 }

@@ -34,78 +34,85 @@ public struct CyclingPowerFeature: OptionSet {
 extension CyclingPowerFeature: CustomStringConvertible {
     public var description: String {
         get {
-            var featureDescription = ""
+            fieldDescriptions.map { key, value in key }.joined(separator: ", ")
+        }
+    }
+}
+
+extension CyclingPowerFeature {
+    public var fieldDescriptions: [String : String] {
+        get {
+            var featureDescriptions: [String : String] = [:]
             if self.contains(.pedalPowerBalanceSupported) {
-                featureDescription += "Pedal Power Balance, "
+                featureDescriptions["Pedal Power Balance"] = "Supported"
             }
             if self.contains(.accumulatedTorqueSupported) {
-                featureDescription += "Accumulated Torque, "
+                featureDescriptions["Accumulated Torque"] = "Supported"
             }
             if self.contains(.wheelRevolutionDataSupported) {
-                featureDescription += "Wheel Revolution Data, "
+                featureDescriptions["Wheel Revolution Data"] = "Supported"
             }
             if self.contains(.crankRevolutionDataSupported) {
-                featureDescription += "Crank Revolution Data, "
+                featureDescriptions["Crank Revolution Data"] = "Supported"
             }
             if self.contains(.extremeMagnitudesSupported) {
-                featureDescription += "Extreme Magnitudes, "
+                featureDescriptions["Extreme Magnitudes"] = "Supported"
             }
             if self.contains(.extremeAnglesSupported) {
-                featureDescription += "Extreme Angles, "
+                featureDescriptions["Extreme Angles"] = "Supported"
             }
             if self.contains(.topAndBottomDeadSpotAnglesSupported) {
-                featureDescription += "Top and Bottom Dead Spot Angles, "
+                featureDescriptions["Top and Bottom Dead Spot Angles"] = "Supported"
             }
             if self.contains(.accumulatedEnergySupported) {
-                featureDescription += "Accumulated Energy, "
+                featureDescriptions["Accumulated Energy"] = "Supported"
             }
             if self.contains(.offsetCompensationIndicatorSupported) {
-                featureDescription += "Offset Compensation Indicator, "
+                featureDescriptions["Offset Compensation Indicator"] = "Supported"
             }
             if self.contains(.offsetCompensationSupported) {
-                featureDescription += "Offset Compensation, "
+                featureDescriptions["Offset Compensation"] = "Supported"
             }
             if self.contains(.cyclingPowerMeasurementCharacteristicContentMaskingSupported) {
-                featureDescription += "Cycling Power Measurement Characteristic Content Masking, "
+                featureDescriptions["Cycling Power Measurement Characteristic Content Masking"] = "Supported"
             }
             if self.contains(.multipleSensorLocationsSupported) {
-                featureDescription += "Multiple Sensor Locations, "
+                featureDescriptions["Multiple Sensor Locations"] = "Supported"
             }
             if self.contains(.crankLengthAdjustmentSupported) {
-                featureDescription += "Crank Length Adjustment, "
+                featureDescriptions["Crank Length Adjustment"] = "Supported"
             }
             if self.contains(.chainLengthAdjustmentSupported) {
-                featureDescription += "Chain Length Adjustment, "
+                featureDescriptions["Chain Length Adjustment"] = "Supported"
             }
             if self.contains(.chainWeightAdjustmentSupported) {
-                featureDescription += "Chain Weight Adjustment, "
+                featureDescriptions["Chain Weight Adjustment"] = "Supported"
             }
             if self.contains(.spanLengthAdjustmentSupported) {
-                featureDescription += "Span Length Adjustment, "
+                featureDescriptions["Span Length Adjustment"] = "Supported"
             }
             if self.contains(.sensorMeasurementContext) {
-                featureDescription += "Sensor Measurement Context, "
+                featureDescriptions["Sensor Measurement Context"] = "Supported"
             }
             if self.contains(.instantaneousMeasurementDirectionSupported) {
-                featureDescription += "Instantaneous Measurement Direction, "
+                featureDescriptions["Instantaneous Measurement Direction"] = "Supported"
             }
             if self.contains(.factoryCalibrationDateSupported) {
-                featureDescription += "Factory Calibration Date, "
+                featureDescriptions["Factory Calibration Date"] = "Supported"
             }
             if self.contains(.enhancedOffsetCompensationProcedureSupported) {
-                featureDescription += "Enhanced Offset Compensation Procedure, "
+                featureDescriptions["Enhanced Offset Compensation Procedure"] = "Supported"
             }
             if self.contains(.distributedSystemSupportNotForUse) && self.contains(.distributedSystemSupportForUse) {
-                featureDescription += "Unrecognized distributeed system support value, "
+                featureDescriptions["Distributed System Support"] = "Unrecognized distributeed system support value"
             } else if self.contains(.distributedSystemSupportNotForUse) {
-                featureDescription += "Not for use in a distributed system, "
+                featureDescriptions["Distributed System Support"] = "Not for use in a distributed system"
             } else if self.contains(.distributedSystemSupportForUse) {
-                featureDescription += "For use in a distributed system, "
+                featureDescriptions["Distributed System Support"] = "For use in a distributed system"
             } else {
-                featureDescription += "Distributed system support unspecified (legacy sensor), "
+                featureDescriptions["Distributed System Support"] = "Distributed system support unspecified (legacy sensor)"
             }
-
-            return String(featureDescription.prefix(upTo: featureDescription.lastIndex(of: ",") ?? featureDescription.startIndex))
+            return featureDescriptions
         }
     }
 }

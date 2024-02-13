@@ -37,12 +37,12 @@ extension SupportedResistanceLevelRange: CustomStringConvertible {
 }
 
 extension SupportedResistanceLevelRange {
-    public var fieldDescriptions: [String] {
+    public var fieldDescriptions: [String : String] {
         get {
             [
-                "Minimum: \(minimumResistanceLevel)",
-                "Maximum: \(maximumResistanceLevel)",
-                "Increment: \(minimumIncrement)"
+                "Minimum" : "\(minimumResistanceLevel)",
+                "Maximum" : "\(maximumResistanceLevel)",
+                "Increment" : "\(minimumIncrement)"
             ]
         }
     }

@@ -22,7 +22,11 @@ struct CharacteristicView: View {
                         .font(.headline)
                 }
                 ForEach(model.fields) { field in
-                    Text(String(describing: field))
+                    VStack(alignment: .leading) {
+                        Text(field.fieldDescription)
+                            .font(.caption)
+                        Text(field.valueDescription)
+                    }
                 }
             } else {
                 Text("Non-Standard Characteristic")

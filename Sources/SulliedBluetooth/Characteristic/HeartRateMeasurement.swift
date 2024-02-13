@@ -81,18 +81,20 @@ extension HeartRateMeasurement: CustomStringConvertible {
 }
 
 extension HeartRateMeasurement {
-    public var fieldDescriptions: [String] {
+    public var fieldDescriptions: [String : String] {
         get {
-            var fields = [HeartRateMeasurement.formatter.string(from: Measurement<UnitFrequency>(value: Double(heartRateMeasurementValue),
+            var fields = ["Heart Rate" : HeartRateMeasurement.formatter.string(from: Measurement<UnitFrequency>(value: Double(heartRateMeasurementValue),
                                                                                                  unit: UnitFrequency.beatsPerMinute))]
 
             if let energyExpended = energyExpended {
-                fields.append(Measurement<UnitEnergy>(value: Double(energyExpended),
-                                                      unit: UnitEnergy.kilojoules).formatted(.measurement(width: .wide, usage: .workout)))
+                fields["Energy Expended"] = Measurement<UnitEnergy>(value: Double(energyExpended),
+                                                                    unit: UnitEnergy.kilojoules)
+                .formatted(.measurement(width: .wide, usage: .workout))
             }
 
             if let rrInterval = rrInterval {
-                fields.append(contentsOf: [rrInterval.map { Measurement(value: Double($0), unit: UnitDuration.milliseconds).formatted() }.joined(separator: ", ")])
+                fields["RR-Intervals"] = rrInterval.map { Measurement(value: Double($0), unit: UnitDuration.milliseconds).formatted() }
+                    .joined(separator: ", ")
             }
 
             return fields

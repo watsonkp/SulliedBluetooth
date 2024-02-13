@@ -181,18 +181,18 @@ extension CyclingPowerMeasurement: CustomStringConvertible {
 }
 
 extension CyclingPowerMeasurement {
-    public var fieldDescriptions: [String] {
+    public var fieldDescriptions: [String : String] {
         get {
-            var fields = [Measurement(value: Double(instantaneousPower), unit: UnitPower.watts).formatted()]
+            var fields = ["Instantaneous Power" : Measurement(value: Double(instantaneousPower), unit: UnitPower.watts).formatted()]
             if let cumulativeWheelRevolutions,
                let wheelEventTime = wheelEventTime {
-                fields.append(Measurement(value: Double(cumulativeWheelRevolutions), unit: UnitCount.revolutions).formatted())
-                fields.append(CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(wheelEventTime) / 2048, unit: UnitDuration.seconds)))
+                fields["Cumulative Wheel Revolutions"] = Measurement(value: Double(cumulativeWheelRevolutions), unit: UnitCount.revolutions).formatted()
+                fields["Last Wheel Event Time"] = CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(wheelEventTime) / 2048, unit: UnitDuration.seconds))
             }
             if let cumulativeCrankRevolutions = cumulativeCrankRevolutions,
                let crankEventTime = crankEventTime {
-                fields.append(Measurement(value: Double(cumulativeCrankRevolutions), unit: UnitCount.revolutions).formatted())
-                fields.append(CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(crankEventTime) / 1024, unit: UnitDuration.seconds)))
+                fields["Cumulative Crank Revolutions"] = Measurement(value: Double(cumulativeCrankRevolutions), unit: UnitCount.revolutions).formatted()
+                fields["Last Crank Event Time"] = CyclingPowerMeasurement.durationStyle.format(Measurement(value: Double(crankEventTime) / 1024, unit: UnitDuration.seconds))
             }
             return fields
         }

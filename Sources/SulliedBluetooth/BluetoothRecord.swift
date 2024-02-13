@@ -204,41 +204,41 @@ public enum BluetoothValue: CustomStringConvertible {
         }
     }
 
-    public var fieldDescriptions: [String] {
+    public var fieldDescriptions: [String : String] {
         get {
             switch self {
             case .batteryLevel(let level):
-                return ["\(level)%"]
+                return ["Battery Level" : "\(level)%"]
             case .cyclingPower(let measurement):
                 return measurement.fieldDescriptions
             case .systemID(let id):
                 return id.fieldDescriptions
             case .modelNumber(let modelNumber):
-                return [modelNumber]
+                return ["Model Number" : modelNumber]
             case .serialNumberString(let serialNumber):
-                return [serialNumber]
+                return ["Serial Number" : serialNumber]
             case .firmwareRevisionString(let firmwareRevision):
-                return [firmwareRevision]
+                return ["Firmware Revision" : firmwareRevision]
             case .hardwareRevisionString(let hardwareRevision):
-                return [hardwareRevision]
+                return ["Hardware Revision" : hardwareRevision]
             case .softwareRevisionString(let softwareRevision):
-                return [softwareRevision]
+                return ["Software Revision" : softwareRevision]
             case .manufacturerNameString(let manufacturerName):
-                return [manufacturerName]
+                return ["Manufacturer Name" : manufacturerName]
             case .cyclingSpeedAndCadence(let speed):
                 return speed.fieldDescriptions
             case .sensorLocation(let location):
-                return [String(describing: location)]
+                return ["Sensor Location" : String(describing: location)]
             case .heartRateMeasurement(let measurement):
                 return measurement.fieldDescriptions
             case .bodySensorLocation(let location):
-                return [String(describing: location)]
+                return ["Body Sensor Location" : String(describing: location)]
             case .cyclingPowerFeature(let features):
-                return [String(describing: features)]
+                return features.fieldDescriptions
             case .databaseChangeIncrement(let increment):
-                return ["\(increment)"]
+                return ["Database Change Increment" : "\(increment)"]
             case .userIndex(let index):
-                return [String(describing: index)]
+                return ["User Index" : String(describing: index)]
             case .fitnessMachineFeature(let features):
                 return features.fieldDescriptions
             case .supportedResistanceLevelRange(let range):
@@ -246,9 +246,9 @@ public enum BluetoothValue: CustomStringConvertible {
             case .supportedPowerRange(let range):
                 return range.fieldDescriptions
             case .raw(let data):
-                return ["\(data)"]
+                return ["Unrecognized" : "\(data)"]
             case .none:
-                return ["No value"]
+                return [:]
             }
         }
     }

@@ -29,7 +29,7 @@ class CharacteristicModel: ObservableObject {
 
     var fields: [FieldModel] {
         get {
-            parsedValue.fieldDescriptions.map { FieldModel(characteristicID: uuid, valueDescription: $0) }
+            parsedValue.fieldDescriptions.map { FieldModel(characteristicID: uuid, fieldDescription: $0, valueDescription: $1) }.sorted(by: { $0.fieldDescription < $1.fieldDescription })
         }
     }
 

@@ -24,9 +24,12 @@ extension FitnessMachineFeature: CustomStringConvertible {
 }
 
 extension FitnessMachineFeature {
-    public var fieldDescriptions: [String] {
+    public var fieldDescriptions: [String : String] {
         get {
-            fitnessMachineFeatures.featureDescriptions + targetSettingFeatures.featureDescriptions
+            [
+                "Fitness Machine Features" : String(describing: fitnessMachineFeatures),
+                "Target Setting Features" : String(describing: targetSettingFeatures)
+            ]
         }
     }
 }
@@ -60,66 +63,66 @@ public struct FitnessMachineFeatures: OptionSet {
 extension FitnessMachineFeatures: CustomStringConvertible {
     public var description: String {
         get {
-            featureDescriptions.joined(separator: ", ")
+            featureDescriptions.map { key, value in key }.joined(separator: ", ")
         }
     }
 }
 
 extension FitnessMachineFeatures {
-    public var featureDescriptions: [String] {
+    public var featureDescriptions: [String : String] {
         get {
-            var featureDescriptions: [String] = []
+            var featureDescriptions: [String : String] = [:]
 
             if self.contains(.averageSpeedSupported) {
-                featureDescriptions.append("Average Speed")
+                featureDescriptions["Average Speed"] = "Supported"
             }
             if self.contains(.cadenceSupported) {
-                featureDescriptions.append("Cadence")
+                featureDescriptions["Cadence"] = "Supported"
             }
             if self.contains(.totalDistanceSupported) {
-                featureDescriptions.append("Total Distance")
+                featureDescriptions["Total Distance"] = "Supported"
             }
             if self.contains(.inclinationSupported) {
-                featureDescriptions.append("Inclination")
+                featureDescriptions["Inclination"] = "Supported"
             }
             if self.contains(.elevationGainSupported) {
-                featureDescriptions.append("Elevation Gain")
+                featureDescriptions["Elevation Gain"] = "Supported"
             }
             if self.contains(.paceSupported) {
-                featureDescriptions.append("Pace")
+                featureDescriptions["Pace"] = "Supported"
             }
             if self.contains(.stepCountSupported) {
-                featureDescriptions.append("Step Count")
+                featureDescriptions["Step Count"] = "Supported"
             }
             if self.contains(.resistanceLevelSupported) {
-                featureDescriptions.append("Resistance Level")
+                featureDescriptions["Resistance Level"] = "Supported"
             }
             if self.contains(.strideCountSupported) {
-                featureDescriptions.append("Stride Count")
+                featureDescriptions["Stride Count"] = "Supported"
             }
             if self.contains(.expendedEnergySupported) {
-                featureDescriptions.append("Expended Energy")
+                featureDescriptions["Expended Energy"] = "Supported"
             }
             if self.contains(.heartRateMeasurementSupported) {
-                featureDescriptions.append("Heart Rate Measurement")
+                featureDescriptions["Heart Rate Measurement"] = "Supported"
             }
             if self.contains(.metabolicEquivalentSupported) {
-                featureDescriptions.append("Metabolic Equivalent")
+                featureDescriptions["Metabolic Equivalent"] = "Supported"
             }
             if self.contains(.elapsedTimeSupported) {
-                featureDescriptions.append("Elapsed Time")
+                featureDescriptions["Elapsed Time"] = "Supported"
             }
             if self.contains(.remainingTimeSupported) {
-                featureDescriptions.append("Remaining Time")
+                featureDescriptions["Remaining Time"] = "Supported"
             }
             if self.contains(.powerMeasurementSupported) {
-                featureDescriptions.append("Power Measurement")
+                featureDescriptions["Power Measurement"] = "Supported"
             }
             if self.contains(.forceonBeltandPowerOutputSupported) {
-                featureDescriptions.append("Force on Belt and Power Output")
+                featureDescriptions["Force on Belt and Power Output"] = "Supported"
             }
             if self.contains(.userDataRetentionSupported) {
-                featureDescriptions.append("User Data Retention")
+                featureDescriptions["User Data Retention"] = "Supported"
             }
 
             return featureDescriptions
@@ -156,66 +159,66 @@ public struct TargetSettingFeatures: OptionSet {
 extension TargetSettingFeatures: CustomStringConvertible {
     public var description: String {
         get {
-            featureDescriptions.joined(separator: ", ")
+            featureDescriptions.map { key, value in key }.joined(separator: ", ")
         }
     }
 }
 
 extension TargetSettingFeatures {
-    public var featureDescriptions: [String] {
+    public var featureDescriptions: [String : String] {
         get {
-            var featureDescriptions: [String] = []
+            var featureDescriptions: [String : String] = [:]
 
             if self.contains(.speedTargetSettingSupported) {
-                featureDescriptions.append("Speed Target Setting")
+                featureDescriptions["Speed Target Setting"] = "Supported"
             }
             if self.contains(.inclinationTargetSettingSupported) {
-                featureDescriptions.append("Inclination Target Setting")
+                featureDescriptions["Inclination Target Setting"] = "Supported"
             }
             if self.contains(.resistanceTargetSettingSupported) {
-                featureDescriptions.append("Resistance Target Setting")
+                featureDescriptions["Resistance Target Setting"] = "Supported"
             }
             if self.contains(.powerTargetSettingSupported) {
-                featureDescriptions.append("Power Target Setting")
+                featureDescriptions["Power Target Setting"] = "Supported"
             }
             if self.contains(.heartRateTargetSettingSupported) {
-                featureDescriptions.append("Heart Rate Target Setting")
+                featureDescriptions["Heart Rate Target Setting"] = "Supported"
             }
             if self.contains(.targetedExpendedEnergyConfigurationSupported) {
-                featureDescriptions.append("Targeted Expended Energy Configuration")
+                featureDescriptions["Targeted Expended Energy Configuration"] = "Supported"
             }
             if self.contains(.targetedStepNumberConfigurationSupported) {
-                featureDescriptions.append("Targeted Step Number Configuration")
+                featureDescriptions["Targeted Step Number Configuration"] = "Supported"
             }
             if self.contains(.targetedStrideNumberConfigurationSupported) {
-                featureDescriptions.append("Targeted Stride Number Configuration")
+                featureDescriptions["Targeted Stride Number Configuration"] = "Supported"
             }
             if self.contains(.targetedDistanceConfigurationSupported) {
-                featureDescriptions.append("Targeted Distance Configuration")
+                featureDescriptions["Targeted Distance Configuration"] = "Supported"
             }
             if self.contains(.targetedTrainingTimeConfigurationSupported) {
-                featureDescriptions.append("Targeted Training Time Configuration")
+                featureDescriptions["Targeted Training Time Configuration"] = "Supported"
             }
             if self.contains(.targetedTimeinTwoHeartRateZonesConfigurationSupported) {
-                featureDescriptions.append("Targeted Time in Two Heart Rate Zones Configuration")
+                featureDescriptions["Targeted Time in Two Heart Rate Zones Configuration"] = "Supported"
             }
             if self.contains(.targetedTimeinThreeHeartRateZonesConfigurationSupported) {
-                featureDescriptions.append("Targeted Time in Three Heart Rate Zones Configuration")
+                featureDescriptions["Targeted Time in Three Heart Rate Zones Configuration"] = "Supported"
             }
             if self.contains(.targetedTimeinFiveHeartRateZonesConfigurationSupported) {
-                featureDescriptions.append("Targeted Time in Five Heart Rate Zones Configuration")
+                featureDescriptions["Targeted Time in Five Heart Rate Zones Configuration"] = "Supported"
             }
             if self.contains(.indoorBikeSimulationParametersSupported) {
-                featureDescriptions.append("Indoor Bike Simulation Parameters")
+                featureDescriptions["Indoor Bike Simulation Parameters"] = "Supported"
             }
             if self.contains(.wheelCircumferenceConfigurationSupported) {
-                featureDescriptions.append("Wheel Circumference Configuration")
+                featureDescriptions["Wheel Circumference Configuration"] = "Supported"
             }
             if self.contains(.spinDownControlSupported) {
-                featureDescriptions.append("Spin Down Control")
+                featureDescriptions["Spin Down Control"] = "Supported"
             }
             if self.contains(.targetedCadenceConfigurationSupported) {
-                featureDescriptions.append("Targeted Cadence Configuration")
+                featureDescriptions["Targeted Cadence Configuration"] = "Supported"
             }
 
             return featureDescriptions
