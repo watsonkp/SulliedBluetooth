@@ -56,18 +56,6 @@ public struct Bluetooth {
             // YAML reference of characteristic UUIDs
             //  https://bitbucket.org/bluetooth-SIG/public/src/main/assigned_numbers/uuids/characteristic_uuids.yaml
             switch id {
-            case CBUUID(string: "0x2A5B"):
-                return BluetoothValue.cyclingSpeedAndCadence(CSCMeasurement(value: value))
-            case CBUUID(string: "0x2A5D"):
-                guard let sensorLocation = SensorLocation(rawValue: value[0]) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.sensorLocation(sensorLocation)
-            case CBUUID(string: "0x2A63"):
-                guard let measurement = CyclingPowerMeasurement(value: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.cyclingPower(measurement)
             case CBUUID(string: "0x2a19"):
                 // https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Characteristics/org.bluetooth.characteristic.battery_level.xml
                 var typedValue = [UInt8](repeating:0, count: 1)
@@ -103,6 +91,18 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.bodySensorLocation(bodySensorLocation)
+            case CBUUID(string: "0x2A5B"):
+                return BluetoothValue.cyclingSpeedAndCadence(CSCMeasurement(value: value))
+            case CBUUID(string: "0x2A5D"):
+                guard let sensorLocation = SensorLocation(rawValue: value[0]) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.sensorLocation(sensorLocation)
+            case CBUUID(string: "0x2A63"):
+                guard let measurement = CyclingPowerMeasurement(value: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.cyclingPower(measurement)
             case CBUUID(string: "0x2A65"):
                 guard let features = Bluetooth.readUInt32(at: 0, of: value) else {
                     return BluetoothValue.raw(value)
