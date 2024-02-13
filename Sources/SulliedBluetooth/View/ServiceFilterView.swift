@@ -9,7 +9,7 @@ struct ServiceFilterView: View {
     var body: some View {
         NavigationView {
             VStack {
-                List(BluetoothRecord.supportedNotifyingServices, id: \.id, selection: $serviceFilter) { service in
+                List(Bluetooth.supportedNotifyingServices, id: \.id, selection: $serviceFilter) { service in
                     Label(String(describing: service), systemImage: "waveform")
                 }
                 .environment(\.editMode, $editMode)
