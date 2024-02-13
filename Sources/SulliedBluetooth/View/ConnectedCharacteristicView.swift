@@ -4,9 +4,28 @@ struct ConnectedCharacteristicView: View {
     @ObservedObject var model: CharacteristicModel
     var body: some View {
         HStack {
-            Text("\(model.name):")
-                .lineLimit(1)
-            Text(String(describing: model.parsedValue))
+            VStack(alignment: .leading) {
+                if model.isAssignedNumber {
+                    Text("\(model.name)")
+                        .lineLimit(1)
+                        .font(.caption)
+                    ForEach(model.fields) { field in
+                        Text(field.fieldDescription)
+                            .font(.caption2)
+                        Text(field.valueDescription)
+                    }
+                    if model.fields.isEmpty && model.canNotify {
+                        Text("Not recording")
+                    }
+                } else {
+                    Text("Non-Standard Characteristic")
+                        .lineLimit(1)
+                        .font(.caption)
+                    Text(model.name)
+                        .font(.caption2)
+                }
+            }
+            Spacer()
             if model.canNotify {
                 Image(systemName: model.isNotifying ? "stop.circle" : "record.circle")
             }

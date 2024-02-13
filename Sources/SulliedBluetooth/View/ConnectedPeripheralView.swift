@@ -7,8 +7,12 @@ struct ConnectedPeripheralView: View {
             Text("\(model.name ?? "???")")
                 .font(.headline)
             Text("\(model.identifier)")
-                .font(.caption)
+                .font(.footnote)
+                .minimumScaleFactor(0.5)
+                .padding(.leading)
+                .lineLimit(1)
             ForEach(model.services, id: \ServiceModel.uuid) { service in
+                Divider()
                 ConnectedServiceView(model: service)
             }
         }
