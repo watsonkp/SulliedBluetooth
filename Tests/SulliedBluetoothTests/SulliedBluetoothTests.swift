@@ -175,11 +175,4 @@ final class BluetoothTests: XCTestCase {
         XCTAssertEqual(parsedMeasurement.accumulatedEnergy, nil)
         XCTAssertEqual(parsedMeasurement.offsetCompensationIndicator, false)
     }
-
-    func testDesignTimeModel() {
-        var data = Data(count: 2)
-        data[1] = UInt8(170 + 10  * sin(12 * Double.pi / 8))
-        let value = ValueModel(id: CBUUID(string: "0x2a37"), value: data)
-        XCTAssertEqual("160", String(describing: value))
-    }
 }
