@@ -23,8 +23,10 @@ struct CharacteristicView: View {
                 }
                 ForEach(model.fields) { field in
                     VStack(alignment: .leading) {
-                        Text(field.fieldDescription)
-                            .font(.caption)
+                        if model.name != field.fieldDescription {
+                            Text(field.fieldDescription)
+                                .font(.caption)
+                        }
                         Text(field.valueDescription)
                     }
                 }
