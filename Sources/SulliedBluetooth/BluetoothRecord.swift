@@ -37,98 +37,9 @@ public struct BluetoothRecord {
         self.uuid = characteristic.uuid
         self.name = "\(characteristic.uuid)"
         self.timestamp = timestamp
-        self.value = BluetoothRecord.decode(characteristic: self.uuid, value: characteristic.value)
+        self.value = Bluetooth.decode(characteristic: self.uuid, from: characteristic.value)
         // TODO: Remove these properties. Added temporarily for backwards compatibility.
         self.raw = characteristic.value!
         self.serviceUUID = characteristic.service!.uuid
-    }
-
-    public static func decode(characteristic id: CBUUID, value: Data?) -> BluetoothValue {
-        if let value = value {
-            // YAML reference of characteristic UUIDs
-            //  https://bitbucket.org/bluetooth-SIG/public/src/main/assigned_numbers/uuids/characteristic_uuids.yaml
-            switch id {
-            case CBUUID(string: "0x2A5B"):
-                return BluetoothValue.cyclingSpeedAndCadence(CSCMeasurement(value: value))
-            case CBUUID(string: "0x2A5D"):
-                guard let sensorLocation = SensorLocation(rawValue: value[0]) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.sensorLocation(sensorLocation)
-            case CBUUID(string: "0x2A63"):
-                guard let measurement = CyclingPowerMeasurement(value: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.cyclingPower(measurement)
-            case CBUUID(string: "0x2a19"):
-                // https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Characteristics/org.bluetooth.characteristic.battery_level.xml
-                var typedValue = [UInt8](repeating:0, count: 1)
-                typedValue.withUnsafeMutableBytes({(bs: UnsafeMutableRawBufferPointer) -> Void in
-                    value.copyBytes(to: bs, count: value.count)
-                })
-                return BluetoothValue.batteryLevel(typedValue[0])
-            case CBUUID(string: "0x2A23"):
-                guard let id = SystemID(value: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.systemID(id)
-            case CBUUID(string: "0x2A24"):
-                return BluetoothValue.modelNumber(Bluetooth.readString(at: 0, of: value))
-            case CBUUID(string: "0x2A25"):
-                return BluetoothValue.serialNumberString(Bluetooth.readString(at: 0, of: value))
-            case CBUUID(string: "0x2A26"):
-                return BluetoothValue.firmwareRevisionString(Bluetooth.readString(at: 0, of: value))
-            case CBUUID(string: "0x2A27"):
-                return BluetoothValue.hardwareRevisionString(Bluetooth.readString(at: 0, of: value))
-            case CBUUID(string: "0x2A28"):
-                return BluetoothValue.softwareRevisionString(Bluetooth.readString(at: 0, of: value))
-            case CBUUID(string: "0x2A29"):
-                return BluetoothValue.manufacturerNameString(Bluetooth.readString(at: 0, of: value))
-            case CBUUID(string: "0x2a37"):
-                guard let measurement = HeartRateMeasurement(value: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.heartRateMeasurement(measurement)
-            case CBUUID(string: "0x2A38"):
-                guard value.count == 1,
-                      let bodySensorLocation = BodySensorLocation(rawValue: value[0]) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.bodySensorLocation(bodySensorLocation)
-            case CBUUID(string: "0x2A65"):
-                guard let features = Bluetooth.readUInt32(at: 0, of: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.cyclingPowerFeature(CyclingPowerFeature(rawValue: features))
-            case CBUUID(string: "0x2A99"):
-                guard let increment = Bluetooth.readUInt32(at: 0, of: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.databaseChangeIncrement(increment)
-            case CBUUID(string: "0x2A9A"):
-                guard let index = value.first else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.userIndex(UserIndex(userIndex: index))
-            case CBUUID(string: "0x2ACC"):
-                guard let features = FitnessMachineFeature(value: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.fitnessMachineFeature(features)
-            case CBUUID(string: "0x2AD6"):
-                guard let range = SupportedResistanceLevelRange(value: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.supportedResistanceLevelRange(range)
-            case CBUUID(string: "0x2AD8"):
-                guard let range = SupportedPowerRange(value: value) else {
-                    return BluetoothValue.raw(value)
-                }
-                return BluetoothValue.supportedPowerRange(range)
-            default:
-                return BluetoothValue.raw(value)
-            }
-        }
-        return BluetoothValue.none
     }
 }

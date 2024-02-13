@@ -72,7 +72,7 @@ final class BluetoothTests: XCTestCase {
     func testCyclingSpeedAndCadence() {
         // Test the CSC Measurement characteristic of the service.
         let data = Data(base64Encoded: "AwAAAEAACABgASA=")
-        var parsed = BluetoothRecord.decode(characteristic: CBUUID(string: "0x2A5B"), value: data)
+        var parsed = Bluetooth.decode(characteristic: CBUUID(string: "0x2A5B"), from: data)
         guard case .cyclingSpeedAndCadence(let parsedMeasurement) = parsed else {
             XCTAssertTrue(false)
             return
@@ -84,7 +84,7 @@ final class BluetoothTests: XCTestCase {
         XCTAssertEqual(String(describing: parsedMeasurement), "Wheel(64, 8), Crank(96, 288)")
 
         let empty_data = Data(base64Encoded: "AA==")
-        parsed = BluetoothRecord.decode(characteristic: CBUUID(string: "0x2A5B"), value: empty_data)
+        parsed = Bluetooth.decode(characteristic: CBUUID(string: "0x2A5B"), from: empty_data)
         guard case .cyclingSpeedAndCadence(let parsedMeasurement) = parsed else {
             XCTAssertTrue(false)
             return
@@ -96,7 +96,7 @@ final class BluetoothTests: XCTestCase {
         XCTAssertEqual(String(describing: parsedMeasurement), "--")
 
         let wheel_data = Data(base64Encoded: "AQECAwQFBg==")
-        parsed = BluetoothRecord.decode(characteristic: CBUUID(string: "0x2A5B"), value: wheel_data)
+        parsed = Bluetooth.decode(characteristic: CBUUID(string: "0x2A5B"), from: wheel_data)
         guard case .cyclingSpeedAndCadence(let parsedMeasurement) = parsed else {
             XCTAssertTrue(false)
             return
@@ -108,7 +108,7 @@ final class BluetoothTests: XCTestCase {
         XCTAssertEqual(String(describing: parsedMeasurement), "Wheel(16909060, 1286)")
 
         let crank_data = Data(base64Encoded: "AgQDAgE=")
-        parsed = BluetoothRecord.decode(characteristic: CBUUID(string: "0x2A5B"), value: crank_data)
+        parsed = Bluetooth.decode(characteristic: CBUUID(string: "0x2A5B"), from: crank_data)
         guard case .cyclingSpeedAndCadence(let parsedMeasurement) = parsed else {
             XCTAssertTrue(false)
             return
@@ -124,7 +124,7 @@ final class BluetoothTests: XCTestCase {
     func testCyclingPower() {
         // Test the Cycling Power Measurement characteristic of the service.
         let full_data = Data(base64Encoded: "/x8BAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIA==")
-        var parsed = BluetoothRecord.decode(characteristic: CBUUID(string: "0x2A63"), value: full_data)
+        var parsed = Bluetooth.decode(characteristic: CBUUID(string: "0x2A63"), from: full_data)
         guard case .cyclingPower(let parsedMeasurement) = parsed else {
             XCTAssertTrue(false)
             return
@@ -150,7 +150,7 @@ final class BluetoothTests: XCTestCase {
         XCTAssertEqual(parsedMeasurement.offsetCompensationIndicator, true)
 
         let minimal_data = Data(base64Encoded: "AAAD6A==")
-        parsed = BluetoothRecord.decode(characteristic: CBUUID(string: "0x2A63"), value: minimal_data)
+        parsed = Bluetooth.decode(characteristic: CBUUID(string: "0x2A63"), from: minimal_data)
         guard case .cyclingPower(let parsedMeasurement) = parsed else {
             XCTAssertTrue(false)
             return
