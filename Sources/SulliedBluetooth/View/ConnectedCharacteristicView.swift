@@ -30,6 +30,7 @@ struct ConnectedCharacteristicView: View {
             Spacer()
             if model.canNotify {
                 Image(systemName: model.isNotifying ? "stop.circle" : "record.circle")
+                    .foregroundColor(.accentColor)
             }
         }
     }
