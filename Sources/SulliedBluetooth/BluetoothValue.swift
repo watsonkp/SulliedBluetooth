@@ -20,6 +20,7 @@ public enum BluetoothValue {
     case fitnessMachineFeature(FitnessMachineFeature)
     case supportedResistanceLevelRange(SupportedResistanceLevelRange)
     case supportedPowerRange(SupportedPowerRange)
+    case unsupported(UnsupportedMeasurement)
     case raw(Data)
     case none
 
@@ -66,6 +67,8 @@ public enum BluetoothValue {
                 return range.fieldDescriptions
             case .raw(let data):
                 return ["Unrecognized" : "\(data)"]
+            case .unsupported(let unsupported):
+                return unsupported.fieldDescriptions
             case .none:
                 return [:]
             }

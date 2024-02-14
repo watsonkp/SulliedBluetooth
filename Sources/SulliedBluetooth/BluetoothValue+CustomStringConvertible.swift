@@ -42,6 +42,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: range)
             case .supportedPowerRange(let range):
                 return String(describing: range)
+            case .unsupported(let unsupported):
+                return String(describing: unsupported)
             case .raw(let data):
                 return "\(data)"
             case .none:

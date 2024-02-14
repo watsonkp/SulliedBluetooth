@@ -134,7 +134,7 @@ public struct Bluetooth {
                 }
                 return BluetoothValue.supportedPowerRange(range)
             default:
-                return BluetoothValue.raw(value)
+                return BluetoothValue.unsupported(UnsupportedMeasurement(forCharacteristic: id, from: value))
             }
         }
         return BluetoothValue.none
