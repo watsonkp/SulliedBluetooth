@@ -10,8 +10,10 @@ struct ConnectedCharacteristicView: View {
                         .lineLimit(1)
                         .font(.caption)
                     ForEach(model.fields) { field in
-                        Text(field.fieldDescription)
-                            .font(.caption2)
+                        if field.fieldDescription != model.name {
+                            Text(field.fieldDescription)
+                                .font(.caption2)
+                        }
                         Text(field.valueDescription)
                     }
                     if model.fields.isEmpty && model.canNotify {
