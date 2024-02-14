@@ -28,6 +28,7 @@ struct ServiceView_Previews: PreviewProvider {
     static var previews: some View {
         List {
             ServiceView(model: DesignTimeModel.populatedService()) { _, _ in }
+            ServiceView(model: DesignTimeModel.nonStandardService()) { _, _ in }
         }
     }
 }

@@ -78,6 +78,7 @@ class DesignTimeModel {
     static func populatedPeripheral() -> PeripheralModel {
         let peripheral = PeripheralModel(identifier: UUID(), name: "Polar H10")
         peripheral.services.append(populatedService())
+        peripheral.services.append(nonStandardService())
         peripheral.services.append(batteryService())
         return peripheral
     }
@@ -104,7 +105,14 @@ class DesignTimeModel {
         service.characteristics.append(characteristic)
         return service
     }
-    
+
+    static func nonStandardService() -> ServiceModel {
+        let service = ServiceModel(uuid: CBUUID(string: "6217FF4B-FB31-1140-AD5A-A45545D7ECF3"))
+        service.characteristics.append(CharacteristicModel(uuid: CBUUID(string: "6217FF4C-C8EC-B1FB-1380-3AD986708E2D"), properties: []))
+        service.characteristics.append(CharacteristicModel(uuid: CBUUID(string: "6217FF4D-91BB-91D0-7E2A-7CD3BDA8A1F3"), properties: []))
+        return service
+    }
+
     static func populatedCharacteristic() -> CharacteristicModel {
         return heartRateCharacteristic()
     }
