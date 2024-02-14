@@ -55,9 +55,9 @@ public enum BluetoothValue {
             case .cyclingPowerFeature(let features):
                 return features.fieldDescriptions
             case .databaseChangeIncrement(let increment):
-                return ["Database Change Increment" : "\(increment)"]
+                return ["Database Change Increment" : increment != 0 ? "\(increment)" : "New device"]
             case .userIndex(let index):
-                return ["User Index" : String(describing: index)]
+                return index.fieldDescriptions
             case .fitnessMachineFeature(let features):
                 return features.fieldDescriptions
             case .supportedResistanceLevelRange(let range):

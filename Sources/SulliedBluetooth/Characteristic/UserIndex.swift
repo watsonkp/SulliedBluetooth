@@ -11,3 +11,11 @@ extension UserIndex: CustomStringConvertible {
         }
     }
 }
+
+extension UserIndex : DecodedCharacteristic {
+    var fieldDescriptions: [String : String] {
+        get {
+            userIndex != 255 ? ["User Index" : "\(userIndex)"] : [:]
+        }
+    }
+}
