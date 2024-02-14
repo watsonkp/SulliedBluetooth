@@ -12,8 +12,10 @@ struct ConnectedPeripheralView: View {
                 .padding(.leading)
                 .lineLimit(1)
             ForEach(model.services, id: \ServiceModel.uuid) { service in
-                Divider()
-                ConnectedServiceView(model: service)
+                if service.isAssignedNumber {
+                    Divider()
+                    ConnectedServiceView(model: service)
+                }
             }
         }
     }

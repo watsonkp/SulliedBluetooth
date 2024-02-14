@@ -4,13 +4,8 @@ struct ConnectedServiceView: View {
     @ObservedObject var model: ServiceModel
     var body: some View {
         VStack(alignment: .leading) {
-            if model.isAssignedNumber {
-                Text("\(model.name)")
-                    .font(.subheadline)
-            } else {
-                Text("Non-Standard Service")
-                    .font(.subheadline)
-            }
+            Text("\(model.name)")
+                .font(.subheadline)
             ForEach(model.characteristics, id: \CharacteristicModel.uuid) { characteristic in
                 if !characteristic.fields.isEmpty || characteristic.canNotify {
                     ConnectedCharacteristicView(model: characteristic)
