@@ -12,7 +12,9 @@ struct ConnectedServiceView: View {
                     .font(.subheadline)
             }
             ForEach(model.characteristics, id: \CharacteristicModel.uuid) { characteristic in
-                ConnectedCharacteristicView(model: characteristic)
+                if !characteristic.fields.isEmpty {
+                    ConnectedCharacteristicView(model: characteristic)
+                }
             }
         }
     }
