@@ -56,8 +56,10 @@ extension SystemID: CustomStringConvertible {
 extension SystemID {
     public var fieldDescriptions: [String : String] {
         get {
-            ["OUI" : String(format: "%X", organizationallyUniqueIdentifier),
-             "MDI" : String(format: "%X", manufacturerDefinedIdentifier)]
+            [
+                "Organizationally Unique Identifier" : String(format: "%X", organizationallyUniqueIdentifier),
+                "Manufacturer Defined Identifier" : String(format: "%X", manufacturerDefinedIdentifier)
+            ]
         }
     }
 }
