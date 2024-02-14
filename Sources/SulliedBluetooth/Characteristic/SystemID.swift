@@ -7,9 +7,9 @@ public struct SystemID: DecodedCharacteristic {
     let manufacturerDefinedIdentifier: UInt32
 
     init?(value: Data) {
-        guard value.count != 8,
-        let oui = SystemID.readUInt32(at: 0, of: value),
-        let mdi = SystemID.readUInt32(at: 4, of: value) else {
+        guard value.count == 8,
+              let oui = SystemID.readUInt32(at: 0, of: value),
+              let mdi = SystemID.readUInt32(at: 4, of: value) else {
             return nil
         }
 
