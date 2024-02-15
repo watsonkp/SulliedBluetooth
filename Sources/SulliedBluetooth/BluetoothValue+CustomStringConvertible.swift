@@ -6,6 +6,8 @@ extension BluetoothValue : CustomStringConvertible {
             switch self {
             case .batteryLevel(let level):
                 return "\(level)%"
+            case .co2Concentration(let co2):
+                return String(describing: co2)
             case .cyclingPower(let measurement):
                 return String(describing: measurement)
             case .systemID(let id):

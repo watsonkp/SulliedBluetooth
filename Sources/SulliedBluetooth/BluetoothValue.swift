@@ -2,6 +2,7 @@ import Foundation
 
 public enum BluetoothValue {
     case batteryLevel(UInt8)
+    case co2Concentration(CO2Concentration)
     case cyclingPower(CyclingPowerMeasurement)
     case systemID(SystemID)
     case modelNumber(String)
@@ -29,6 +30,8 @@ public enum BluetoothValue {
             switch self {
             case .batteryLevel(let level):
                 return ["Battery Level" : "\(level)%"]
+            case .co2Concentration(let co2):
+                return co2.fieldDescriptions
             case .cyclingPower(let measurement):
                 return measurement.fieldDescriptions
             case .systemID(let id):

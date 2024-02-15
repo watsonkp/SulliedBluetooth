@@ -1613,11 +1613,6 @@ public struct LiveHealthObservations {
     public init() {}
 }
 
-// 0x2B8C
-public struct CO2Concentration {
-    public init() {}
-}
-
 // 0x2B8D
 public struct CosineOfTheAngle {
     public init() {}

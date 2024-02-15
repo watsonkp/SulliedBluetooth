@@ -89,6 +89,15 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                 if characteristic.value != nil {
                     let record = BluetoothRecord(characteristic: characteristic, timestamp: timestamp)
                     switch (record.value) {
+                    case .co2Concentration(let measurement):
+                        recordPublisher.send(
+                            IntegerDataPoint(date: timestamp,
+                                             unit: UnitDispersion.partsPerMillion,
+                                             usage: .air,
+                                             value: Int64(measurement.co2Concentration),
+                                             significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.co2Concentration)),
+                                             significantPosition: 0)
+                        )
                     case .cyclingPower(let measurement):
                         let significantFigures = measurement.instantaneousPower > 0 ? 1 + Int64(log10(Double(measurement.instantaneousPower))) : 0
                         // Could there be multiple types of power source in a single activity?

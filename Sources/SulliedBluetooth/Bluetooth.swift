@@ -133,6 +133,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.supportedPowerRange(range)
+            case CBUUID(string: "0x2B8C"):
+                guard let co2 = CO2Concentration(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.co2Concentration(co2)
             default:
                 return BluetoothValue.unsupported(UnsupportedMeasurement(forCharacteristic: id, from: value))
             }
