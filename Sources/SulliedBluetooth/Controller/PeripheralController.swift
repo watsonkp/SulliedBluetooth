@@ -16,7 +16,8 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
     public static let supportedRecordingCharacteristics: Set<CBUUID> = [
         CBUUID(string: "0x2A37"),
         CBUUID(string: "0x2A5B"),
-        CBUUID(string: "0x2A63")
+        CBUUID(string: "0x2A63"),
+        CBUUID(string: "0x2B8C"),
     ]
 
     var isNotifying: Bool {
