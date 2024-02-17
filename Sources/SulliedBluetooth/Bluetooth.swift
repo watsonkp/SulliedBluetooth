@@ -114,6 +114,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.cyclingPowerFeature(CyclingPowerFeature(rawValue: features))
+            case CBUUID(string: "0x2A6E"):
+                guard let temperature = Temperature(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.temperature(temperature)
             case CBUUID(string: "0x2A99"):
                 guard let increment = Bluetooth.readUInt32(at: 0, of: value) else {
                     return BluetoothValue.raw(value)

@@ -17,6 +17,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
         CBUUID(string: "0x2A37"),
         CBUUID(string: "0x2A5B"),
         CBUUID(string: "0x2A63"),
+        CBUUID(string: "0x2A6E"),
         CBUUID(string: "0x2B8C"),
     ]
 
@@ -98,6 +99,15 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                                              value: Int64(measurement.co2Concentration),
                                              significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.co2Concentration)),
                                              significantPosition: 0)
+                        )
+                    case .temperature(let measurement):
+                        recordPublisher.send(
+                            IntegerDataPoint(date: timestamp,
+                                             unit: UnitTemperature.celsius,
+                                             usage: .air,
+                                             value: Int64(measurement.temperature),
+                                             significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.temperature)),
+                                             significantPosition: -2)
                         )
                     case .cyclingPower(let measurement):
                         let significantFigures = measurement.instantaneousPower > 0 ? 1 + Int64(log10(Double(measurement.instantaneousPower))) : 0
