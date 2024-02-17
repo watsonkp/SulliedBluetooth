@@ -119,6 +119,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.temperature(temperature)
+            case CBUUID(string: "0x2A6F"):
+                guard let humidity = Humidity(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.humidity(humidity)
             case CBUUID(string: "0x2A99"):
                 guard let increment = Bluetooth.readUInt32(at: 0, of: value) else {
                     return BluetoothValue.raw(value)

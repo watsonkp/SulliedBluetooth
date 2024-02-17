@@ -18,6 +18,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
         CBUUID(string: "0x2A5B"),
         CBUUID(string: "0x2A63"),
         CBUUID(string: "0x2A6E"),
+        CBUUID(string: "0x2A6F"),
         CBUUID(string: "0x2B8C"),
     ]
 
@@ -100,6 +101,14 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                                              significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.co2Concentration)),
                                              significantPosition: 0)
                         )
+                    case .humidity(let measurement):
+                        recordPublisher.send(
+                            IntegerDataPoint(date: timestamp,
+                                             unit: UnitUnknown.unknown,
+                                             usage: .air,
+                                             value: Int64(measurement.humidity),
+                                             significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.humidity)),
+                                             significantPosition: -2))
                     case .temperature(let measurement):
                         recordPublisher.send(
                             IntegerDataPoint(date: timestamp,
