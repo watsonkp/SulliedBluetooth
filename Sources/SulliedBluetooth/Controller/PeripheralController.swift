@@ -96,7 +96,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         recordPublisher.send(
                             IntegerDataPoint(date: timestamp,
                                              unit: UnitDispersion.partsPerMillion,
-                                             usage: .air,
+                                             usage: .airCO2,
                                              value: Int64(measurement.co2Concentration),
                                              significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.co2Concentration)),
                                              significantPosition: 0)
@@ -105,7 +105,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         recordPublisher.send(
                             IntegerDataPoint(date: timestamp,
                                              unit: UnitUnknown.unknown,
-                                             usage: .air,
+                                             usage: .humidity,
                                              value: Int64(measurement.humidity),
                                              significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.humidity)),
                                              significantPosition: -2))
@@ -113,7 +113,7 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                         recordPublisher.send(
                             IntegerDataPoint(date: timestamp,
                                              unit: UnitTemperature.celsius,
-                                             usage: .air,
+                                             usage: .airTemperature,
                                              value: Int64(measurement.temperature),
                                              significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.temperature)),
                                              significantPosition: -2)
