@@ -171,7 +171,17 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
             } else {
                 self.model.peripherals.append(newModel)
             }
-            NSLog("Peripheral \(peripheral.name ?? peripheral.identifier.uuidString) with RSSI \(RSSI)\nAdvertising:\(advertisementData)")
+        } else {
+            // TODO: Is it worth updating previous entries as new devices are received?
+            //  Might produce more names?
+            //  Might produce more services?
+            NSLog("Device \(peripheral.name ?? peripheral.identifier.uuidString)")
+            let serviceUUIDs = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID])?.filter({ Bluetooth.isAssignedNumber($0) })
+            NSLog("Service UUIDs \(serviceUUIDs)")
+            let solicitedServiceUUIDs = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? [CBUUID]
+            NSLog("Service UUIDs \(solicitedServiceUUIDs)")
+            let overflowServiceUUIDs = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? [CBUUID]
+            NSLog("Service UUIDs \(overflowServiceUUIDs)")
         }
     }
 
