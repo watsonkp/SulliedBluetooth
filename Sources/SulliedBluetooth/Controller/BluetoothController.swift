@@ -164,7 +164,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
         if discoveredPeripherals[peripheral.identifier] == nil {
             discoveredPeripherals[peripheral.identifier] = (Date(), peripheral)
-            self.model.peripherals.append(PeripheralModel(peripheral))
+            self.model.peripherals.append(PeripheralModel(peripheral, rssi: RSSI))
             NSLog("Peripheral \(peripheral.name ?? peripheral.identifier.uuidString) with RSSI \(RSSI)\nAdvertising:\(advertisementData)")
         }
     }
