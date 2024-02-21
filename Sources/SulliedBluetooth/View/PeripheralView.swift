@@ -14,7 +14,17 @@ struct PeripheralView: View {
             if model.connectionState == .connecting {
                 ProgressView()
             } else if let rssi = model.rssi {
-                Text("\(rssi)")
+                if #available(iOS 16, *) {
+                    Gauge(value: Double(100 - max(0 - rssi, 0)) / 100.0, label: {
+                        Text("\(rssi) dB")
+                            .font(.caption)
+                    })
+                    .gaugeStyle(.accessoryCircularCapacity)
+                    .tint(.blue)
+                } else {
+                    Text("\(rssi) dB")
+                        .font(.caption)
+                }
             }
         }
     }
@@ -30,7 +40,64 @@ struct PeripheralView_Previews: PreviewProvider {
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
                                                   state: .disconnected,
-                                                  rssi: 42))
+                                                  rssi: -42))
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: nil,
+                                                  state: .disconnected,
+                                                  rssi: -93))
         }
+        .previewDisplayName("Portrait")
+
+        List {
+            PeripheralView(model: DesignTimeModel.populatedPeripheral())
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: "DEBUG",
+                                                  state: .connecting))
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: nil,
+                                                  state: .disconnected,
+                                                  rssi: -42))
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: nil,
+                                                  state: .disconnected,
+                                                  rssi: -93))
+        }
+
+        .previewInterfaceOrientation(.landscapeRight)
+        .previewDisplayName("Landscape")
+        List {
+            PeripheralView(model: DesignTimeModel.populatedPeripheral())
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: "DEBUG",
+                                                  state: .connecting))
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: nil,
+                                                  state: .disconnected,
+                                                  rssi: -42))
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: nil,
+                                                  state: .disconnected,
+                                                  rssi: -93))
+        }
+        .previewDevice(PreviewDevice(rawValue: "iPhone SE (1st generation)"))
+        .previewDisplayName("iPhone SE")
+
+        List {
+            PeripheralView(model: DesignTimeModel.populatedPeripheral())
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: "DEBUG",
+                                                  state: .connecting))
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: nil,
+                                                  state: .disconnected,
+                                                  rssi: -42))
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: nil,
+                                                  state: .disconnected,
+                                                  rssi: -93))
+        }
+        .previewDevice(PreviewDevice(rawValue: "iPhone SE (1st generation)"))
+        .previewDisplayName("iPhone SE - Landscape")
+        .previewInterfaceOrientation(.landscapeRight)
     }
 }
