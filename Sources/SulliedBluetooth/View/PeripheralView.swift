@@ -5,14 +5,16 @@ struct PeripheralView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("\(model.name ?? "???")")
+                Text("\(model.name ?? "Unnamed device")")
                     .font(.headline)
                 Text("\(model.identifier)")
                     .font(.caption)
             }
+            Spacer()
             if model.connectionState == .connecting {
-                Spacer()
                 ProgressView()
+            } else if let rssi = model.rssi {
+                Text("\(rssi)")
             }
         }
     }
@@ -25,6 +27,10 @@ struct PeripheralView_Previews: PreviewProvider {
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: "DEBUG",
                                                   state: .connecting))
+            PeripheralView(model: PeripheralModel(identifier: UUID(),
+                                                  name: nil,
+                                                  state: .disconnected,
+                                                  rssi: 42))
         }
     }
 }

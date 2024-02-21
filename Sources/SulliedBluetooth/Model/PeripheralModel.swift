@@ -16,9 +16,10 @@ class PeripheralModel: ObservableObject {
         self.rssi = rssi?.intValue
     }
     
-    init(identifier: UUID, name: String, state: CBPeripheralState = .disconnected) {
+    init(identifier: UUID, name: String?, state: CBPeripheralState = .disconnected, rssi: Int? = nil) {
         self.identifier = identifier
         self.name = name
         self.connectionState = state
+        self.rssi = rssi
     }
 }
