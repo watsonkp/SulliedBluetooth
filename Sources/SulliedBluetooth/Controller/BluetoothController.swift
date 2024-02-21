@@ -153,10 +153,16 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 //    }
 
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        // Check for advertisement data specifying that this peripheral is not currently connectable.
+        if let isConnectable = advertisementData[CBAdvertisementDataIsConnectable] as? NSNumber,
+              isConnectable == 0 {
+            return
+        }
+
         if discoveredPeripherals[peripheral.identifier] == nil {
             discoveredPeripherals[peripheral.identifier] = (Date(), peripheral)
             self.model.peripherals.append(PeripheralModel(peripheral))
-            NSLog("Peripheral \(peripheral.identifier.uuidString) with RSSI \(RSSI)\nAdvertising:\(advertisementData)")
+            NSLog("Peripheral \(peripheral.name ?? peripheral.identifier.uuidString) with RSSI \(RSSI)\nAdvertising:\(advertisementData)")
         }
     }
 
