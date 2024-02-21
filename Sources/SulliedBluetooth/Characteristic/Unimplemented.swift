@@ -653,11 +653,6 @@ public struct Language {
     public init() {}
 }
 
-// 0x2AA3
-public struct BarometricPressureTrend {
-    public init() {}
-}
-
 // 0x2AA4
 public struct BondManagementControlPoint {
     public init() {}

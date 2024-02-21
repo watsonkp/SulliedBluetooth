@@ -134,6 +134,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.userIndex(UserIndex(userIndex: index))
+            case CBUUID(string: "0x2AA3"):
+                guard let trend = BarometricPressureTrend(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.barometricPressureTrend(trend)
             case CBUUID(string: "0x2ACC"):
                 guard let features = FitnessMachineFeature(value: value) else {
                     return BluetoothValue.raw(value)
