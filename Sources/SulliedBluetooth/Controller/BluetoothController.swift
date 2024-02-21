@@ -68,6 +68,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
            let manager = self.manager,
            !manager.isScanning,
            manager.state == .poweredOn {
+            invalidate()
             manager.scanForPeripherals(withServices: serviceFilter.count != 0 ? Array(serviceFilter) : nil, options: nil)
         }
 
