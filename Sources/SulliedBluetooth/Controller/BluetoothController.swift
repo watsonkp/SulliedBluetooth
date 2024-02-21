@@ -25,6 +25,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     public var publisher: AnyPublisher<IntegerDataPoint, Never>
     private var subscriptions: [AnyCancellable] = []
     private var isScanningRequested = false
+    private var serviceFilter: [CBUUID]? = nil
 
     public override init() {
         self.publisher = AnyPublisher(Publishers.Buffer(upstream: self.bluetoothPublisher,
@@ -57,6 +58,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
     public func toggleScan(serviceFilter: Set<CBUUID> = []) {
         self.isScanningRequested.toggle()
+        self.serviceFilter = serviceFilter.isEmpty ? nil : Array(serviceFilter)
 
         // Initialize the CoreBluetooth manager to dispatch events on the main queue.
         if self.isScanningRequested && self.manager == nil {
@@ -126,7 +128,7 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
             // Start scanning for peripherals if requested and the manager state is now powered on.
             if isScanningRequested {
                 if !central.isScanning {
-                    central.scanForPeripherals(withServices: [CBUUID(string: "0x180d")], options: nil)
+                    central.scanForPeripherals(withServices: serviceFilter, options: nil)
                 }
             }
         case CBManagerState.resetting:
