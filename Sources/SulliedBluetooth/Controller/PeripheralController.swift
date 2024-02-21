@@ -250,11 +250,13 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
         }
     }
 
-    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
-        guard let error = error else {
-            NSLog(String(describing: error))
-            return
-        }
-        model.rssi = RSSI.intValue
-    }
+    // TODO: API misuse errors. Can only accept commands while in connected state.
+    //  API misuse reading while delegate is nil.
+//    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+//        guard let error = error else {
+//            NSLog(String(describing: error))
+//            return
+//        }
+//        model.rssi = RSSI.intValue
+//    }
 }

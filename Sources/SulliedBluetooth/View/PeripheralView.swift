@@ -9,25 +9,25 @@ struct PeripheralView: View {
                     .font(.headline)
                 Text("\(model.identifier)")
                     .font(.caption)
-                Text("\(model.advertisedServices?.count ?? 0) services")
             }
             Spacer()
             if model.connectionState == .connecting {
                 ProgressView()
-            } else if let rssi = model.rssi {
-                if #available(iOS 16, *) {
-                    Gauge(value: Double(100 - max(0 - rssi, 0)) / 100.0, label: {
-                        Text("\(rssi) dB")
-                            .font(.caption)
-                    })
-                    .gaugeStyle(.accessoryCircularCapacity)
-                    .tint(.blue)
-                    .scaleEffect(0.67)
-                } else {
-                    Text("\(rssi) dB")
-                        .font(.caption)
-                }
             }
+//            } else if let rssi = model.rssi {
+//                if #available(iOS 16, *) {
+//                    Gauge(value: Double(100 - max(0 - rssi, 0)) / 100.0, label: {
+//                        Text("\(rssi) dB")
+//                            .font(.caption)
+//                    })
+//                    .gaugeStyle(.accessoryCircularCapacity)
+//                    .tint(.blue)
+//                    .scaleEffect(0.67)
+//                } else {
+//                    Text("\(rssi) dB")
+//                        .font(.caption)
+//                }
+//            }
         }
     }
 }
@@ -41,12 +41,10 @@ struct PeripheralView_Previews: PreviewProvider {
                                                   state: .connecting))
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
-                                                  state: .disconnected,
-                                                  rssi: -42))
+                                                  state: .disconnected))
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
-                                                  state: .disconnected,
-                                                  rssi: -93))
+                                                  state: .disconnected))
         }
         .previewDisplayName("Portrait")
 
@@ -57,12 +55,10 @@ struct PeripheralView_Previews: PreviewProvider {
                                                   state: .connecting))
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
-                                                  state: .disconnected,
-                                                  rssi: -42))
+                                                  state: .disconnected))
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
-                                                  state: .disconnected,
-                                                  rssi: -93))
+                                                  state: .disconnected))
         }
 
         .previewInterfaceOrientation(.landscapeRight)
@@ -74,12 +70,10 @@ struct PeripheralView_Previews: PreviewProvider {
                                                   state: .connecting))
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
-                                                  state: .disconnected,
-                                                  rssi: -42))
+                                                  state: .disconnected))
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
-                                                  state: .disconnected,
-                                                  rssi: -93))
+                                                  state: .disconnected))
         }
         .previewDevice(PreviewDevice(rawValue: "iPhone SE (1st generation)"))
         .previewDisplayName("iPhone SE")
@@ -91,12 +85,10 @@ struct PeripheralView_Previews: PreviewProvider {
                                                   state: .connecting))
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
-                                                  state: .disconnected,
-                                                  rssi: -42))
+                                                  state: .disconnected))
             PeripheralView(model: PeripheralModel(identifier: UUID(),
                                                   name: nil,
-                                                  state: .disconnected,
-                                                  rssi: -93))
+                                                  state: .disconnected))
         }
         .previewDevice(PreviewDevice(rawValue: "iPhone SE (1st generation)"))
         .previewDisplayName("iPhone SE - Landscape")

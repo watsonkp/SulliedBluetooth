@@ -164,10 +164,9 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
         if discoveredPeripherals[peripheral.identifier] == nil {
             discoveredPeripherals[peripheral.identifier] = (Date(), peripheral)
-            let advertisedServices = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID])?
-                .filter({ Bluetooth.isAssignedNumber($0) })
-            let newModel = PeripheralModel(peripheral,
-                                           withAdvertisedServices: advertisedServices)
+//            let advertisedServices = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID])?
+//                .filter({ Bluetooth.isAssignedNumber($0) })
+            let newModel = PeripheralModel(peripheral)
             if newModel.name != nil,
                let unnamedIndex = self.model.peripherals.firstIndex(where: { $0.name == nil }) {
                 self.model.peripherals.insert(newModel, at: unnamedIndex)
@@ -175,7 +174,8 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
                 self.model.peripherals.append(newModel)
             }
         }
-        peripheral.readRSSI()
+        // TODO: API misuse
+//        peripheral.readRSSI()
     }
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
