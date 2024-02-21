@@ -249,4 +249,12 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
             }
         }
     }
+
+    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+        guard let error = error else {
+            NSLog(String(describing: error))
+            return
+        }
+        model.rssi = RSSI.intValue
+    }
 }

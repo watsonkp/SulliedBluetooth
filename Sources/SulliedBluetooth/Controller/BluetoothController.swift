@@ -164,25 +164,18 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
 
         if discoveredPeripherals[peripheral.identifier] == nil {
             discoveredPeripherals[peripheral.identifier] = (Date(), peripheral)
-            let newModel = PeripheralModel(peripheral, rssi: RSSI)
+            let advertisedServices = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID])?
+                .filter({ Bluetooth.isAssignedNumber($0) })
+            let newModel = PeripheralModel(peripheral,
+                                           withAdvertisedServices: advertisedServices)
             if newModel.name != nil,
                let unnamedIndex = self.model.peripherals.firstIndex(where: { $0.name == nil }) {
                 self.model.peripherals.insert(newModel, at: unnamedIndex)
             } else {
                 self.model.peripherals.append(newModel)
             }
-        } else {
-            // TODO: Is it worth updating previous entries as new devices are received?
-            //  Might produce more names?
-            //  Might produce more services?
-            NSLog("Device \(peripheral.name ?? peripheral.identifier.uuidString)")
-            let serviceUUIDs = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID])?.filter({ Bluetooth.isAssignedNumber($0) })
-            NSLog("Service UUIDs \(serviceUUIDs)")
-            let solicitedServiceUUIDs = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? [CBUUID]
-            NSLog("Service UUIDs \(solicitedServiceUUIDs)")
-            let overflowServiceUUIDs = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? [CBUUID]
-            NSLog("Service UUIDs \(overflowServiceUUIDs)")
         }
+        peripheral.readRSSI()
     }
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {

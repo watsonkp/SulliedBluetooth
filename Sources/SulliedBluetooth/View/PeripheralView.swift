@@ -9,6 +9,7 @@ struct PeripheralView: View {
                     .font(.headline)
                 Text("\(model.identifier)")
                     .font(.caption)
+                Text("\(model.advertisedServices?.count ?? 0) services")
             }
             Spacer()
             if model.connectionState == .connecting {
