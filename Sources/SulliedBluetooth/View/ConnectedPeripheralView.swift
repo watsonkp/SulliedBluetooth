@@ -4,7 +4,7 @@ struct ConnectedPeripheralView: View {
     @ObservedObject var model: PeripheralModel
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(model.name ?? "???")")
+            Text("\(model.name ?? "Unknown name")")
                 .font(.headline)
             Text("\(model.identifier)")
                 .font(.footnote)

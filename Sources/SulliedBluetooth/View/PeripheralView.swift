@@ -5,7 +5,7 @@ struct PeripheralView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("\(model.name ?? "Unnamed device")")
+                Text("\(model.name ?? "Unknown name")")
                     .font(.headline)
                 Text("\(model.identifier)")
                     .font(.caption)
