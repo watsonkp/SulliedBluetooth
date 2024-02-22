@@ -413,11 +413,6 @@ public struct UVIndex {
     public init() {}
 }
 
-// 0x2A78
-public struct Rainfall {
-    public init() {}
-}
-
 // 0x2A79
 public struct WindChill {
     public init() {}
