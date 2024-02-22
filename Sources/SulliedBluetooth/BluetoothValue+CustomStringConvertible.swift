@@ -82,6 +82,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: concentration)
             case .particulateMatterPM10Concentration(let concentration):
                 return String(describing: concentration)
+            case .particulateMatterPM25Concentration(let concentration):
+                return String(describing: concentration)
             case .pollenConcentration(let concentration):
                 return String(describing: concentration)
             case .pressure(let pressure):

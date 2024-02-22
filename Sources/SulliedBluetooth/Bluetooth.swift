@@ -274,6 +274,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.particulateMatterPM1Concentration(concentration)
+            case CBUUID(string: "0x2BD6"):
+                guard let concentration = ParticulateMatterPM25Concentration(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.particulateMatterPM25Concentration(concentration)
             case CBUUID(string: "0x2BD7"):
                 guard let concentration = ParticulateMatterPM10Concentration(from: value) else {
                     return BluetoothValue.raw(value)
