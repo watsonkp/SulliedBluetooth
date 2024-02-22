@@ -169,6 +169,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.userIndex(UserIndex(userIndex: index))
+            case CBUUID(string: "0x2AA0"):
+                guard let flux = MagneticFluxDensity2D(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.magneticFluxDensity2D(flux)
             case CBUUID(string: "0x2AA3"):
                 guard let trend = BarometricPressureTrend(from: value) else {
                     return BluetoothValue.raw(value)

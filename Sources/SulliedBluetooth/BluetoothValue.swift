@@ -30,6 +30,7 @@ public enum BluetoothValue {
     case humidity(Humidity)
     case irradiance(Irradiance)
     case magneticDeclination(MagneticDeclination)
+    case magneticFluxDensity2D(MagneticFluxDensity2D)
     case temperature(Temperature)
     case unsupported(UnsupportedMeasurement)
     case raw(Data)
@@ -96,6 +97,8 @@ public enum BluetoothValue {
                 return irradiance.fieldDescriptions
             case .magneticDeclination(let angle):
                 return angle.fieldDescriptions
+            case .magneticFluxDensity2D(let flux):
+                return flux.fieldDescriptions
             case .temperature(let t):
                 return t.fieldDescriptions
             case .raw(let data):
