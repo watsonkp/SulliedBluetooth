@@ -64,6 +64,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: angle)
             case .magneticFluxDensity2D(let flux):
                 return String(describing: flux)
+            case .magneticFluxDensity3D(let flux):
+                return String(describing: flux)
             case .temperature(let t):
                 return String(describing: t)
             case .unsupported(let unsupported):

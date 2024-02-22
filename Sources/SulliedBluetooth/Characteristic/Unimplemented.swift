@@ -603,11 +603,6 @@ public struct UserControlPoint {
     public init() {}
 }
 
-// 0x2AA1
-public struct MagneticFluxDensity3D {
-    public init() {}
-}
-
 // 0x2AA2
 public struct Language {
     public init() {}
