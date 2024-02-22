@@ -1848,11 +1848,6 @@ public struct SupportedAudioContexts {
     public init() {}
 }
 
-// 0x2BD3
-public struct NonMethaneVolatileOrganicCompoundsConcentration {
-    public init() {}
-}
-
 // 0x2BD4
 public struct OzoneConcentration {
     public init() {}

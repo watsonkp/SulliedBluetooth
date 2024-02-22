@@ -74,6 +74,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: concentration)
             case .nitrogenDioxideConcentration(let concentration):
                 return String(describing: concentration)
+            case .nonMethaneVolatileOrganicCompoundsConcentration(let concentration):
+                return String(describing: concentration)
             case .pollenConcentration(let concentration):
                 return String(describing: concentration)
             case .pressure(let pressure):
