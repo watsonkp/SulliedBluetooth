@@ -39,6 +39,7 @@ public enum BluetoothValue {
     case trueWindDirection(TrueWindDirection)
     case trueWindSpeed(TrueWindSpeed)
     case uvIndex(UVIndex)
+    case windChill(WindChill)
     case unsupported(UnsupportedMeasurement)
     case raw(Data)
     case none
@@ -122,6 +123,8 @@ public enum BluetoothValue {
                 return speed.fieldDescriptions
             case .uvIndex(let index):
                 return index.fieldDescriptions
+            case .windChill(let temperature):
+                return temperature.fieldDescriptions
             case .raw(let data):
                 return ["Unrecognized" : "\(data)"]
             case .unsupported(let unsupported):

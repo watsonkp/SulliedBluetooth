@@ -398,11 +398,6 @@ public struct Elevation {
     public init() {}
 }
 
-// 0x2A79
-public struct WindChill {
-    public init() {}
-}
-
 // 0x2A7D
 public struct DescriptorValueChanged {
     public init() {}

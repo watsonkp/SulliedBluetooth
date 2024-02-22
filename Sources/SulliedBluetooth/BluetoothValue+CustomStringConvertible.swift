@@ -80,6 +80,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: speed)
             case .uvIndex(let index):
                 return String(describing: index)
+            case .windChill(let temperature):
+                return String(describing: temperature)
             case .unsupported(let unsupported):
                 return String(describing: unsupported)
             case .raw(let data):

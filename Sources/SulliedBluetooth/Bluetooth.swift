@@ -179,6 +179,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.rainfall(depth)
+            case CBUUID(string: "0x2A79"):
+                guard let temperature = WindChill(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.windChill(temperature)
             case CBUUID(string: "0x2A7B"):
                 guard let temperature = DewPoint(from: value) else {
                     return BluetoothValue.raw(value)
