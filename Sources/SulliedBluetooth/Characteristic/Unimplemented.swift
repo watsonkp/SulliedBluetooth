@@ -398,11 +398,6 @@ public struct Elevation {
     public init() {}
 }
 
-// 0x2A70
-public struct TrueWindSpeed {
-    public init() {}
-}
-
 // 0x2A76
 public struct UVIndex {
     public init() {}
