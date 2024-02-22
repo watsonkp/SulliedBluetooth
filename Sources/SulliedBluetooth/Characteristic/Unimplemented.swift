@@ -453,11 +453,6 @@ public struct HeatIndex {
     public init() {}
 }
 
-// 0x2A7B
-public struct DewPoint {
-    public init() {}
-}
-
 // 0x2A7D
 public struct DescriptorValueChanged {
     public init() {}
