@@ -124,6 +124,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.humidity(humidity)
+            case CBUUID(string: "0x2A72"):
+                guard let speed = ApparentWindSpeed(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.apparentWindSpeed(speed)
             case CBUUID(string: "0x2A73"):
                 guard let direction = ApparentWindDirection(from: value) else {
                     return BluetoothValue.raw(value)

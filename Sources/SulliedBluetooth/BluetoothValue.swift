@@ -22,6 +22,7 @@ public enum BluetoothValue {
     case supportedResistanceLevelRange(SupportedResistanceLevelRange)
     case supportedPowerRange(SupportedPowerRange)
     case apparentWindDirection(ApparentWindDirection)
+    case apparentWindSpeed(ApparentWindSpeed)
     case barometricPressureTrend(BarometricPressureTrend)
     case humidity(Humidity)
     case temperature(Temperature)
@@ -74,6 +75,8 @@ public enum BluetoothValue {
                 return range.fieldDescriptions
             case .apparentWindDirection(let direction):
                 return direction.fieldDescriptions
+            case .apparentWindSpeed(let speed):
+                return speed.fieldDescriptions
             case .barometricPressureTrend(let trend):
                 return trend.fieldDescriptions
             case .humidity(let humidity):
