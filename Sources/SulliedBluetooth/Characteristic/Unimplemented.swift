@@ -443,11 +443,6 @@ public struct WindChill {
     public init() {}
 }
 
-// 0x2A7A
-public struct HeatIndex {
-    public init() {}
-}
-
 // 0x2A7D
 public struct DescriptorValueChanged {
     public init() {}
