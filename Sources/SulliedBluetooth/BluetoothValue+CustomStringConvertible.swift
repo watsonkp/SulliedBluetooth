@@ -68,6 +68,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: flux)
             case .pollenConcentration(let concentration):
                 return String(describing: concentration)
+            case .pressure(let pressure):
+                return String(describing: pressure)
             case .temperature(let t):
                 return String(describing: t)
             case .unsupported(let unsupported):

@@ -33,6 +33,7 @@ public enum BluetoothValue {
     case magneticFluxDensity2D(MagneticFluxDensity2D)
     case magneticFluxDensity3D(MagneticFluxDensity3D)
     case pollenConcentration(PollenConcentration)
+    case pressure(Pressure)
     case temperature(Temperature)
     case unsupported(UnsupportedMeasurement)
     case raw(Data)
@@ -105,6 +106,8 @@ public enum BluetoothValue {
                 return flux.fieldDescriptions
             case .pollenConcentration(let concentration):
                 return concentration.fieldDescriptions
+            case .pressure(let pressure):
+                return pressure.fieldDescriptions
             case .temperature(let t):
                 return t.fieldDescriptions
             case .raw(let data):
