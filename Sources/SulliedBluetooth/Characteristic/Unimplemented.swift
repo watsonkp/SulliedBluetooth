@@ -403,11 +403,6 @@ public struct TrueWindSpeed {
     public init() {}
 }
 
-// 0x2A71
-public struct TrueWindDirection {
-    public init() {}
-}
-
 // 0x2A76
 public struct UVIndex {
     public init() {}

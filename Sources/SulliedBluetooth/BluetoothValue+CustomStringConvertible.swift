@@ -74,6 +74,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: rainfall)
             case .temperature(let t):
                 return String(describing: t)
+            case .trueWindDirection(let angle):
+                return String(describing: angle)
             case .unsupported(let unsupported):
                 return String(describing: unsupported)
             case .raw(let data):
