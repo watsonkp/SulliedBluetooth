@@ -52,6 +52,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: speed)
             case .barometricPressureTrend(let trend):
                 return String(describing: trend)
+            case .carbonMonoxideConcentration(let concentration):
+                return String(describing: concentration)
             case .dewPoint(let temperature):
                 return String(describing: temperature)
             case .gustFactor(let factor):
