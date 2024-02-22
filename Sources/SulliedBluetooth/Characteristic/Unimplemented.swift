@@ -1863,11 +1863,6 @@ public struct ParticulateMatterPM10Concentration {
     public init() {}
 }
 
-// 0x2BD9
-public struct SulfurHexafluorideConcentration {
-    public init() {}
-}
-
 // 0x2BDA
 public struct HearingAidFeatures {
     public init() {}

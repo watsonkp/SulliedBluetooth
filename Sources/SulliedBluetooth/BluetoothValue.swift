@@ -42,6 +42,7 @@ public enum BluetoothValue {
     case pressure(Pressure)
     case rainfall(Rainfall)
     case sulfurDioxideConcentration(SulfurDioxideConcentration)
+    case sulfurHexafluorideConcentration(SulfurHexafluorideConcentration)
     case temperature(Temperature)
     case trueWindDirection(TrueWindDirection)
     case trueWindSpeed(TrueWindSpeed)
@@ -135,6 +136,8 @@ public enum BluetoothValue {
             case .rainfall(let rainfall):
                 return rainfall.fieldDescriptions
             case .sulfurDioxideConcentration(let concentration):
+                return concentration.fieldDescriptions
+            case .sulfurHexafluorideConcentration(let concentration):
                 return concentration.fieldDescriptions
             case .temperature(let t):
                 return t.fieldDescriptions
