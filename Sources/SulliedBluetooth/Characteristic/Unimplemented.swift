@@ -1863,11 +1863,6 @@ public struct ParticulateMatterPM10Concentration {
     public init() {}
 }
 
-// 0x2BD8
-public struct SulfurDioxideConcentration {
-    public init() {}
-}
-
 // 0x2BD9
 public struct SulfurHexafluorideConcentration {
     public init() {}

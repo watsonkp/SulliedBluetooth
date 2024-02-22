@@ -84,6 +84,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: pressure)
             case .rainfall(let rainfall):
                 return String(describing: rainfall)
+            case .sulfurDioxideConcentration(let concentration):
+                return String(describing: concentration)
             case .temperature(let t):
                 return String(describing: t)
             case .trueWindDirection(let angle):
