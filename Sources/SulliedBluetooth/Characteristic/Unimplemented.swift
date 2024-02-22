@@ -418,11 +418,6 @@ public struct TrueWindDirection {
     public init() {}
 }
 
-// 0x2A74
-public struct GustFactor {
-    public init() {}
-}
-
 // 0x2A75
 public struct PollenConcentration {
     public init() {}

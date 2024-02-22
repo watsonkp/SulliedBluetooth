@@ -25,6 +25,7 @@ public enum BluetoothValue {
     case apparentWindSpeed(ApparentWindSpeed)
     case barometricPressureTrend(BarometricPressureTrend)
     case dewPoint(DewPoint)
+    case gustFactor(GustFactor)
     case humidity(Humidity)
     case temperature(Temperature)
     case unsupported(UnsupportedMeasurement)
@@ -82,6 +83,8 @@ public enum BluetoothValue {
                 return trend.fieldDescriptions
             case .dewPoint(let temperature):
                 return temperature.fieldDescriptions
+            case .gustFactor(let factor):
+                return factor.fieldDescriptions
             case .humidity(let humidity):
                 return humidity.fieldDescriptions
             case .temperature(let t):
