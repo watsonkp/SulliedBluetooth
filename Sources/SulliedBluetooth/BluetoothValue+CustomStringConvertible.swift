@@ -70,6 +70,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: flux)
             case .magneticFluxDensity3D(let flux):
                 return String(describing: flux)
+            case .methaneConcentration(let concentration):
+                return String(describing: concentration)
             case .pollenConcentration(let concentration):
                 return String(describing: concentration)
             case .pressure(let pressure):

@@ -249,6 +249,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.carbonMonoxideConcentration(concentration)
+            case CBUUID(string: "0x2BD1"):
+                guard let concentration = MethaneConcentration(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.methaneConcentration(concentration)
             default:
                 return BluetoothValue.unsupported(UnsupportedMeasurement(forCharacteristic: id, from: value))
             }
