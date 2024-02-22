@@ -1853,11 +1853,6 @@ public struct ParticulateMatterPM25Concentration {
     public init() {}
 }
 
-// 0x2BD7
-public struct ParticulateMatterPM10Concentration {
-    public init() {}
-}
-
 // 0x2BDA
 public struct HearingAidFeatures {
     public init() {}
