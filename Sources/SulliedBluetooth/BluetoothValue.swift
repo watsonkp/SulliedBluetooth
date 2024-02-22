@@ -38,6 +38,7 @@ public enum BluetoothValue {
     case nitrogenDioxideConcentration(NitrogenDioxideConcentration)
     case nonMethaneVolatileOrganicCompoundsConcentration(NonMethaneVolatileOrganicCompoundsConcentration)
     case ozoneConcentration(OzoneConcentration)
+    case particulateMatterPM1Concentration(ParticulateMatterPM1Concentration)
     case pollenConcentration(PollenConcentration)
     case pressure(Pressure)
     case rainfall(Rainfall)
@@ -128,6 +129,8 @@ public enum BluetoothValue {
             case .nonMethaneVolatileOrganicCompoundsConcentration(let concentration):
                 return concentration.fieldDescriptions
             case .ozoneConcentration(let concentration):
+                return concentration.fieldDescriptions
+            case .particulateMatterPM1Concentration(let concentration):
                 return concentration.fieldDescriptions
             case .pollenConcentration(let concentration):
                 return concentration.fieldDescriptions
