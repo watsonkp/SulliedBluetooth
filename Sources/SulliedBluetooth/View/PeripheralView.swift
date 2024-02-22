@@ -22,7 +22,6 @@ struct PeripheralView: View {
 //                    })
 //                    .gaugeStyle(.accessoryCircularCapacity)
 //                    .tint(.blue)
-//                    .scaleEffect(0.67)
 //                } else {
 //                    Text("\(rssi) dB")
 //                        .font(.caption)
