@@ -1848,11 +1848,6 @@ public struct SupportedAudioContexts {
     public init() {}
 }
 
-// 0x2BD4
-public struct OzoneConcentration {
-    public init() {}
-}
-
 // 0x2BD5
 public struct ParticulateMatterPM1Concentration {
     public init() {}
