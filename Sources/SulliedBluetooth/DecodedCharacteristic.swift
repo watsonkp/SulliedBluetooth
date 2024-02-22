@@ -6,6 +6,13 @@ protocol DecodedCharacteristic {
 }
 
 extension DecodedCharacteristic {
+    static func readInt8(at i: Int, of data: Data) -> Int8? {
+        guard i < data.count else {
+            return nil
+        }
+        return Int8(data[i])
+    }
+
     static func readInt16(at i: Int, of data: Data) -> Int16? {
         guard i + 1 < data.count else {
             return nil
