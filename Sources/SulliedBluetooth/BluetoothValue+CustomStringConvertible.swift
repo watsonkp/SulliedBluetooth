@@ -44,6 +44,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: range)
             case .supportedPowerRange(let range):
                 return String(describing: range)
+            case .apparentWindDirection(let direction):
+                return String(describing: direction)
             case .barometricPressureTrend(let trend):
                 return String(describing: trend)
             case .humidity(let humidity):

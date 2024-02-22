@@ -124,6 +124,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.humidity(humidity)
+            case CBUUID(string: "0x2A73"):
+                guard let direction = ApparentWindDirection(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.apparentWindDirection(direction)
             case CBUUID(string: "0x2A99"):
                 guard let increment = Bluetooth.readUInt32(at: 0, of: value) else {
                     return BluetoothValue.raw(value)

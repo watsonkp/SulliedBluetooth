@@ -423,11 +423,6 @@ public struct ApparentWindSpeed {
     public init() {}
 }
 
-// 0x2A73
-public struct ApparentWindDirection {
-    public init() {}
-}
-
 // 0x2A74
 public struct GustFactor {
     public init() {}
