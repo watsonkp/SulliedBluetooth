@@ -3,6 +3,36 @@ import CoreBluetooth
 @testable import SulliedBluetooth
 
 final class BluetoothTests: XCTestCase {
+    func testShortFloatDecode() {
+        // 72
+        XCTAssertEqual(.finite(72.0),
+                       AmmoniaConcentration(from: Array<UInt8>([0x00, 0x48]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+        // 72.0
+        XCTAssertEqual(.finite(72.0),
+                       AmmoniaConcentration(from: Array<UInt8>([0xF2, 0xD0]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+        // 98
+        XCTAssertEqual(.finite(98.0),
+                       AmmoniaConcentration(from: Array<UInt8>([0x00, 0x62]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+        // 98.0
+        XCTAssertEqual(.finite(98.0),
+                       AmmoniaConcentration(from: Array<UInt8>([0xF3, 0xD4]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+        // -6
+        XCTAssertEqual(.finite(-6.0),
+                       AmmoniaConcentration(from: Array<UInt8>([0x0F, 0xFA]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+        // -6.0
+        XCTAssertEqual(.finite(-6.0),
+                       AmmoniaConcentration(from: Array<UInt8>([0xFF, 0xC4]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+
+        XCTAssertEqual(.NaN,
+                       AmmoniaConcentration(from: Array<UInt8>([0x07, 0xFF]).withUnsafeBufferPointer({ Data($0) }))!.ammoniaConcentration)
+        XCTAssertEqual(.Nres,
+                       AmmoniaConcentration(from: Array<UInt8>([0x08, 0x00]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+        XCTAssertEqual(.infinity,
+                       AmmoniaConcentration(from: Array<UInt8>([0x07, 0xFE]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+        XCTAssertEqual(.negativeInfinity,
+                       AmmoniaConcentration(from: Array<UInt8>([0x08, 0x02]).withUnsafeBufferPointer({ Data($0) }))?.ammoniaConcentration)
+    }
+
     func testUUID() {
         // Service UUIDs
         XCTAssertTrue(Bluetooth.isAssignedNumber(CBUUID(string: "0x1818")))
