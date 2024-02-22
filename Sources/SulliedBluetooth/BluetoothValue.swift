@@ -29,6 +29,7 @@ public enum BluetoothValue {
     case heatIndex(HeatIndex)
     case humidity(Humidity)
     case irradiance(Irradiance)
+    case magneticDeclination(MagneticDeclination)
     case temperature(Temperature)
     case unsupported(UnsupportedMeasurement)
     case raw(Data)
@@ -93,6 +94,8 @@ public enum BluetoothValue {
                 return humidity.fieldDescriptions
             case .irradiance(let irradiance):
                 return irradiance.fieldDescriptions
+            case .magneticDeclination(let angle):
+                return angle.fieldDescriptions
             case .temperature(let t):
                 return t.fieldDescriptions
             case .raw(let data):

@@ -86,6 +86,11 @@ public struct Bluetooth {
                 return BluetoothValue.softwareRevisionString(Bluetooth.readString(at: 0, of: value))
             case CBUUID(string: "0x2A29"):
                 return BluetoothValue.manufacturerNameString(Bluetooth.readString(at: 0, of: value))
+            case CBUUID(string: "0x2A2C"):
+                guard let angle = MagneticDeclination(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.magneticDeclination(angle)
             case CBUUID(string: "0x2a37"):
                 guard let measurement = HeartRateMeasurement(value: value) else {
                     return BluetoothValue.raw(value)

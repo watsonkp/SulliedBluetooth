@@ -183,11 +183,6 @@ public struct CurrentTime {
     public init() {}
 }
 
-// 0x2A2C
-public struct MagneticDeclination {
-    public init() {}
-}
-
 // 0x2A31
 public struct ScanRefresh {
     public init() {}
