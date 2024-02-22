@@ -58,6 +58,8 @@ extension BluetoothValue : CustomStringConvertible {
                 return String(describing: temperature)
             case .humidity(let humidity):
                 return String(describing: humidity)
+            case .irradiance(let irradiance):
+                return String(describing: irradiance)
             case .temperature(let t):
                 return String(describing: t)
             case .unsupported(let unsupported):

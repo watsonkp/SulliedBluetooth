@@ -28,6 +28,7 @@ public enum BluetoothValue {
     case gustFactor(GustFactor)
     case heatIndex(HeatIndex)
     case humidity(Humidity)
+    case irradiance(Irradiance)
     case temperature(Temperature)
     case unsupported(UnsupportedMeasurement)
     case raw(Data)
@@ -90,6 +91,8 @@ public enum BluetoothValue {
                 return temperature.fieldDescriptions
             case .humidity(let humidity):
                 return humidity.fieldDescriptions
+            case .irradiance(let irradiance):
+                return irradiance.fieldDescriptions
             case .temperature(let t):
                 return t.fieldDescriptions
             case .raw(let data):

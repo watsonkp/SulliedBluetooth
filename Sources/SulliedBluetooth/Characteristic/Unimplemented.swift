@@ -428,11 +428,6 @@ public struct UVIndex {
     public init() {}
 }
 
-// 0x2A77
-public struct Irradiance {
-    public init() {}
-}
-
 // 0x2A78
 public struct Rainfall {
     public init() {}
