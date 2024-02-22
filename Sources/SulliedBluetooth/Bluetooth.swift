@@ -164,6 +164,11 @@ public struct Bluetooth {
                     return BluetoothValue.raw(value)
                 }
                 return BluetoothValue.pollenConcentration(concentration)
+            case CBUUID(string: "0x2A76"):
+                guard let index = UVIndex(from: value) else {
+                    return BluetoothValue.raw(value)
+                }
+                return BluetoothValue.uvIndex(index)
             case CBUUID(string: "0x2A77"):
                 guard let irradiance = Irradiance(from: value) else {
                     return BluetoothValue.raw(value)
