@@ -106,7 +106,8 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             IntegerDataPoint(date: timestamp,
                                              unit: UnitUnknown.unknown,
                                              usage: .humidity,
-                                             value: Int64(measurement.humidity),
+                                             // TODO: Measurement has a fractional part.
+                                             value: Int64(measurement.humidity / 100),
                                              significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.humidity)),
                                              significantPosition: -2))
                     case .temperature(let measurement):
@@ -114,7 +115,8 @@ class PeripheralController: NSObject, CBPeripheralDelegate, PeripheralController
                             IntegerDataPoint(date: timestamp,
                                              unit: UnitTemperature.celsius,
                                              usage: .airTemperature,
-                                             value: Int64(measurement.temperature),
+                                             // TODO: Measurement has a fractional part.
+                                             value: Int64(measurement.temperature / 100),
                                              significantFigures: Int64(SignificantDigits.significantDigits(of: measurement.temperature)),
                                              significantPosition: -2)
                         )
