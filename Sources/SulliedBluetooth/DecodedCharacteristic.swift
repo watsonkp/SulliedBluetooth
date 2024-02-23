@@ -20,6 +20,13 @@ extension DecodedCharacteristic {
         return Int16(data[i]) | Int16(data[i+1])<<8
     }
 
+    static func readInt24(at i: Int, of data: Data) -> Int32? {
+        guard i + 2 < data.count else {
+            return nil
+        }
+        return Int32(bitPattern: UInt32(data[i])) | Int32(bitPattern: UInt32(data[i+1])<<8) | Int32(Int8(bitPattern: data[i+2]))<<16
+    }
+
     static func read2UInt12(at i: Int, of data: Data) -> (UInt16?, UInt16?) {
         guard i + 2 < data.count else {
             return (nil, nil)
