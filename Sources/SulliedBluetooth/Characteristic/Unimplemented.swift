@@ -393,11 +393,6 @@ public struct LNControlPoint {
     public init() {}
 }
 
-// 0x2A6C
-public struct Elevation {
-    public init() {}
-}
-
 // 0x2A7D
 public struct DescriptorValueChanged {
     public init() {}

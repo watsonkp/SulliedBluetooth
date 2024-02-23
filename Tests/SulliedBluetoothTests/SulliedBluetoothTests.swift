@@ -3,6 +3,27 @@ import CoreBluetooth
 @testable import SulliedBluetooth
 
 final class BluetoothTests: XCTestCase {
+    func testSignedDecode() {
+        // 72
+        XCTAssertEqual(72,
+                       Elevation(from: Array<UInt8>([0x48, 0x00, 0x00]).withUnsafeBufferPointer({ Data($0) }))?.elevation)
+        // -6
+        XCTAssertEqual(-6,
+                       Elevation(from: Array<UInt8>([0xFA, 0xFF, 0xFF]).withUnsafeBufferPointer({ Data($0) }))?.elevation)
+        // 7658
+        XCTAssertEqual(7658,
+                       Elevation(from: Array<UInt8>([0xEA, 0x1D, 0x00]).withUnsafeBufferPointer({ Data($0) }))?.elevation)
+        // -7658
+        XCTAssertEqual(-7658,
+                       Elevation(from: Array<UInt8>([0x16, 0xE2, 0xFF]).withUnsafeBufferPointer({ Data($0) }))?.elevation)
+        // -5431830
+        XCTAssertEqual(-5431830,
+                       Elevation(from: Array<UInt8>([0xEA, 0x1D, 0xAD]).withUnsafeBufferPointer({ Data($0) }))?.elevation)
+        // 5431830
+        XCTAssertEqual(5431830,
+                       Elevation(from: Array<UInt8>([0x16, 0xE2, 0x52]).withUnsafeBufferPointer({ Data($0) }))?.elevation)
+    }
+
     func testShortFloatDecode() {
         // 72
         XCTAssertEqual(.finite(72.0),
