@@ -54,7 +54,7 @@ public struct ConnectionView: View {
                             scanning = !scanning
                             controller.toggleScan(serviceFilter: serviceFilter)
                         }, label: {
-                            Text("\(scanning ? "Stop" : "Scan")")
+                            Text("\(scanning ? "Stop" : "Search")")
                                 .font(.headline)
                         })
                         .buttonStyle(.borderedProminent)
@@ -63,7 +63,7 @@ public struct ConnectionView: View {
                             scanning = !scanning
                             controller.toggleScan(serviceFilter: serviceFilter)
                         }, label: {
-                            Text("\(scanning ? "Stop" : "Scan")")
+                            Text("\(scanning ? "Stop" : "Search")")
                                 .font(.headline)
                         })
                     }
