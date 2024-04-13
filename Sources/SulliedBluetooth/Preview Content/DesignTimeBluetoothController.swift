@@ -4,8 +4,10 @@ import SulliedMeasurement
 
 public class DesignTimeBluetoothController: BluetoothControllerProtocol {
     public var model: BluetoothModel = BluetoothModel()
-    private var bluetoothPublisher = PassthroughSubject<IntegerDataPoint, Never>()
-    public var publisher: AnyPublisher<IntegerDataPoint, Never>
+//    private var bluetoothPublisher = PassthroughSubject<IntegerDataPoint, Never>()
+    private var bluetoothPublisher = PassthroughSubject<BluetoothRecord, Never>()
+//    public var publisher: AnyPublisher<IntegerDataPoint, Never>
+    public var publisher: AnyPublisher<BluetoothRecord, Never>
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
     private var subscriptions: [AnyCancellable] = []
     var isScanning = false

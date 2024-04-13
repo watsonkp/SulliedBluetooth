@@ -4,7 +4,8 @@ import SulliedMeasurement
 
 public protocol BluetoothControllerProtocol {
     var model: BluetoothModel { get }
-    var publisher: AnyPublisher<IntegerDataPoint, Never> { get }
+//    var publisher: AnyPublisher<IntegerDataPoint, Never> { get }
+    var publisher: AnyPublisher<BluetoothRecord, Never> { get }
     var peripheralControllers: [UUID: PeripheralControllerProtocol] { get }
     var isNotifying: Bool { get }
     func toggleScan(serviceFilter: Set<CBUUID>) -> Void
@@ -21,8 +22,10 @@ public class BluetoothController: NSObject, CBCentralManagerDelegate, BluetoothC
     private let baseMemberUUID = Data(base64Encoded: "8AA=")!
     private var discoveredPeripherals = [UUID: (Date, CBPeripheral)]()
     public var peripheralControllers = [UUID: PeripheralControllerProtocol]()
-    private var bluetoothPublisher = PassthroughSubject<IntegerDataPoint, Never>()
-    public var publisher: AnyPublisher<IntegerDataPoint, Never>
+//    private var bluetoothPublisher = PassthroughSubject<IntegerDataPoint, Never>()
+    private var bluetoothPublisher = PassthroughSubject<BluetoothRecord, Never>()
+//    public var publisher: AnyPublisher<IntegerDataPoint, Never>
+    public var publisher: AnyPublisher<BluetoothRecord, Never>
     private var subscriptions: [AnyCancellable] = []
     private var isScanningRequested = false
     private var serviceFilter: [CBUUID]? = nil

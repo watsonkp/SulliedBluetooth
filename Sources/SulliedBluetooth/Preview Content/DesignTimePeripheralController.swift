@@ -11,7 +11,8 @@ class DesignTimePeripheralController: PeripheralControllerProtocol {
             service.characteristics.first(where: { $0.uuid == id })?.isNotifying = enabled
         }
     }
-    var recordPublisher = PassthroughSubject<IntegerDataPoint, Never>()
+//    var recordPublisher = PassthroughSubject<IntegerDataPoint, Never>()
+    var recordPublisher = PassthroughSubject<BluetoothRecord, Never>()
     private var subscriptions: [AnyCancellable] = []
 
     init(model: PeripheralModel) {
@@ -19,23 +20,23 @@ class DesignTimePeripheralController: PeripheralControllerProtocol {
         let start = Date.now
 
         // Publish heart rate characteristic values
-        Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect()
-            .compactMap {
-                guard let value = self.model.services.first(where: { $0.uuid == CBUUID(string: "0x180d") })?
-                    .characteristics.filter({ $0.isNotifying }).first?
-                    .parsedValue.description,
-                let measurement = Int64(value) else {
-                    return nil
-                }
-                return IntegerDataPoint(date: $0,
-                                        unit: UnitFrequency.beatsPerMinute,
-                                        usage: .heartRate,
-                                        value: measurement,
-                                        significantFigures: 3,
-                                        significantPosition: 0)
-            }
-            .sink(receiveValue: { self.recordPublisher.send($0) })
-            .store(in: &subscriptions)
+//        Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect()
+//            .compactMap {
+//                guard let value = self.model.services.first(where: { $0.uuid == CBUUID(string: "0x180d") })?
+//                    .characteristics.filter({ $0.isNotifying }).first?
+//                    .parsedValue.description,
+//                let measurement = Int64(value) else {
+//                    return nil
+//                }
+//                return IntegerDataPoint(date: $0,
+//                                        unit: UnitFrequency.beatsPerMinute,
+//                                        usage: .heartRate,
+//                                        value: measurement,
+//                                        significantFigures: 3,
+//                                        significantPosition: 0)
+//            }
+//            .sink(receiveValue: { self.recordPublisher.send($0) })
+//            .store(in: &subscriptions)
 
         // Update heart rate characteristic values
         Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect().map { _ in
