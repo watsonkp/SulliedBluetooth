@@ -7,19 +7,19 @@ import SulliedMeasurement
 // Cycling Power Measurement characteristic
 //  https://bitbucket.org/bluetooth-SIG/public/src/main/gss/org.bluetooth.characteristic.cycling_power_measurement.yaml
 public struct CyclingPowerMeasurement: DecodedCharacteristic {
-    let instantaneousPower: Int16
+    public let instantaneousPower: Int16
     // Unit is 0.5%
     let pedalPowerBalance: UInt8?
     let pedalPowerBalanceReference: PedalPowerBalanceReference
     // Unit is 1/32 Newton meter
     let accumulatedTorque: UInt16?
     let accumulatedTorqueSource: AccumulatedTorqueSource
-    let cumulativeWheelRevolutions: UInt32?
+    public let cumulativeWheelRevolutions: UInt32?
     // Unit is 1/2048 second
-    let wheelEventTime: UInt16?
-    let cumulativeCrankRevolutions: UInt16?
+    public let wheelEventTime: UInt16?
+    public let cumulativeCrankRevolutions: UInt16?
     // Unit is 1/1024 second
-    let crankEventTime: UInt16?
+    public let crankEventTime: UInt16?
     let maximumForceMagnitude: Int16?
     let minimumForceMagnitude: Int16?
     // Unit is 1/32 Newton meter
