@@ -7,7 +7,7 @@ struct PeripheralView: View {
             VStack(alignment: .leading) {
                 Text("\(model.name ?? "Unknown name")")
                     .font(.headline)
-                Text("\(model.identifier)")
+                UUIDView(id: model.identifier)
                     .font(.caption)
             }
             Spacer()
